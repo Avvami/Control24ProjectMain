@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Control24ProjectMain</string>
+    <string name="company_logo_image">Company Logo Image</string>
+    <string name="company_description">Cистемы мониторинга и диспетчеризации транспорта ГЛОНАСС/GPS</string>
+</resources>
