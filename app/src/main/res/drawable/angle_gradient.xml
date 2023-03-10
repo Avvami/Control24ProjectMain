@@ -4,6 +4,7 @@
     <gradient
         android:type="linear"
         android:angle="135"
-        android:startColor="@color/material_theme_sys_light_primary_container"
-        android:endColor="@color/material_theme_sys_light_primary" />
+        android:startColor="@color/material_theme_ref_primary_primary90"
+        android:centerColor="@color/material_theme_ref_primary_primary50"
+        android:endColor="@color/material_theme_ref_primary_primary30" />
 </shape>
