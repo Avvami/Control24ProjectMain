@@ -7,11 +7,11 @@
     tools:context=".fragments.SettingsFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/settingsTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_bounds_horizontal"
-        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
+        android:layout_marginVertical="@dimen/margin_vertical_16dp"
         android:fontFamily="@font/roboto"
         android:text="@string/settings_menu"
         android:textColor="@color/material_theme_sys_light_on_background"
@@ -19,24 +19,286 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
-        android:id="@+id/userRL"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/userCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
+        android:layout_marginVertical="@dimen/margin_vertical_16dp"
+        android:paddingVertical="14dp"
+        android:paddingHorizontal="12dp"
+        android:background="@drawable/constraint_btn_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/settingsTV">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/accountIconIV"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/account_image"
             android:src="@drawable/icon_account"
-            android:contentDescription="@string/account_image"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/material_theme_sys_light_on_primary_container" />
 
         <TextView
+            android:id="@+id/accountTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/account"/>
-    </RelativeLayout>
+            android:text="@string/account"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="14sp"
+            android:textColor="@color/material_theme_sys_light_on_primary_container"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@id/accountIconIV"
+            app:layout_constraintStart_toEndOf="@id/accountIconIV"/>
+
+        <TextView
+            android:id="@+id/usernameTemplateTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/username_template"
+            android:textColor="@color/material_theme_sys_light_on_primary_container"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/accountIconIV"
+            app:layout_constraintStart_toEndOf="@id/accountIconIV"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/logoutCLButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/constraint_btn_background"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/logoutIconIV"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:contentDescription="@string/logout_image"
+                android:src="@drawable/icon_logout"
+                app:tint="@color/material_theme_sys_light_on_primary_container"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/logoutTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/logout"
+                android:textColor="@color/material_theme_sys_light_on_primary_container"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/logoutIconIV"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/generalSettingsCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
+        android:layout_marginVertical="@dimen/margin_vertical_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userCL">
+
+        <TextView
+            android:id="@+id/generalSettingsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/general_settings"
+            android:textColor="@color/material_theme_sys_light_primary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/darkThemeCL"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/constraint_buttons_height"
+            android:layout_marginVertical="12dp"
+            android:background="@drawable/constraint_btn_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV">
+
+            <TextView
+                android:id="@+id/darkThemeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/dark_theme"
+                android:textColor="@color/material_theme_sys_light_on_primary_container"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/darkThemeMSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:thumbTint="@color/thumb_bg"
+                app:trackTint="@color/track_bg" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mapProviderCL"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/constraint_buttons_height"
+            android:layout_marginVertical="12dp"
+            android:background="@drawable/constraint_btn_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/darkThemeCL">
+
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/map_provider"
+                android:textColor="@color/material_theme_sys_light_on_primary_container"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/rightArrowIV1"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/right_arrow_image"
+                android:src="@drawable/right_arrow"
+                app:tint="@color/material_theme_sys_light_on_primary_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_vertical_16dp"
+        android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generalSettingsCL">
+
+        <TextView
+            android:id="@+id/supportSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/support_settings"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/material_theme_sys_light_primary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/aboutAppCL"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/constraint_buttons_height"
+            android:background="@drawable/constraint_btn_background"
+            android:layout_marginVertical="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/supportSettings">
+
+            <TextView
+                android:id="@+id/aboutAppTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about_app"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/material_theme_sys_light_on_primary_container"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/rightArrowIV2"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/right_arrow"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/right_arrow_image"
+                app:tint="@color/material_theme_sys_light_on_primary_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/helpCL"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/constraint_buttons_height"
+            android:background="@drawable/constraint_btn_background"
+            android:layout_marginVertical="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutAppCL">
+
+            <TextView
+                android:id="@+id/helpTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/material_theme_sys_light_on_primary_container"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/rightArrowIV3"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/right_arrow"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/right_arrow_image"
+                app:tint="@color/material_theme_sys_light_on_primary_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

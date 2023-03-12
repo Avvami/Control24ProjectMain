@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav_background"
         android:paddingHorizontal="28dp"
-        app:elevation="10dp"
         app:itemIconTint="@color/bottom_nav_items_color"
         app:itemRippleColor="@color/material_theme_ref_primary_primary90"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"

@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        replaceFragment(ReportsFragment())
+        replaceFragment(ListFragment())
+        binding.bottomNavigationView.selectedItemId = R.id.list_menu
 
         binding.bottomNavigationView.setOnItemSelectedListener {
 

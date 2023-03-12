@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Control24ProjectMain</string>
+    <string name="app_name">Контроль 24</string>
     <string name="company_logo_image">Company Logo Image</string>
     <string name="company_description">Cистемы мониторинга и диспетчеризации транспорта ГЛОНАСС/GPS</string>
     <string name="login_hint">Логин</string>
@@ -13,9 +13,17 @@
     <!--Settings part-->
     <string name="settings_menu">Настройки</string>
     <string name="account">Аккаунт</string>
-    <string name="user_template">Имя пользователя</string>
+    <string name="username_template">Имя пользователя</string>
     <string name="logout">Выйти</string>
-    <string name="account_image">Иконка аккаунта</string>
+    <string name="account_image">Account icon</string>
+    <string name="logout_image">Logout icon</string>
+    <string name="general_settings">Основные настройки</string>
+    <string name="dark_theme">Темная Тема</string>
+    <string name="map_provider">Поставщик карт</string>
+    <string name="right_arrow_image">Right arrow icon</string>
+    <string name="support_settings">Поддержка</string>
+    <string name="about_app">О Приложении</string>
+    <string name="help">Помощь</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
