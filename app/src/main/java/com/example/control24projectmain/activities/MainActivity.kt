@@ -24,6 +24,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val username = intent.getStringExtra("USERNAME")
+        val bundle = Bundle()
+        bundle.putString("USERNAME", username)
+
+        val settingsFragment = SettingsFragment()
+        settingsFragment.arguments = bundle
+
         replaceFragment(ListFragment())
         binding.bottomNavigationView.selectedItemId = R.id.list_menu
 
@@ -33,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.reports_menu -> replaceFragment(ReportsFragment())
                 R.id.list_menu -> replaceFragment(ListFragment())
                 R.id.map_menu -> replaceFragment(MapFragment())
-                R.id.settings_menu -> replaceFragment(SettingsFragment())
+                R.id.settings_menu -> replaceFragment(settingsFragment)
 
                 else -> {
                     /*Something should be here*/

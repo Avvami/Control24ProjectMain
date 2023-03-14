@@ -78,4 +78,9 @@
         <item name="stRadius">12dp</item>
     </style>
 
+    <style name="SplashTheme" parent="LoginTranslucentStatusAndNavigationStyle">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="android:progressBarStyle">?android:attr/progressBarStyle</item>
+    </style>
+
 </resources>

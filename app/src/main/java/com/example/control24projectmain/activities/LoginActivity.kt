@@ -7,7 +7,9 @@ import android.os.Handler
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
+import com.example.control24projectmain.HttpRequestHelper
 import com.example.control24projectmain.R
+import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityLoginBinding
 import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.*
@@ -20,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
     private var backPressedOnce = false
     private lateinit var toast: StyleableToast
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
                 /*If everything is fine, then proceed*/
                 else -> {
                     /*Get entered values*/
-                    val email: String = binding.loginET.text.toString().trim {it <= ' '}
+                    val login: String = binding.loginET.text.toString().trim {it <= ' '}
                     val password: String = binding.passwordET.text.toString().trim {it <= ' '}
                     /*Make an HTTP request in the Database*/
                     val progressBar = binding.progressBar
@@ -65,8 +67,10 @@ class LoginActivity : AppCompatActivity() {
                         progressBar.progress = 0
 
                         try {
-                            val response = makeHttpRequest("http://91.193.225.170:8012/login2&$email&$password")
+                            val response = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
+                            UserManager.saveLoginCredentials(context = this@LoginActivity, login = login, password = password)
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            intent.putExtra("USERNAME", login)
                             startActivity(intent)
                             //overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out)
                             finish()
@@ -95,25 +99,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun makeHttpRequest(url: String): String {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        return withContext(Dispatchers.IO) {
-            val response = client.newCall(request).execute()
-            val responseBody = response.body?.string() ?: ""
-            if (response.code == 400) {
-                throw BadRequestException(responseBody)
-            } else {
-                response.isSuccessful
-                responseBody
-            }
-
         }
     }
 

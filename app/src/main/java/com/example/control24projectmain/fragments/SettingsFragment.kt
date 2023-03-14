@@ -1,19 +1,25 @@
 package com.example.control24projectmain.fragments
 
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.control24projectmain.R
+import com.example.control24projectmain.UserManager
+import com.example.control24projectmain.UserManager.clearLoginCredentials
+import com.example.control24projectmain.activities.LoginActivity
 import com.example.control24projectmain.databinding.FragmentSettingsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +44,19 @@ class SettingsFragment : Fragment() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
+        val username = arguments?.getString("USERNAME")
+        binding.usernameTemplateTV.text = username
+
+        /*coroutineScope.launch {
+            val loginCredentials = UserManager.getLoginCredentials(requireContext())
+            binding.usernameTemplateTV.text = loginCredentials?.first
+        }*/
+
         binding.logoutCLButton.setOnClickListener {
-            /*hey*/
+            clearLoginCredentials(requireContext())
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
 
         binding.darkThemeCL.setOnClickListener {
