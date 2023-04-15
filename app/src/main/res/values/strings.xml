@@ -25,6 +25,12 @@
     <string name="about_app">О Приложении</string>
     <string name="help">Помощь</string>
 
+    <!--Internet dialog view-->
+    <string name="internet_dialog_warning">Ошибка</string>
+    <string name="internet_dialog_description">Отсутствует интернет соединение. Проверьте подключение и повторите попытку</string>
+    <string name="dialog_retry">Повторить</string>
+    <string name="dialog_continue">Продолжить</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
