@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="settingsMenuItemsColor" format="color"/>
+    <attr name="settingsMenuItemsRippleColor" format="color"/>
+
+    <attr name="loginButtonColor" format="color"/>
+    <attr name="loginButtonRippleColor" format="color"/>
+    <attr name="loginButtonTextColor" format="color"/>
+    <attr name="loginProgressBarColor" format="color"/>
+    <attr name="loginEditTextOutlineColor" format="color"/>
+    <attr name="loginEditTextOutlineFocusedColor" format="color"/>
+    <attr name="loginEditTextHintColor" format="color"/>
+    <attr name="loginEditTextHintActiveColor" format="color"/>
+    <attr name="loginEditTextCursorColor" format="color"/>
+    <attr name="loginHelpButtonRippleColor" format="color"/>
+
+    <attr name="switchThumbColor" format="color"/>
+    <attr name="switchTrackColor" format="color"/>
+
+    <attr name="toastBackgroundColor" format="color"/>
+    <attr name="toastTextColor" format="color"/>
+
+    <attr name="textOnBackgroundColor" format="color"/>
+    <attr name="textOnItemsColor" format="color"/>
+
+    <attr name="splashScreenBackgroundColor" format="color"/>
+
+    <attr name="overScrollColor" format="color"/>
+    <attr name="scrollVerticalThumbColor" format="color"/>
+
+    <attr name="gradientStartColor" format="color"/>
+    <attr name="gradientCenterColor" format="color"/>
+    <attr name="gradientEndColor" format="color"/>
+
+    <attr name="bottomNavigationBarColor" format="color"/>
+    <attr name="bottomNavigationItemColor" format="color"/>
+    <attr name="bottomNavigationItemActiveColor" format="color"/>
+    <attr name="bottomNavigationItemRippleColor" format="color"/>
+</resources>

@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.example.control24projectmain.HttpRequestHelper
+import com.example.control24projectmain.InternetConnectionCheck
 import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityLoginBinding
@@ -31,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginButton.setOnClickListener {
             when {
-                /*Login is not empty check, is empty -> toast + focus*/
+                // Login edit view is not empty check, if it is empty then show toast + focus on edit view
                 TextUtils.isEmpty(binding.loginET.text.toString().trim{ it <= ' ' }) -> {
                     StyleableToast.makeText(
                         this,
@@ -41,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                     binding.loginET.requestFocus()
                 }
-                /*Password is not empty check, is empty -> toast + focus*/
+                // Password edit view is not empty check, if it is empty then show toast + focus on edit view
                 TextUtils.isEmpty(binding.passwordET.text.toString().trim { it <= ' ' }) -> {
                     StyleableToast.makeText(
                         this,
@@ -51,15 +52,16 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                     binding.passwordET.requestFocus()
                 }
-                /*If everything is fine, then proceed*/
+                // If everything is fine, then proceed
                 else -> {
-                    /*Get entered values*/
+                    // Get entered credentials
                     val login: String = binding.loginET.text.toString().trim {it <= ' '}
                     val password: String = binding.passwordET.text.toString().trim {it <= ' '}
-                    /*Make an HTTP request in the Database*/
+
                     val progressBar = binding.progressBar
                     progressBar.isIndeterminate = true
 
+                    // Make an HTTP request to the Database using coroutines
                     coroutineScope.launch {
                         progressBar.visibility = View.VISIBLE
                         binding.loginTV.visibility = View.INVISIBLE
@@ -68,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
                         try {
                             val response = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
+                            // Save login cred to the UserManager object
                             UserManager.saveLoginCredentials(context = this@LoginActivity, login = login, password = password)
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             intent.putExtra("USERNAME", login)
@@ -91,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                                 R.style.CustomStyleableToast
                             ).show()
                         } finally {
-                            // Hide the progressBar and show the title
+                            // Hide the progressBar
                             progressBar.visibility = View.INVISIBLE
                             binding.loginTV.visibility = View.VISIBLE
                             progressBar.progress = 0
@@ -104,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
 
     class BadRequestException(message: String) : Exception(message)
 
+    // Double back press to close the app
     override fun onBackPressed() {
         if (backPressedOnce) {
             super.onBackPressed()

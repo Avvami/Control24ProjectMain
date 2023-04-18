@@ -10,6 +10,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="transparent">#00FFFFFF</color>
+    <color name="black_10p">#1A000000</color>
 
     <color name="material_theme_sys_light_primary">#3C57B9</color>
     <color name="material_theme_sys_light_on_primary">#FFFFFF</color>
@@ -143,16 +144,16 @@
     <color name="material_theme_ref_neutral_variant_neutral_variant99">#FEFBFF</color>
     <color name="material_theme_ref_neutral_variant_neutral_variant100">#FFFFFF</color>
 
-    <color name="material_theme_surfaces_light_surface1">#FEFBFF</color>
-    <color name="material_theme_surfaces_light_surface2">#FEFBFF</color>
-    <color name="material_theme_surfaces_light_surface3">#FEFBFF</color>
-    <color name="material_theme_surfaces_light_surface4">#FEFBFF</color>
-    <color name="material_theme_surfaces_light_surface5">#FEFBFF</color>
+    <color name="material_theme_surfaces_light_surface1">#F4F3FB</color>
+    <color name="material_theme_surfaces_light_surface2">#EEEEF9</color>
+    <color name="material_theme_surfaces_light_surface3">#E9E9F7</color>
+    <color name="material_theme_surfaces_light_surface4">#E7E7F7</color>
+    <color name="material_theme_surfaces_light_surface5">#E3E4F5</color>
 
-    <color name="material_theme_surfaces_dark_surface1">#1B1B1F</color>
-    <color name="material_theme_surfaces_dark_surface2">#1B1B1F</color>
-    <color name="material_theme_surfaces_dark_surface3">#1B1B1F</color>
-    <color name="material_theme_surfaces_dark_surface4">#1B1B1F</color>
-    <color name="material_theme_surfaces_dark_surface5">#1B1B1F</color>
+    <color name="material_theme_surfaces_dark_surface1">#23232A</color>
+    <color name="material_theme_surfaces_dark_surface2">#272931</color>
+    <color name="material_theme_surfaces_dark_surface3">#2C2E38</color>
+    <color name="material_theme_surfaces_dark_surface4">#2E2F3A</color>
+    <color name="material_theme_surfaces_dark_surface5">#31333E</color>
 
 </resources>

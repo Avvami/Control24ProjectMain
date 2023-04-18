@@ -1,10 +1,10 @@
 package com.example.control24projectmain
 
-import com.example.control24projectmain.activities.LoginActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.IOException
 
 object HttpRequestHelper {
 
@@ -18,11 +18,12 @@ object HttpRequestHelper {
             val response = client.newCall(request).execute()
             val responseBody = response.body?.string() ?: ""
             if (response.code == 400) {
-                throw LoginActivity.BadRequestException(responseBody)
+                throw BadRequestException(responseBody)
             } else {
                 response.isSuccessful
                 responseBody
             }
         }
     }
+    class BadRequestException(message: String) : IOException(message)
 }

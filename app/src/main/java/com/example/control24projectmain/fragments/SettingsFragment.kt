@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat.recreate
+import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.UserManager.clearLoginCredentials
 import com.example.control24projectmain.activities.LoginActivity
+import com.example.control24projectmain.activities.MainActivity
 import com.example.control24projectmain.databinding.FragmentSettingsBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,26 +35,16 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
 
         val switchToggle = binding.darkThemeMSwitch
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        val isDarkModeOn = sharedPref?.getBoolean("isDarkModeOn", false) ?: false
+        val isDarkModeOn = arguments?.getBoolean("DARK_THEME")
 
-        switchToggle.isChecked = isDarkModeOn
+        switchToggle.isChecked = isDarkModeOn == true
 
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-
+        // Set the username in Text View
         val username = arguments?.getString("USERNAME")
         binding.usernameTemplateTV.text = username
 
-        /*coroutineScope.launch {
-            val loginCredentials = UserManager.getLoginCredentials(requireContext())
-            binding.usernameTemplateTV.text = loginCredentials?.first
-        }*/
-
         binding.logoutCLButton.setOnClickListener {
+            // Clear saved login session and start login screen
             clearLoginCredentials(requireContext())
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
@@ -60,14 +53,11 @@ class SettingsFragment : Fragment() {
 
         binding.darkThemeCL.setOnClickListener {
             switchToggle.isChecked = !switchToggle.isChecked
-            /*if (switchToggle.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                saveDarkModeState(true)
-            }
-            else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                saveDarkModeState(false)
-            }*/
+            (activity as MainActivity).isDarkThemeSet(switchToggle.isChecked)
+        }
+
+        switchToggle.setOnCheckedChangeListener { _, isChecked ->
+            (activity as MainActivity).isDarkThemeSet(isChecked)
         }
 
         binding.mapProviderCL.setOnClickListener {
@@ -85,11 +75,11 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
-    private fun saveDarkModeState(isDarkModeOn: Boolean) {
+    /*private fun saveDarkModeState(isDarkModeOn: Boolean) {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with (sharedPref.edit()) {
             putBoolean("isDarkModeOn", isDarkModeOn)
             commit()
         }
-    }
+    }*/
 }

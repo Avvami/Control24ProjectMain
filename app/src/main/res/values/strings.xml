@@ -9,6 +9,9 @@
     <string name="reports_menu">Отчеты</string>
     <string name="list_menu">Список</string>
     <string name="map_menu">Карта</string>
+    
+    <!--Objects List part-->
+    <string name="objects_list">Объекты отслеживания</string>
 
     <!--Settings part-->
     <string name="settings_menu">Настройки</string>
@@ -19,7 +22,8 @@
     <string name="logout_image">Logout icon</string>
     <string name="general_settings">Основные настройки</string>
     <string name="dark_theme">Темная Тема</string>
-    <string name="map_provider">Поставщик карт</string>
+    <string name="map_provider">Поставщик Карт</string>
+    <string name="list_view_settings">Вид Списка Объектов</string>
     <string name="right_arrow_image">Right arrow icon</string>
     <string name="support_settings">Поддержка</string>
     <string name="about_app">О Приложении</string>

@@ -1,37 +1,87 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Control24ProjectMain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/material_theme_sys_light_primary</item>
-        <item name="colorPrimaryVariant">@color/material_theme_sys_light_background</item>
-        <item name="colorOnPrimary">@color/material_theme_sys_light_background</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/material_theme_sys_light_secondary</item>
-        <item name="colorSecondaryVariant">@color/material_theme_sys_light_secondary_container</item>
-        <item name="colorOnSecondary">@color/material_theme_sys_light_on_secondary</item>
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">?colorPrimaryVariant</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <!--<item name="android:statusBarColor">?colorPrimaryVariant</item>-->
+        <!--<item name="android:windowLightStatusBar">true</item>-->
     </style>
+    
+    <style name="AppTheme" parent="Theme.Control24ProjectMain">
+        <item name="settingsMenuItemsColor">@color/material_theme_sys_light_primary_container</item>
+        <item name="settingsMenuItemsRippleColor">@color/material_theme_ref_primary_primary80</item>
 
-    <style name="LoginTranslucentStatusAndNavigationStyle" parent="Theme.Control24ProjectMain">
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="loginButtonColor">@color/material_theme_sys_light_primary</item>
+        <item name="loginButtonRippleColor">@color/material_theme_ref_primary_primary50</item>
+        <item name="loginButtonTextColor">@color/material_theme_sys_light_background</item>
+        <item name="loginProgressBarColor">@color/material_theme_sys_light_background</item>
+        <item name="loginEditTextOutlineColor">@color/material_theme_ref_primary_primary100</item>
+        <item name="loginEditTextOutlineFocusedColor">@color/material_theme_ref_primary_primary90</item>
+        <item name="loginEditTextHintColor">@color/material_theme_ref_secondary_secondary90</item>
+        <item name="loginEditTextHintActiveColor">@color/material_theme_ref_secondary_secondary100</item>
+        <item name="loginEditTextCursorColor">@color/material_theme_sys_light_background</item>
+        <item name="loginHelpButtonRippleColor">@color/material_theme_ref_primary_primary80</item>
+
+        <item name="switchThumbColor">@color/material_theme_ref_primary_primary40</item>
+        <item name="switchTrackColor">@color/material_theme_ref_primary_primary60</item>
+
+        <item name="toastBackgroundColor">@color/material_theme_sys_light_primary</item>
+        <item name="toastTextColor">@color/material_theme_sys_light_background</item>
+
+        <item name="textOnBackgroundColor">@color/material_theme_sys_light_background</item>
+        <item name="textOnItemsColor">@color/material_theme_sys_light_on_background</item>
+
+        <item name="splashScreenBackgroundColor">@color/material_theme_sys_light_primary</item>
+
+        <item name="overScrollColor">@color/material_theme_ref_primary_primary40</item>
+        <item name="scrollVerticalThumbColor">@color/transparent</item>
+
+        <item name="gradientStartColor">@color/material_theme_ref_primary_primary90</item>
+        <item name="gradientCenterColor">@color/material_theme_ref_primary_primary50</item>
+        <item name="gradientEndColor">@color/material_theme_ref_primary_primary40</item>
+
+        <item name="bottomNavigationBarColor">@color/material_theme_sys_light_primary_container</item>
+        <item name="bottomNavigationItemColor">@color/material_theme_sys_light_outline</item>
+        <item name="bottomNavigationItemActiveColor">@color/material_theme_sys_light_primary</item>
+        <item name="bottomNavigationItemRippleColor">@color/material_theme_ref_primary_primary80</item>
+
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorEdgeEffect">?attr/overScrollColor</item>
+        <item name="android:scrollbarThumbVertical">?attr/scrollVerticalThumbColor</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+
+    <style name="SplashScreenTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+    
+    <style name="TextTitleLargeStyle">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">?attr/textOnBackgroundColor</item>
+        <item name="fontFamily">@font/roboto</item>
     </style>
 
     <style name="TextInputOuterFieldStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/input_text_outline_color</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded</item>
         <item name="boxStrokeWidthFocused">1dp</item>
-        <item name="hintTextColor">@color/material_theme_ref_secondary_secondary100</item>
+        <item name="hintTextColor">?attr/loginEditTextHintActiveColor</item>
         <item name="errorIconDrawable">@null</item>
-        <item name="android:textColorHint">@color/material_theme_ref_secondary_secondary90</item>
+        <item name="android:textColorHint">?attr/loginEditTextHintColor</item>
         <item name="passwordToggleTint">@color/password_toggle_color</item>
     </style>
 
     <style name="TextInputInnerFieldStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:textColor">@color/material_theme_ref_primary_primary100</item>
+        <item name="android:textColor">?attr/textOnBackgroundColor</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
@@ -45,22 +95,22 @@
     </style>
 
     <style name="MaterialButtonSolidStyle" parent="@style/Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/material_theme_sys_light_primary</item>
-        <item name="android:background">@drawable/btn_ripple_bg_pr_s_light</item>
+        <item name="backgroundTint">?attr/loginButtonColor</item>
+        <item name="android:background">@drawable/btn_login_ripple_solid</item>
         <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
         <item name="android:elevation">@dimen/button_elevation</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@color/material_theme_sys_light_on_primary</item>
+        <item name="android:textColor">?attr/loginButtonTextColor</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="MaterialTextButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="cornerRadius">@dimen/corner_radius_most</item>
-        <item name="rippleColor">@color/material_theme_ref_primary_primary80</item>
+        <item name="rippleColor">?attr/loginHelpButtonRippleColor</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@color/material_theme_sys_light_on_primary</item>
+        <item name="android:textColor">?attr/textOnBackgroundColor</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
@@ -71,16 +121,11 @@
 
     <style name="CustomStyleableToast">
         <item name="stFont">@font/roboto_medium</item>
-        <item name="stColorBackground">@color/material_theme_sys_light_primary</item>
-        <item name="stTextColor">@color/material_theme_sys_light_on_primary</item>
+        <item name="stColorBackground">?attr/toastBackgroundColor</item>
+        <item name="stTextColor">?attr/toastTextColor</item>
         <item name="stTextSize">12sp</item>
         <!--<item name="stIconStart"></item>-->
         <item name="stRadius">12dp</item>
-    </style>
-
-    <style name="SplashTheme" parent="LoginTranslucentStatusAndNavigationStyle">
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
-        <item name="android:progressBarStyle">?android:attr/progressBarStyle</item>
     </style>
 
 </resources>

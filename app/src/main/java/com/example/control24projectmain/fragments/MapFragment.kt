@@ -2,21 +2,18 @@ package com.example.control24projectmain.fragments
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
+import android.view.Window
+import androidx.core.content.ContextCompat
 import com.example.control24projectmain.R
+import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.FragmentMapBinding
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.ScaleBarOverlay
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 
 class MapFragment : Fragment() {
 
@@ -28,6 +25,16 @@ class MapFragment : Fragment() {
     ): View {
 
         binding = FragmentMapBinding.inflate(layoutInflater)
+
+        // Set the status bar color
+        val window: Window = requireActivity().window
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.black_10p)
+
+        // Set the status bar text color to dark
+        val isDark = UserManager.getSharedPreferencesData(requireContext())
+        if (!isDark.first) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
 
         // Load configuration
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
@@ -49,5 +56,20 @@ class MapFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    // Restore status bar color and text color when exit Fragment
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        // Set default status bar color
+        val window: Window = requireActivity().window
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
+
+        // Restore the status bar text color to white
+        val isDark = UserManager.getSharedPreferencesData(requireContext())
+        if (!isDark.first) {
+            window.decorView.systemUiVisibility = 0
+        }
     }
 }
