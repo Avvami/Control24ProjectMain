@@ -106,12 +106,15 @@ class SplashScreenActivity : AppCompatActivity() {
                 }
             }
 
+            // Dialog continue button click
             val continueBtn = dialogBinding.findViewById<RelativeLayout>(R.id.continueBtn)
             continueBtn.setOnClickListener {
                 // Almost same logic as for retry button
                 if (InternetConnectionCheck.isInternetConnected(this@SplashScreenActivity)) {
+                    // Dismiss the dialog and check if it has saved login cred
                     dialog.dismiss()
                     if (loginCredentials != null) {
+                        // Has saved login cred then do login
                         performLogin(
                             loginCredentials,
                             {
@@ -131,12 +134,14 @@ class SplashScreenActivity : AppCompatActivity() {
                             }
                         )
                     } else {
+                        // No saved login cred then just open login activity
                         val intent = Intent(this@SplashScreenActivity, LoginActivity::class.java)
                         startActivity(intent)
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()
                     }
                 } else {
+                    // No internet connection go to login activity
                     dialog.dismiss()
                     val intent = Intent(this@SplashScreenActivity, LoginActivity::class.java)
                     startActivity(intent)
@@ -154,7 +159,6 @@ class SplashScreenActivity : AppCompatActivity() {
         val (login, password) = loginCredentials
 
         coroutineScope.launch {
-
             try {
                 HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
                 onSuccess()

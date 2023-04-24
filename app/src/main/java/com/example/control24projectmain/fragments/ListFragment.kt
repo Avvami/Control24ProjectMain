@@ -5,56 +5,42 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.control24projectmain.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.control24projectmain.ObjectData
+import com.example.control24projectmain.ObjectsListAdapter
+import com.example.control24projectmain.databinding.FragmentListBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentListBinding
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false)
-    }
+    ): View {
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        binding = FragmentListBinding.inflate(layoutInflater)
+
+        recyclerView = binding.objectsListRV
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.setHasFixedSize(true)
+
+        val objectDataList = listOf(
+            ObjectData(1, "OBJECT_1", "Category A", "Client A", "Auto Num 1", "Auto Model 1", false),
+            ObjectData(2, "OBJECT_2", "Category B", "Client B", "Auto Num 2", "Auto Model 2", false),
+            ObjectData(3, "OBJECT_3", "Category C", "Client C", "Auto Num 3", "Auto Model 3", false),
+            ObjectData(3, "OBJECT_4", "Category D", "Client D", "Auto Num 4", "Auto Model 4", false)
+        )
+        val adapter = ObjectsListAdapter(requireContext(), objectDataList)
+        recyclerView.adapter = adapter
+
+        /*val keyString = arguments?.getString("KEY")
+        val objectsList = arguments?.getParcelableArrayList<ObjectData>("OBJECTS")
+        binding.textView.text = keyString
+        binding.textView4.text = objectsList.toString()*/
+
+        return binding.root
     }
 }

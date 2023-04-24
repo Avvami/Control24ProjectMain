@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    tools:context=".activities.HelpActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/helpBackCL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/leftArrow"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:contentDescription="@string/left_arrow_image"
+                    android:foreground="@drawable/oval_ripple_effect"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/icon_left_arrow"
+                    app:tint="?attr/textOnBackgroundColor" />
+
+                <TextView
+                    android:id="@+id/helpBackTV"
+                    style="@style/TextTitleLargeStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/help"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/leftArrow"
+                    app:layout_constraintStart_toEndOf="@+id/leftArrow" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/loginProblemTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:text="@string/login_problem"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/helpBackCL" />
+
+            <TextView
+                android:id="@+id/emailTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:text="@string/email_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginProblemTV" />
+
+            <TextView
+                android:id="@+id/emailLinkTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/email_link"
+                android:textColor="?attr/textLinkColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailTV" />
+
+            <TextView
+                android:id="@+id/supportNumberTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:text="@string/support_number_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailLinkTV" />
+
+            <TextView
+                android:id="@+id/supportNumberLinkTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/support_number_link"
+                android:textColor="?attr/textLinkColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/supportNumberTV" />
+
+            <TextView
+                android:id="@+id/youtubeGuideTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:text="@string/youtube_guide_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/supportNumberLinkTV" />
+
+            <TextView
+                android:id="@+id/youtubeGuideLinkTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/youtube_guide_link"
+                android:textColor="?attr/textLinkColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/youtubeGuideTV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

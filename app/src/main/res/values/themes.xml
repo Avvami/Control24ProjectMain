@@ -14,8 +14,8 @@
         <item name="loginButtonRippleColor">@color/material_theme_ref_primary_primary50</item>
         <item name="loginButtonTextColor">@color/material_theme_sys_light_background</item>
         <item name="loginProgressBarColor">@color/material_theme_sys_light_background</item>
-        <item name="loginEditTextOutlineColor">@color/material_theme_ref_primary_primary100</item>
-        <item name="loginEditTextOutlineFocusedColor">@color/material_theme_ref_primary_primary90</item>
+        <item name="loginEditTextOutlineColor">@color/material_theme_ref_primary_primary90</item>
+        <item name="loginEditTextOutlineFocusedColor">@color/material_theme_ref_primary_primary100</item>
         <item name="loginEditTextHintColor">@color/material_theme_ref_secondary_secondary90</item>
         <item name="loginEditTextHintActiveColor">@color/material_theme_ref_secondary_secondary100</item>
         <item name="loginEditTextCursorColor">@color/material_theme_sys_light_background</item>
@@ -29,6 +29,7 @@
 
         <item name="textOnBackgroundColor">@color/material_theme_sys_light_background</item>
         <item name="textOnItemsColor">@color/material_theme_sys_light_on_background</item>
+        <item name="textObjectsInfoColor">@color/material_theme_sys_light_on_surface_variant</item>
 
         <item name="splashScreenBackgroundColor">@color/material_theme_sys_light_primary</item>
 
@@ -43,6 +44,25 @@
         <item name="bottomNavigationItemColor">@color/material_theme_sys_light_outline</item>
         <item name="bottomNavigationItemActiveColor">@color/material_theme_sys_light_primary</item>
         <item name="bottomNavigationItemRippleColor">@color/material_theme_ref_primary_primary80</item>
+
+        <item name="carIconBackgroundColor">@color/material_theme_sys_light_primary</item>
+        <item name="carIconColor">@color/material_theme_sys_light_on_primary</item>
+        <item name="dashboardIconBackgroundColor">@color/material_theme_sys_light_tertiary</item>
+        <item name="dashboardIconColor">@color/material_theme_sys_light_on_tertiary</item>
+        <item name="locationIconBackgroundColor">@color/material_theme_sys_light_error_container</item>
+        <item name="locationIconColor">@color/material_theme_sys_light_on_error_container</item>
+        <item name="timeIconBackgroundColor">@color/material_theme_sys_light_on_surface_variant</item>
+        <item name="timeIconColor">@color/material_theme_sys_light_surface_variant</item>
+        <item name="callButtonRippleColor">@color/material_theme_ref_primary_primary80</item>
+
+        <item name="objectsListItemsColor">@color/material_theme_sys_light_primary_container</item>
+        <item name="objectsListItemsRippleColor">@color/material_theme_ref_primary_primary80</item>
+
+        <item name="switchesRippleColor">@color/material_theme_ref_primary_primary70</item>
+
+        <item name="backgroundTextTemplateColor">@color/material_theme_sys_light_on_background50p</item>
+
+        <item name="textLinkColor">@color/material_theme_sys_light_primary_container</item>
 
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -63,8 +83,6 @@
     </style>
     
     <style name="TextTitleLargeStyle">
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginStart">16dp</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">?attr/textOnBackgroundColor</item>
         <item name="fontFamily">@font/roboto</item>
@@ -99,10 +117,6 @@
         <item name="android:background">@drawable/btn_login_ripple_solid</item>
         <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
         <item name="android:elevation">@dimen/button_elevation</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">?attr/loginButtonTextColor</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="MaterialTextButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
@@ -111,6 +125,16 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?attr/textOnBackgroundColor</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="MaterialButtonOutlinedStyle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/corner_radius_most</item>
+        <item name="rippleColor">?attr/callButtonRippleColor</item>
+        <item name="strokeColor">?attr/textObjectsInfoColor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/textObjectsInfoColor</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
@@ -124,7 +148,6 @@
         <item name="stColorBackground">?attr/toastBackgroundColor</item>
         <item name="stTextColor">?attr/toastTextColor</item>
         <item name="stTextSize">12sp</item>
-        <!--<item name="stIconStart"></item>-->
         <item name="stRadius">12dp</item>
     </style>
 

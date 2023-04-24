@@ -11,6 +11,8 @@
 
     <color name="transparent">#00FFFFFF</color>
     <color name="black_10p">#1A000000</color>
+    <color name="material_theme_sys_light_on_background50p">#801B1B1F</color>
+    <color name="material_theme_sys_dark_on_background50p">#80E4E1E6</color>
 
     <color name="material_theme_sys_light_primary">#3C57B9</color>
     <color name="material_theme_sys_light_on_primary">#FFFFFF</color>

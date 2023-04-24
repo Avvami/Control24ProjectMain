@@ -22,6 +22,7 @@
 
     <attr name="textOnBackgroundColor" format="color"/>
     <attr name="textOnItemsColor" format="color"/>
+    <attr name="textObjectsInfoColor" format="color"/>
 
     <attr name="splashScreenBackgroundColor" format="color"/>
 
@@ -36,4 +37,23 @@
     <attr name="bottomNavigationItemColor" format="color"/>
     <attr name="bottomNavigationItemActiveColor" format="color"/>
     <attr name="bottomNavigationItemRippleColor" format="color"/>
+
+    <attr name="carIconBackgroundColor" format="color"/>
+    <attr name="carIconColor" format="color"/>
+    <attr name="dashboardIconBackgroundColor" format="color"/>
+    <attr name="dashboardIconColor" format="color"/>
+    <attr name="locationIconBackgroundColor" format="color"/>
+    <attr name="locationIconColor" format="color"/>
+    <attr name="timeIconBackgroundColor" format="color"/>
+    <attr name="timeIconColor" format="color"/>
+    <attr name="callButtonRippleColor" format="color"/>
+
+    <attr name="objectsListItemsColor" format="color"/>
+    <attr name="objectsListItemsRippleColor" format="color"/>
+
+    <attr name="switchesRippleColor" format="color"/>
+
+    <attr name="backgroundTextTemplateColor" format="color"/>
+
+    <attr name="textLinkColor" format="color"/>
 </resources>

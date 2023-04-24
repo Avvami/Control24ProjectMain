@@ -1,8 +1,6 @@
 package com.example.control24projectmain
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
@@ -12,7 +10,7 @@ object UserManager {
     private const val LOGIN_KEY = "LOGIN"
     private const val PASSWORD_KEY = "PASSWORD"
     private const val THEME_KEY = "THEME"
-    private const val POSITION_KEY = "POSITION"
+    private const val OBJECTS_LIST_VIEW_KEY = "OBJECTS_LIST"
 
     // Save user cred inside encrypted shared pref
     fun saveLoginCredentials(context: Context, login: String, password: String) {
@@ -72,26 +70,32 @@ object UserManager {
         editor.apply()
     }
 
-    // Save data for other needs
-    fun saveSharedPreferencesData(context: Context, isDarkTheme: Boolean, navViewPosition: Int) {
+    // Save theme state
+    fun saveThemeState(context: Context, isDarkTheme: Boolean) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean(THEME_KEY, isDarkTheme)
-        editor.putInt(POSITION_KEY, navViewPosition)
         editor.apply()
     }
 
-    fun getSharedPreferencesData(context: Context): Pair<Boolean, Int> {
-        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val isLightThemeEnabled = sharedPreferences.getBoolean(THEME_KEY, false)
-        val navViewPosition = sharedPreferences.getInt(POSITION_KEY, R.id.list_menu)
-        return Pair(isLightThemeEnabled, navViewPosition)
+    // Get theme state
+    fun getThemeState(context: Context): Boolean {
+        val sharedPreferences =
+            context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(THEME_KEY, false)
     }
 
-    /*fun clearSelectedFragmentPosition(context: Context) {
+    // Save objects list data
+    fun saveObjectsListView(context: Context, isDetailedList: Boolean) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.remove(POSITION_KEY)
+        editor.putBoolean(OBJECTS_LIST_VIEW_KEY, isDetailedList)
         editor.apply()
-    }*/
+    }
+
+    // Get objects list data
+    fun getObjectsListView(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(OBJECTS_LIST_VIEW_KEY, false)
+    }
 }

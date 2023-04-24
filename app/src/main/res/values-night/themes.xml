@@ -26,6 +26,7 @@
 
         <item name="toastBackgroundColor">@color/material_theme_surfaces_dark_surface1</item>
         <item name="toastTextColor">@color/material_theme_sys_dark_on_background</item>
+        <item name="textObjectsInfoColor">@color/material_theme_sys_dark_on_surface_variant</item>
 
         <item name="textOnBackgroundColor">@color/material_theme_sys_dark_on_background</item>
         <item name="textOnItemsColor">@color/material_theme_sys_dark_on_background</item>
@@ -43,6 +44,25 @@
         <item name="bottomNavigationItemColor">@color/material_theme_sys_dark_outline</item>
         <item name="bottomNavigationItemActiveColor">@color/material_theme_sys_dark_primary</item>
         <item name="bottomNavigationItemRippleColor">@color/material_theme_surfaces_dark_surface1</item>
+
+        <item name="carIconBackgroundColor">@color/material_theme_sys_dark_primary</item>
+        <item name="carIconColor">@color/material_theme_sys_dark_on_primary</item>
+        <item name="dashboardIconBackgroundColor">@color/material_theme_sys_dark_tertiary</item>
+        <item name="dashboardIconColor">@color/material_theme_sys_dark_on_tertiary</item>
+        <item name="locationIconBackgroundColor">@color/material_theme_sys_dark_error_container</item>
+        <item name="locationIconColor">@color/material_theme_sys_dark_on_error_container</item>
+        <item name="timeIconBackgroundColor">@color/material_theme_sys_dark_on_surface_variant</item>
+        <item name="timeIconColor">@color/material_theme_sys_dark_surface_variant</item>
+        <item name="callButtonRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant50</item>
+
+        <item name="objectsListItemsColor">@color/material_theme_surfaces_dark_surface5</item>
+        <item name="objectsListItemsRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant30</item>
+
+        <item name="switchesRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant70</item>
+
+        <item name="backgroundTextTemplateColor">@color/material_theme_sys_dark_on_background50p</item>
+
+        <item name="textLinkColor">@color/material_theme_sys_dark_primary</item>
 
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>

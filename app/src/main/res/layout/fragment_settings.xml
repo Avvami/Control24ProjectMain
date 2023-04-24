@@ -26,6 +26,8 @@
                 android:id="@+id/settingsTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
                 style="@style/TextTitleLargeStyle"
                 android:text="@string/settings_menu"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +42,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/constraint_btn_background"
+                android:background="@drawable/background_settings_items"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +88,7 @@
                     android:id="@+id/logoutCLButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -151,7 +153,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginVertical="12dp"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV">
@@ -167,7 +169,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/darkThemeMSwitch"
@@ -179,7 +181,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:thumbTint="?attr/switchThumbColor"
-                        app:trackTint="?attr/switchTrackColor" />
+                        app:trackTint="?attr/switchTrackColor"/>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -189,7 +191,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginVertical="12dp"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/darkThemeCL">
@@ -214,7 +216,7 @@
                         android:layout_height="26dp"
                         android:layout_marginEnd="12dp"
                         android:contentDescription="@string/right_arrow_image"
-                        android:src="@drawable/right_arrow"
+                        android:src="@drawable/icon_right_arrow"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -223,18 +225,18 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/listViewSettingsCL"
+                    android:id="@+id/objectsListViewSettingsCL"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginVertical="12dp"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mapProviderCL">
 
 
                     <TextView
-                        android:id="@+id/listViewSettingsTV"
+                        android:id="@+id/objectsListViewSettingsTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
@@ -252,7 +254,7 @@
                         android:layout_height="26dp"
                         android:layout_marginEnd="12dp"
                         android:contentDescription="@string/right_arrow_image"
-                        android:src="@drawable/right_arrow"
+                        android:src="@drawable/icon_right_arrow"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -291,7 +293,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginVertical="12dp"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/supportSettings">
@@ -315,7 +317,7 @@
                         android:layout_height="26dp"
                         android:layout_marginEnd="12dp"
                         android:contentDescription="@string/right_arrow_image"
-                        android:src="@drawable/right_arrow"
+                        android:src="@drawable/icon_right_arrow"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -328,7 +330,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginVertical="12dp"
-                    android:background="@drawable/constraint_btn_background"
+                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/aboutAppCL">
@@ -352,7 +354,7 @@
                         android:layout_height="26dp"
                         android:layout_marginEnd="12dp"
                         android:contentDescription="@string/right_arrow_image"
-                        android:src="@drawable/right_arrow"
+                        android:src="@drawable/icon_right_arrow"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

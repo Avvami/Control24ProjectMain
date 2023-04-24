@@ -18,6 +18,7 @@ import org.osmdroid.util.GeoPoint
 class MapFragment : Fragment() {
 
     private lateinit var binding: FragmentMapBinding
+    private var isDarkTheme: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +32,8 @@ class MapFragment : Fragment() {
         window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.black_10p)
 
         // Set the status bar text color to dark
-        val isDark = UserManager.getSharedPreferencesData(requireContext())
-        if (!isDark.first) {
+        isDarkTheme = UserManager.getThemeState(requireContext())
+        if (!isDarkTheme) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
@@ -67,8 +68,8 @@ class MapFragment : Fragment() {
         window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
 
         // Restore the status bar text color to white
-        val isDark = UserManager.getSharedPreferencesData(requireContext())
-        if (!isDark.first) {
+        //val isDarkTheme = UserManager.getThemeState(requireContext())
+        if (!isDarkTheme) {
             window.decorView.systemUiVisibility = 0
         }
     }
