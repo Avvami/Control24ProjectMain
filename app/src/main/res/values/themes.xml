@@ -7,6 +7,8 @@
     </style>
     
     <style name="AppTheme" parent="Theme.Control24ProjectMain">
+        <item name="logoBackgroundColor">@color/material_theme_sys_light_primary</item>
+
         <item name="settingsMenuItemsColor">@color/material_theme_sys_light_primary_container</item>
         <item name="settingsMenuItemsRippleColor">@color/material_theme_ref_primary_primary80</item>
 
@@ -64,9 +66,12 @@
 
         <item name="textLinkColor">@color/material_theme_sys_light_primary_container</item>
 
-        <item name="android:statusBarColor">@color/transparent</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <!--<item name="android:navigationBarColor">?attr/bottomNavigationBarColor</item>-->
         <item name="android:windowLightStatusBar">false</item>
+
         <item name="android:colorEdgeEffect">?attr/overScrollColor</item>
         <item name="android:scrollbarThumbVertical">?attr/scrollVerticalThumbColor</item>
 

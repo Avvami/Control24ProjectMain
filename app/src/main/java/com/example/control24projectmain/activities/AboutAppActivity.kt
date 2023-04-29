@@ -1,18 +1,9 @@
 package com.example.control24projectmain.activities
 
 import android.content.Intent
-import android.graphics.Paint
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextPaint
-import android.text.style.TypefaceSpan
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.pm.PackageInfoCompat
-import androidx.core.content.res.ResourcesCompat
-import com.example.control24projectmain.BuildConfig
 import com.example.control24projectmain.R
 import com.example.control24projectmain.databinding.ActivityAboutAppBinding
 import java.text.SimpleDateFormat
@@ -78,6 +69,6 @@ class AboutAppActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+        overridePendingTransition(R.anim.scale_in, R.anim.slide_out_left)
     }
 }

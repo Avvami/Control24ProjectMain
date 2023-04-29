@@ -56,4 +56,6 @@
     <attr name="backgroundTextTemplateColor" format="color"/>
 
     <attr name="textLinkColor" format="color"/>
+
+    <attr name="logoBackgroundColor" format="color"/>
 </resources>

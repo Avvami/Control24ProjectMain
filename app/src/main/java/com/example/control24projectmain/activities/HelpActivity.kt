@@ -61,6 +61,6 @@ class HelpActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+        overridePendingTransition(R.anim.scale_in, R.anim.slide_out_left)
     }
 }

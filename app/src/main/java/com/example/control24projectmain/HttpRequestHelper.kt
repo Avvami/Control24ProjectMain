@@ -1,6 +1,5 @@
 package com.example.control24projectmain
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

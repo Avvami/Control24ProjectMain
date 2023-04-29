@@ -17,10 +17,12 @@ class ObjectsListViewActivity : AppCompatActivity() {
         binding = ActivityObjectsListViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Check if its detailed or short view selected (Short view is default)
+        // Get the saved data (short is default)
         isDetailedView = UserManager.getObjectsListView(this@ObjectsListViewActivity)
         val shortCheckBox = binding.shortMCheckBox
         val detailedCheckBox = binding.detailedMCheckBox
+
+        // Change the font for either of view selected
         if (!isDetailedView) {
             shortCheckBox.isChecked = true
             shortCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
@@ -34,7 +36,7 @@ class ObjectsListViewActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        // Change the state of checkBox and save selected
+        // Change the state of checkBox its font and save selected
         shortCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 detailedCheckBox.isChecked = false
@@ -44,7 +46,7 @@ class ObjectsListViewActivity : AppCompatActivity() {
             }
         }
 
-        // Change the state of checkBox and save selected
+        // Change the state of checkBox its font and save selected
         detailedCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 shortCheckBox.isChecked = false
@@ -59,6 +61,6 @@ class ObjectsListViewActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+        overridePendingTransition(R.anim.scale_in, R.anim.slide_out_left)
     }
 }

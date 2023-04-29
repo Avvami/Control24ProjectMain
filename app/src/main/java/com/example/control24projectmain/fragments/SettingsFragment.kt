@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.control24projectmain.R
+import com.example.control24projectmain.UserManager.clearExpandedListItem
 import com.example.control24projectmain.UserManager.clearLoginCredentials
 import com.example.control24projectmain.activities.AboutAppActivity
 import com.example.control24projectmain.activities.HelpActivity
 import com.example.control24projectmain.activities.LoginActivity
 import com.example.control24projectmain.activities.MainActivity
+import com.example.control24projectmain.activities.MapProviderActivity
 import com.example.control24projectmain.activities.ObjectsListViewActivity
 import com.example.control24projectmain.databinding.FragmentSettingsBinding
 
@@ -44,8 +46,10 @@ class SettingsFragment : Fragment() {
         binding.logoutCLButton.setOnClickListener {
             // Clear saved login session and start login screen
             clearLoginCredentials(requireContext())
+            clearExpandedListItem(requireContext())
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.scale_out)
             activity?.finish()
         }
 
@@ -62,28 +66,30 @@ class SettingsFragment : Fragment() {
 
         // Map provider button is clicked then open a map provider activity
         binding.mapProviderCL.setOnClickListener {
-            /*whats ap*/
+            val intent = Intent(activity, MapProviderActivity::class.java)
+            startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
 
         // Objects list view button is clicked then open a objects list view activity
         binding.objectsListViewSettingsCL.setOnClickListener {
             val intent = Intent(activity, ObjectsListViewActivity::class.java)
             startActivity(intent)
-            activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left)
+            activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
 
         // About app button is clicked then open a about app activity
         binding.aboutAppCL.setOnClickListener {
             val intent = Intent(activity, AboutAppActivity::class.java)
             startActivity(intent)
-            activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left)
+            activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
 
         // Help button is clicked then open a help activity
         binding.helpCL.setOnClickListener {
             val intent = Intent(activity, HelpActivity::class.java)
             startActivity(intent)
-            activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left)
+            activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
 
         return binding.root

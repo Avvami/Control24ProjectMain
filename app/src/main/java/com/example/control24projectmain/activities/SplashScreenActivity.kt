@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.*
 import android.widget.RelativeLayout
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.control24projectmain.HttpRequestHelper
 import com.example.control24projectmain.InternetConnectionCheck
 import com.example.control24projectmain.R

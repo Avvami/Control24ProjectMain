@@ -5,16 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.control24projectmain.ObjectData
+import com.example.control24projectmain.CombinedResponse
+import com.example.control24projectmain.FirstResponse
 import com.example.control24projectmain.ObjectsListAdapter
+import com.example.control24projectmain.SharedViewModel
 import com.example.control24projectmain.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var recyclerView: RecyclerView
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,23 +27,18 @@ class ListFragment : Fragment() {
 
         binding = FragmentListBinding.inflate(layoutInflater)
 
-        recyclerView = binding.objectsListRV
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+        // Observe the ViewModel and update the UI when new data is received
+        sharedViewModel.bundleLiveData.observe(viewLifecycleOwner) { bundle ->
+            // update the UI with the new data
+            val response = bundle.getSerializable("OBJECTS_DATA") as CombinedResponse
 
-        val objectDataList = listOf(
-            ObjectData(1, "OBJECT_1", "Category A", "Client A", "Auto Num 1", "Auto Model 1", false),
-            ObjectData(2, "OBJECT_2", "Category B", "Client B", "Auto Num 2", "Auto Model 2", false),
-            ObjectData(3, "OBJECT_3", "Category C", "Client C", "Auto Num 3", "Auto Model 3", false),
-            ObjectData(3, "OBJECT_4", "Category D", "Client D", "Auto Num 4", "Auto Model 4", false)
-        )
-        val adapter = ObjectsListAdapter(requireContext(), objectDataList)
-        recyclerView.adapter = adapter
+            recyclerView = binding.objectsListRV
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView.setHasFixedSize(true)
 
-        /*val keyString = arguments?.getString("KEY")
-        val objectsList = arguments?.getParcelableArrayList<ObjectData>("OBJECTS")
-        binding.textView.text = keyString
-        binding.textView4.text = objectsList.toString()*/
+            val adapter = ObjectsListAdapter(requireContext(), response.objects)
+            recyclerView.adapter = adapter
+        }
 
         return binding.root
     }

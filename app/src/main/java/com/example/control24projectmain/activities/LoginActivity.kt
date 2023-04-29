@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -20,7 +19,6 @@ import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityLoginBinding
 import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.*
-import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -109,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, HelpActivity::class.java)
             intent.putExtra("fromLoginActivity", true)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
     }
 
@@ -153,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 intent.putExtra("USERNAME", login)
                 startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
                 finish()
             } catch (e: HttpRequestHelper.BadRequestException) {
                 // Handle the 400 error

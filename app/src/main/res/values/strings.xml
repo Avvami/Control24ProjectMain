@@ -21,7 +21,7 @@
     <string name="car_name_template">Нет данных</string>
     <string name="display_on_map">Отобразить на карте</string>
     <string name="location_template">Нет данных</string>
-    <string name="speed_template">Нет данных</string>
+    <string name="speed_template">%dкм/ч</string>
     <string name="time_template">Нет данных</string>
     <string name="owner">Владелец</string>
     <string name="owner_template">Нет данных</string>
@@ -78,6 +78,10 @@
     <string name="support_settings">Поддержка</string>
     <string name="about_app">О Приложении</string>
     <string name="help">Помощь</string>
+
+    <!--Map provider activity-->
+    <string name="yandex_maps">Яндекс Карты</string>
+    <string name="open_street_maps">Open Street Maps</string>
 
     <!--Internet dialog view-->
     <string name="internet_dialog_warning">Ошибка</string>
