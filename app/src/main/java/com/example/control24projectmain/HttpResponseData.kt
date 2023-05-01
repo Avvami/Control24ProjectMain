@@ -38,7 +38,7 @@ data class CombinedResponse (
 data class CombinedResponseObject (
     val id: Int,
     val name: String,
-    val category: String,
+    val category: Int,
     val client: String,
     val avto_no: String,
     val avto_model: String,

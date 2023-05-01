@@ -2,20 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintMapL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="36dp"
+    android:paddingBottom="56dp"
     tools:context=".fragments.MapFragment">
-    <!--delete that padding above later-->
 
-    <!--<org.osmdroid.views.MapView
+    <org.osmdroid.views.MapView
         android:id="@+id/osmMV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/yandexMV"
@@ -24,6 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

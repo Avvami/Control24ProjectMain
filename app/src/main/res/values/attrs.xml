@@ -16,6 +16,8 @@
 
     <attr name="switchThumbColor" format="color"/>
     <attr name="switchTrackColor" format="color"/>
+    <attr name="switchThumbColorInactive" format="color"/>
+    <attr name="switchTrackColorInactive" format="color"/>
 
     <attr name="toastBackgroundColor" format="color"/>
     <attr name="toastTextColor" format="color"/>

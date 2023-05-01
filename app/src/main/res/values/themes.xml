@@ -25,6 +25,8 @@
 
         <item name="switchThumbColor">@color/material_theme_ref_primary_primary40</item>
         <item name="switchTrackColor">@color/material_theme_ref_primary_primary60</item>
+        <item name="switchThumbColorInactive">@color/material_theme_ref_neutral_variant_neutral_variant70</item>
+        <item name="switchTrackColorInactive">@color/material_theme_ref_neutral_variant_neutral_variant50</item>
 
         <item name="toastBackgroundColor">@color/material_theme_sys_light_primary</item>
         <item name="toastTextColor">@color/material_theme_sys_light_background</item>

@@ -56,8 +56,8 @@
         android:background="@drawable/switches_ripple_effect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:thumbTint="?attr/switchThumbColor"
-        app:trackTint="?attr/switchTrackColor"/>
+        app:thumbTint="@color/switch_thumb_state_color"
+        app:trackTint="@color/switch_track_state_color"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/locationCL"

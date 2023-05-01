@@ -87,8 +87,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/downArrow"
         app:layout_constraintEnd_toStartOf="@+id/downArrow"
         app:layout_constraintTop_toTopOf="@+id/downArrow"
-        app:thumbTint="?attr/switchThumbColor"
-        app:trackTint="?attr/switchTrackColor"/>
+        app:thumbTint="@color/switch_thumb_state_color"
+        app:trackTint="@color/switch_track_state_color"/>
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/downArrow"

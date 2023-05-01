@@ -30,7 +30,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@drawable/bottom_nav_background"
+        android:background="?attr/bottomNavigationBarColor"
         android:paddingHorizontal="36dp"
         app:itemIconTint="@color/bottom_nav_items_color"
         app:itemRippleColor="?attr/bottomNavigationItemRippleColor"

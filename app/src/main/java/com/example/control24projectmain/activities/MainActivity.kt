@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.control24projectmain.CombinedResponse
 import com.example.control24projectmain.FirstResponse
 import com.example.control24projectmain.HttpRequestHelper
@@ -22,8 +23,8 @@ import com.example.control24projectmain.fragments.MapFragment
 import com.example.control24projectmain.fragments.SettingsFragment
 import com.google.gson.Gson
 import io.github.muddz.styleabletoast.StyleableToast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -38,9 +39,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toast: StyleableToast
     private var selectedItemId: Int = R.id.list_menu
 
+    private val bundle = Bundle()
+    private var coroutineJob: Job? = null
+    private val intervalMillis = 60000L // 10 seconds in milliseconds
+    private var login: String? = null
+    private var password: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -59,79 +65,10 @@ class MainActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
 
-        val bundle = Bundle()
-
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-        val intervalMillis = 60000L // 10 seconds in milliseconds
-
+        // Get user credentials
         val loginCredentials = UserManager.getLoginCredentials(this@MainActivity)
-        val login = loginCredentials?.first
-        val password = loginCredentials?.second
-
-        coroutineScope.launch {
-            while (true) { // Repeat indefinitely
-                try {
-                    // Make the HTTP request and parse the response
-                    val httpResponseFirst = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
-                    val gson = Gson()
-                    val firstResponseData = gson.fromJson(httpResponseFirst, FirstResponse::class.java)
-                    val httpResponseSecond = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/update2&${firstResponseData.key}")
-
-                    val json1 = JSONObject(httpResponseFirst)
-                    val json2 = JSONObject(httpResponseSecond)
-
-                    val mergedJson = JSONObject()
-                    //mergedJson.put("key", json1.get("key"))
-
-                    val mergedObjects = JSONArray()
-                    val objects1 = json1.getJSONArray("objects")
-                    val objects2 = json2.getJSONArray("objects")
-
-                    for (i in 0 until objects1.length()) {
-                        val obj1 = objects1.getJSONObject(i)
-                        val obj2 = objects2.getJSONObject(i)
-
-                        val mergedObj = JSONObject()
-                        mergedObj.put("id", obj1.get("id"))
-                        mergedObj.put("name", obj1.get("name"))
-                        mergedObj.put("category", obj1.get("category"))
-                        mergedObj.put("client", obj1.get("client"))
-                        mergedObj.put("avto_no", obj1.get("avto_no"))
-                        mergedObj.put("avto_model", obj1.get("avto_model"))
-                        mergedObj.put("gmt", obj2.get("gmt"))
-                        mergedObj.put("lat", obj2.get("lat"))
-                        mergedObj.put("lon", obj2.get("lon"))
-                        mergedObj.put("speed", obj2.get("speed"))
-                        mergedObj.put("heading", obj2.get("heading"))
-                        mergedObj.put("gps", obj2.get("gps"))
-                        mergedObjects.put(mergedObj)
-                    }
-
-                    mergedJson.put("objects", mergedObjects)
-                    val finalJsonStr = mergedJson.toString()
-
-                    val combinedData = gson.fromJson(finalJsonStr, CombinedResponse::class.java)
-
-                    // Update the bundle with the new data
-                    bundle.putSerializable("OBJECTS_DATA", combinedData)
-                    sharedViewModel.bundleLiveData.postValue(bundle)
-
-                    // Wait for the specified interval before making the next request
-                    delay(intervalMillis)
-                } catch (e: Exception) {
-                    // Handle error
-                    StyleableToast.makeText(
-                        this@MainActivity,
-                        e.toString(),
-                        Toast.LENGTH_SHORT,
-                        R.style.CustomStyleableToast
-                    ).show()
-
-                    // Wait for the specified interval even if an error occurs
-                    delay(intervalMillis)
-                }
-            }
-        }
+        login = loginCredentials?.first
+        password = loginCredentials?.second
 
         // Pass the key and objects to list fragment
         val listFragment = ListFragment()
@@ -164,12 +101,10 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom navigation view
         binding.bottomNavigationView.setOnItemSelectedListener {menuItem ->
-
             // Check if the selected item is the same as the current fragment
             if (menuItem.itemId == selectedItemId) {
                 return@setOnItemSelectedListener true
             }
-
             // Switch fragment inside the frameLayout
             when (menuItem.itemId) {
                 R.id.list_menu -> {
@@ -194,7 +129,6 @@ class MainActivity : AppCompatActivity() {
 
     // Replace Fragment in the frameLayout
     private fun replaceFragment(fragment: Fragment) {
-
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
@@ -240,6 +174,87 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    // Start coroutine
+    override fun onStart() {
+        super.onStart()
+        coroutineScopeLaunch()
+    }
+
+    // Stop coroutine
+    override fun onStop() {
+        super.onStop()
+        coroutineJob?.cancel()
+    }
+
+    // Coroutine for http requests to a database
+    private fun coroutineScopeLaunch() {
+        coroutineJob = lifecycleScope.launch {
+            while (true) { // Repeat indefinitely
+                try {
+                    // Make the HTTP request and parse the response
+                    val httpResponseFirst = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
+                    val gson = Gson()
+                    val firstResponseData = gson.fromJson(httpResponseFirst, FirstResponse::class.java)
+                    val httpResponseSecond = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/update2&${firstResponseData.key}")
+
+                    val json1 = JSONObject(httpResponseFirst)
+                    val json2 = JSONObject(httpResponseSecond)
+
+                    val mergedJson = JSONObject()
+                    //mergedJson.put("key", json1.get("key"))
+
+                    val mergedObjects = JSONArray()
+                    val objects1 = json1.getJSONArray("objects")
+                    val objects2 = json2.getJSONArray("objects")
+
+                    for (i in 0 until objects1.length()) {
+                        val obj1 = objects1.getJSONObject(i)
+                        val obj2 = objects2.getJSONObject(i)
+
+                        val mergedObj = JSONObject()
+                        mergedObj.put("id", obj1.get("id"))
+                        mergedObj.put("name", obj1.get("name"))
+                        mergedObj.put("category", obj1.get("category"))
+                        mergedObj.put("client", obj1.get("client"))
+                        mergedObj.put("avto_no", obj1.get("avto_no"))
+                        mergedObj.put("avto_model", obj1.get("avto_model"))
+                        mergedObj.put("gmt", obj2.get("gmt"))
+                        mergedObj.put("lat", obj2.get("lat"))
+                        mergedObj.put("lon", obj2.get("lon"))
+                        mergedObj.put("speed", obj2.get("speed"))
+                        mergedObj.put("heading", obj2.get("heading"))
+                        mergedObj.put("gps", obj2.get("gps"))
+                        mergedObjects.put(mergedObj)
+                    }
+
+                    mergedJson.put("objects", mergedObjects)
+                    val finalJsonStr = mergedJson.toString()
+
+                    val combinedData = gson.fromJson(finalJsonStr, CombinedResponse::class.java)
+                    // Update the bundle with the new data
+                    bundle.putSerializable("OBJECTS_DATA", combinedData)
+                    sharedViewModel.bundleLiveData.postValue(bundle)
+
+                    // Wait for the specified interval before making the next request
+                    delay(intervalMillis)
+                } catch (e: Exception) {
+                    if (e !is CancellationException) {
+                        // Show toast message only if the exception is not a CancellationException
+                        StyleableToast.makeText(
+                            this@MainActivity,
+                            e.toString(),
+                            Toast.LENGTH_SHORT,
+                            R.style.CustomStyleableToast
+                        ).show()
+                    }
+
+                    // Wait for the specified interval even if an error occurs
+                    delay(intervalMillis)
+                }
+            }
         }
     }
 }

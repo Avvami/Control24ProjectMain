@@ -1,12 +1,15 @@
 package com.example.control24projectmain.fragments
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.FragmentMapBinding
@@ -15,18 +18,27 @@ import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.TilesOverlay
 
 class MapFragment : Fragment() {
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var yandexMV: MapView
+    private lateinit var osmMV: org.osmdroid.views.MapView
     private var isDarkTheme: Boolean = false
     private var systemUiVisibility: Int = 0
     private var statusBarColor: Int = 0
+    private val defaultMap = "YANDEX"
+    private var mapProvider: String = defaultMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        mapProvider = UserManager.getSelectedMap(requireContext()).toString()
         if (savedInstanceState != null) {
             // Restore the system UI visibility value
             systemUiVisibility = savedInstanceState.getInt("systemUiVisibility")
@@ -46,17 +58,43 @@ class MapFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Initialize the yandex maps
-        MapKitFactory.initialize(requireContext())
+
+        // Initialize the maps
+        if (mapProvider == defaultMap) {
+            // Yandex Maps
+            MapKitFactory.initialize(requireContext())
+        } else {
+            // Open Street Maps
+            Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
+        }
 
         binding = FragmentMapBinding.inflate(layoutInflater)
 
-        // Initialize the variable and set default position - Krasnoyarsk
+        // Set margin for constraintMapL when user has a virtual navigation control
+        ViewCompat.setOnApplyWindowInsetsListener(binding.constraintMapL) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
+            layoutParams?.leftMargin = insets.left
+            layoutParams?.bottomMargin = insets.bottom
+            layoutParams?.rightMargin = insets.right
+
+            WindowInsetsCompat.CONSUMED
+        }
+
         yandexMV = binding.yandexMV
-        yandexMV.map.move(
-            CameraPosition(Point(56.010569, 92.852572), 12.0f, 0.0f, 0.0f),
-            Animation(Animation.Type.SMOOTH, 0f),
-            null)
+        osmMV = binding.osmMV
+
+        // Initialize the variable and set default position - Krasnoyarsk
+        if (mapProvider == defaultMap) {
+            osmMV.visibility = View.GONE
+            yandexMV.visibility = View.VISIBLE
+            yandexConfig()
+        } else {
+            yandexMV.visibility = View.GONE
+            osmMV.visibility = View.VISIBLE
+            osmConfig()
+        }
 
         // Set the status bar color
         val window: Window = requireActivity().window
@@ -68,37 +106,31 @@ class MapFragment : Fragment() {
         if (!isDarkTheme) {
             systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.decorView.systemUiVisibility = systemUiVisibility
-            yandexMV.map.isNightModeEnabled = false
+
+            if (mapProvider == defaultMap) {
+                yandexMV.map.isNightModeEnabled = false
+            } else {
+                osmMV.overlayManager.tilesOverlay.setColorFilter(null)
+            }
         } else {
-            yandexMV.map.isNightModeEnabled = true
+            if (mapProvider == defaultMap) {
+                yandexMV.map.isNightModeEnabled = true
+            } else {
+                osmMV.overlayManager.tilesOverlay.setColorFilter(TilesOverlay.INVERT_COLORS)
+            }
         }
-
-        /*// Load configuration
-        Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
-        // Get reference to OSM MapVie
-        val osmMapView = binding.osmMV
-        // Set Tile source to MAPNIK
-        osmMapView.setTileSource(TileSourceFactory.MAPNIK)
-
-        // Disable map rotation gestures
-        osmMapView.setMultiTouchControls(true)
-
-        // Add zoom buttons to the middle right
-        val zoomController = osmMapView.zoomController
-
-        val mapController = osmMapView.controller
-        mapController.setZoom(13.0)
-        val startPoint = GeoPoint(56.010569, 92.852572)
-        mapController.setCenter(startPoint)*/
-
 
         return binding.root
     }
 
     override fun onStop() {
-        // Stop the mapkit
-        yandexMV.onStop()
-        MapKitFactory.getInstance().onStop()
+        // Stop the maps
+        if (mapProvider == defaultMap) {
+            yandexMV.onStop()
+            MapKitFactory.getInstance().onStop()
+        } else {
+            osmMV.onPause()
+        }
         super.onStop()
 
         // Set default status bar color
@@ -111,8 +143,27 @@ class MapFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        // Start the mapkit
-        MapKitFactory.getInstance().onStart()
-        yandexMV.onStart()
+        // Start the maps
+        if (mapProvider == defaultMap) {
+            MapKitFactory.getInstance().onStart()
+            yandexMV.onStart()
+        } else {
+            osmMV.onResume()
+        }
+    }
+
+    private fun yandexConfig() {
+        yandexMV.map.move(
+            CameraPosition(Point(56.010569, 92.852572), 12.0f, 0.0f, 0.0f),
+            Animation(Animation.Type.SMOOTH, 0f),
+            null)
+        //yandexMV.map
+    }
+
+    private fun osmConfig() {
+        osmMV.setTileSource(TileSourceFactory.MAPNIK)
+        osmMV.controller.setZoom(14.0)
+        osmMV.controller.setCenter(GeoPoint(56.010569, 92.852572))
+        osmMV.setMultiTouchControls(true)
     }
 }

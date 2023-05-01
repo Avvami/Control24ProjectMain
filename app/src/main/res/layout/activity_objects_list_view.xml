@@ -164,8 +164,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/downArrow1"
                     app:layout_constraintEnd_toStartOf="@+id/downArrow1"
                     app:layout_constraintTop_toTopOf="@+id/downArrow1"
-                    app:thumbTint="?attr/switchThumbColor"
-                    app:trackTint="?attr/switchTrackColor" />
+                    app:thumbTint="@color/switch_thumb_state_color"
+                    app:trackTint="@color/switch_track_state_color" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/downArrow1"
@@ -251,8 +251,8 @@
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="?attr/switchThumbColor"
-                    app:trackTint="?attr/switchTrackColor" />
+                    app:thumbTint="@color/switch_thumb_state_color"
+                    app:trackTint="@color/switch_track_state_color"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/locationCL2"
