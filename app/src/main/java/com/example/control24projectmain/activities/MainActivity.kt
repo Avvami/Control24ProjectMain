@@ -2,6 +2,7 @@ package com.example.control24projectmain.activities
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -74,11 +75,13 @@ class MainActivity : AppCompatActivity() {
         val listFragment = ListFragment()
         listFragment.arguments = bundle
 
-        val isDarkTheme = UserManager.getThemeState(this@MainActivity)
+        //val isDarkTheme = UserManager.getThemeState(this@MainActivity)
+        //val darkThemeState = UserManager.getThemeState(this@MainActivity)
 
         // Get the username from login or splash screen
         val username = intent.getStringExtra("USERNAME")
-        bundle.putBoolean("DARK_THEME", isDarkTheme)
+        //bundle.putBoolean("DARK_THEME", isDarkTheme)
+        //bundle.putString("DARK_THEME", darkThemeState)
         bundle.putString("USERNAME", username)
 
         // Pass the login to settings fragment
@@ -167,15 +170,26 @@ class MainActivity : AppCompatActivity() {
         }, 2000)
     }
 
-    //Dark theme set
-    fun isDarkThemeSet (darkTheme: Boolean) {
+    // Dark theme set
+    /*fun isDarkThemeSet (darkTheme: Boolean) {
         UserManager.saveThemeState(this@MainActivity, darkTheme)
         if (darkTheme) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-    }
+    }*/
+
+    /*fun isDarkThemeSet (darkThemeState: String) {
+        UserManager.saveThemeState(this@MainActivity, darkThemeState)
+        if (darkThemeState == "ON") {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            Log.i("HFJDKHFJKSDGFJH", "MAIN ACTIVITY ON")
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            Log.i("HFJDKHFJKSDGFJH", "MAIN ACTIVITY OFF")
+        }
+    }*/
 
     // Start coroutine
     override fun onStart() {

@@ -1,9 +1,14 @@
 package com.example.control24projectmain
 
 import android.content.Context
+import android.text.format.DateFormat
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 object UserManager {
 
@@ -11,10 +16,11 @@ object UserManager {
     private const val LOGIN_KEY = "LOGIN"
     private const val PASSWORD_KEY = "PASSWORD"
     private const val THEME_KEY = "THEME"
+    private const val DARK_THEME = "THEME_STATE"
     private const val OBJECTS_LIST_VIEW_KEY = "OBJECTS_LIST"
     private const val LIST_STATE = "LIST_STATE"
     private const val MAP_SELECTED = "MAP"
-    private const val COROUTINE = "COROUTINE_RUNNING"
+    private const val DISPLAYED_ITEMS = "DISPLAY"
 
     // Save user cred inside encrypted shared pref
     fun saveLoginCredentials(context: Context, login: String, password: String) {
@@ -77,41 +83,38 @@ object UserManager {
     }
 
     // Save theme state
-    fun saveThemeState(context: Context, isDarkTheme: Boolean) {
+    fun saveThemeState(context: Context, darkThemeState: String/*, isDarkTheme: Boolean*/) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
-            putBoolean(THEME_KEY, isDarkTheme)
+            putString(DARK_THEME, darkThemeState)
+            /*putBoolean(THEME_KEY, isDarkTheme)*/
         }
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(THEME_KEY, isDarkTheme)
-        editor.apply()*/
     }
 
     // Get theme state
-    fun getThemeState(context: Context): Boolean {
-        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
-            THEME_KEY, false)
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(THEME_KEY, false)*/
+    fun getThemeState(context: Context): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
+            DARK_THEME, "OFF")
     }
+
+    // Get theme state
+    /*fun getThemeState(context: Context): Pair<String?, Boolean> {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val darkThemeState = sharedPreferences.getString(THEME_STATE, "OFF")
+        val isDarkTheme = sharedPreferences.getBoolean(THEME_KEY, false)
+        return Pair(darkThemeState, isDarkTheme)
+    }*/
 
     // Save objects list view state
     fun saveObjectsListView(context: Context, isDetailedList: Boolean) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             putBoolean(OBJECTS_LIST_VIEW_KEY, isDetailedList)
         }
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(OBJECTS_LIST_VIEW_KEY, isDetailedList)
-        editor.apply()*/
     }
 
     // Get objects list view state
     fun getObjectsListView(context: Context): Boolean {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
             OBJECTS_LIST_VIEW_KEY, false)
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(OBJECTS_LIST_VIEW_KEY, false)*/
     }
 
     // Save expanded list item
@@ -119,18 +122,12 @@ object UserManager {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             putString(LIST_STATE, listStateArray)
         }
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(LIST_STATE, listStateArray)
-        editor.apply()*/
     }
 
     // Get expanded list item
     fun getExpandedListItem(context: Context): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
             LIST_STATE, null)
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getString(LIST_STATE, null)*/
     }
 
     // Clear expanded list data
@@ -138,10 +135,6 @@ object UserManager {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             remove(LIST_STATE)
         }
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove(LIST_STATE)
-        editor.apply()*/
     }
 
     // Save selected map
@@ -149,29 +142,77 @@ object UserManager {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             putString(MAP_SELECTED, selectedMap)
         }
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(MAP_SELECTED, selectedMap).apply()
-        editor.apply()*/
     }
 
     // Get expanded list item
     fun getSelectedMap(context: Context): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
             MAP_SELECTED, "YANDEX")
-        /*val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getString(MAP_SELECTED, null)*/
     }
 
-    // Save the coroutine state
-    fun saveCoroutineState(context: Context, coroutineRunning: Boolean) {
+    // Save displayed items
+    fun saveDisplayedItems(context: Context, itemsDisplayedArray: String) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
-            putBoolean(COROUTINE, coroutineRunning)
+            putString(DISPLAYED_ITEMS, itemsDisplayedArray)
         }
     }
 
-    fun getCoroutineState(context: Context): Boolean {
-        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
-            COROUTINE, false)
+    // Get displayed items
+    fun getDisplayedItems(context: Context): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
+            DISPLAYED_ITEMS, null)
+    }
+
+    // Clear displayed items
+    fun clearDisplayedItems(context: Context) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            remove(DISPLAYED_ITEMS)
+        }
+    }
+
+    // Save selected time
+    fun saveScheduledTime(context: Context, key: String, hour: Int, minute: Int) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+
+        val timeString = if (isSystem24Hour) {
+            String.format("%02d:%02d", hour, minute)
+        } else {
+            val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            format.timeZone = TimeZone.getDefault()
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+            }
+            format.format(calendar.time)
+        }
+        sharedPreferences.edit {
+            putString(key, timeString)
+        }
+    }
+
+    fun getScheduledTime(context: Context, key: String): String? {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+        val defaultHour = if (key == "startTime") 22 else 7
+        val defaultMinute = 0
+        val defaultTimeString = if (isSystem24Hour) {
+            String.format("%02d:%02d", defaultHour, defaultMinute)
+        } else {
+            val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            format.timeZone = TimeZone.getDefault()
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, defaultHour)
+                set(Calendar.MINUTE, defaultMinute)
+            }
+            format.format(calendar.time)
+        }
+        return sharedPreferences.getString(key, defaultTimeString)
+    }
+
+    fun clearScheduledTime(context: Context, key: String) {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            remove(key)
+        }
     }
 }

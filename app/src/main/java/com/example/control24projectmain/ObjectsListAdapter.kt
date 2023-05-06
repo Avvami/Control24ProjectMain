@@ -2,7 +2,6 @@ package com.example.control24projectmain
 
 import android.content.Context
 import android.location.Geocoder
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 class ObjectsListAdapter(
@@ -24,6 +21,7 @@ class ObjectsListAdapter(
     ) : RecyclerView.Adapter<ObjectsListAdapter.ObjectsListViewHolder>() {
 
     private var expandedStateArray = BooleanArray(item.size)
+    private var displayedItemsArray = BooleanArray(item.size)
 
     class ObjectsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val carNameTV: TextView = itemView.findViewById(R.id.carNameTemplateTV)
@@ -35,6 +33,7 @@ class ObjectsListAdapter(
         val carTypeTV: TextView = itemView.findViewById(R.id.typeTemplateTV)
         val carCategoryTV: TextView = itemView.findViewById(R.id.categoryTemplateTV)
         val carNumberTV: TextView = itemView.findViewById(R.id.autoNumTemplateTV)
+        val displaySwitch: SwitchMaterial = itemView.findViewById(R.id.mapDisplayMSwitch)
         val downArrow: CheckBox = itemView.findViewById(R.id.downArrow)
         val expandableCL: ConstraintLayout = itemView.findViewById(R.id.expandableCL)
     }
@@ -81,9 +80,18 @@ class ObjectsListAdapter(
         holder.carCategoryTV.text = category?.definition
         holder.carNumberTV.text = currentItem.avto_no
 
+        val gson = Gson()
+
+        // Check if our item is displayed on the map
+        val savedDisplayedItemsJsonString = UserManager.getDisplayedItems(context)
+        if (savedDisplayedItemsJsonString != null) {
+            val savedDisplayedItemsArray = gson.fromJson(savedDisplayedItemsJsonString, BooleanArray::class.java)
+            displayedItemsArray = savedDisplayedItemsArray
+        }
+        holder.displaySwitch.isChecked = displayedItemsArray[position]
+
         // Here we check if our list item is on expanded mode
         val savedExpandedStateJsonString = UserManager.getExpandedListItem(context)
-        val gson = Gson()
         if (savedExpandedStateJsonString != null) {
             val savedExpandedStateArray = gson.fromJson(savedExpandedStateJsonString, BooleanArray::class.java)
             expandedStateArray = savedExpandedStateArray
@@ -99,6 +107,13 @@ class ObjectsListAdapter(
             holder.expandableCL.startAnimation(anim)
             holder.downArrow.isChecked = !holder.downArrow.isChecked
         }*/
+
+        holder.displaySwitch.setOnCheckedChangeListener { _, _ ->
+            // Save displaying item
+            displayedItemsArray[position] = !displayedItemsArray[position]
+            val displayedItemsJsonString = gson.toJson(displayedItemsArray)
+            UserManager.saveDisplayedItems(context, displayedItemsJsonString)
+        }
 
         holder.downArrow.setOnClickListener {
             // Define the animation

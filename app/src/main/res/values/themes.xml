@@ -68,6 +68,10 @@
 
         <item name="textLinkColor">@color/material_theme_sys_light_primary_container</item>
 
+        <item name="clusterBorderColor">@color/material_theme_sys_light_background</item>
+        <item name="clusterBackgroundColor">@color/material_theme_sys_light_primary</item>
+        <item name="clusterTextColor">@color/material_theme_sys_light_background</item>
+
         <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>

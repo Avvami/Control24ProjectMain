@@ -60,4 +60,8 @@
     <attr name="textLinkColor" format="color"/>
 
     <attr name="logoBackgroundColor" format="color"/>
+
+    <attr name="clusterBorderColor" format="color"/>
+    <attr name="clusterBackgroundColor" format="color"/>
+    <attr name="clusterTextColor" format="color"/>
 </resources>
