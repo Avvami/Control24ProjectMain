@@ -35,8 +35,6 @@
         <item name="textOnBackgroundColor">@color/material_theme_sys_dark_on_background</item>
         <item name="textOnItemsColor">@color/material_theme_sys_dark_on_background</item>
 
-        <item name="splashScreenBackgroundColor">@color/material_theme_sys_dark_background</item>
-
         <item name="overScrollColor">@color/material_theme_ref_primary_primary40</item>
         <item name="scrollVerticalThumbColor">@color/material_theme_surfaces_dark_surface1</item>
 
@@ -68,9 +66,13 @@
 
         <item name="textLinkColor">@color/material_theme_sys_dark_primary</item>
 
-        <item name="clusterBorderColor">@color/material_theme_sys_dark_background</item>
-        <item name="clusterBackgroundColor">@color/material_theme_sys_dark_primary</item>
-        <item name="clusterTextColor">@color/material_theme_sys_dark_background</item>
+        <item name="placemarkIconBorderColor">@color/material_theme_sys_dark_primary</item>
+        <item name="placemarkIconBackgroundColor">@color/material_theme_sys_dark_background</item>
+        <item name="placemarkIconColor">@color/material_theme_sys_dark_primary</item>
+        <item name="placemarkTextColor">@color/material_theme_sys_dark_primary</item>
+        <item name="placemarkTextBackgroundColor">@color/black_70p</item>
+
+        <item name="recyclerProgressBarColor">@color/material_theme_sys_dark_on_background</item>
 
         <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowTranslucentNavigation">true</item>

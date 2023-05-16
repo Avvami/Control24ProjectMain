@@ -1,7 +1,9 @@
 package com.example.control24projectmain
 
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
+import java.io.IOException
 import java.util.Locale
 
 class ObjectsListAdapter(
@@ -22,6 +25,15 @@ class ObjectsListAdapter(
 
     private var expandedStateArray = BooleanArray(item.size)
     private var displayedItemsArray = BooleanArray(item.size)
+    private var listener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int, size: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
 
     class ObjectsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val carNameTV: TextView = itemView.findViewById(R.id.carNameTemplateTV)
@@ -65,11 +77,17 @@ class ObjectsListAdapter(
         val latitude = currentItem.lat
         val longitude = currentItem.lon
         val geocoder = Geocoder(context, Locale("ru"))
-        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        var addresses: List<Address>? = null
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        } catch (e: IOException) {
+            Log.i("HDFJSDHFK", e.toString())
+        }
         val address = addresses?.get(0)
 
         holder.carLocationTV.text = "${address?.getAddressLine(0)}"
-        holder.carLastTimeUpdateTV.text = currentItem.gmt
+        val app = context.applicationContext as AppLevelClass
+        holder.carLastTimeUpdateTV.text = app.convertTime(currentItem.gmt)
         holder.ownerTV.text = currentItem.client
         holder.carTypeTV.text = currentItem.avto_model
 
@@ -99,14 +117,9 @@ class ObjectsListAdapter(
         holder.downArrow.isChecked = expandedStateArray[position]
         holder.expandableCL.visibility = if (expandedStateArray[position]) View.VISIBLE else View.GONE
 
-        /*holder.itemView.setOnClickListener {
-            // Define the animation
-            val anim = AnimationUtils.loadAnimation(context, R.anim.fade_in_out)
-            currentItem.is_expanded = !currentItem.is_expanded
-            notifyItemChanged(position, isExpanded)
-            holder.expandableCL.startAnimation(anim)
-            holder.downArrow.isChecked = !holder.downArrow.isChecked
-        }*/
+        holder.itemView.setOnClickListener {
+            listener?.onItemClick(position, item.size)
+        }
 
         holder.displaySwitch.setOnCheckedChangeListener { _, _ ->
             // Save displaying item

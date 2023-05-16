@@ -41,10 +41,6 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
 
         val switchToggle = binding.darkThemeMSwitch
-        //val isDarkModeOn = arguments?.getString("DARK_THEME")
-
-        // Switch toggle state if the app is in dark or light mode
-        //switchToggle.isChecked = UserManager.getThemeState(requireContext()) != "OFF"
 
         // Set the username in Text View
         val username = arguments?.getString("USERNAME")
@@ -56,8 +52,6 @@ class SettingsFragment : Fragment() {
             UserManager.clearLoginCredentials(requireContext())
             UserManager.clearExpandedListItem(requireContext())
             UserManager.clearDisplayedItems(requireContext())
-            UserManager.clearScheduledTime(requireContext(), "startTime")
-            UserManager.clearScheduledTime(requireContext(), "endTime")
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.scale_out)
@@ -69,8 +63,6 @@ class SettingsFragment : Fragment() {
             val intent = Intent(activity, ThemeActivity::class.java)
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
-            /*switchToggle.isChecked = !switchToggle.isChecked
-            (activity as MainActivity).isDarkThemeSet(switchToggle.isChecked)*/
         }
 
         // Set the dark theme for the app from function inside the main activity, click on switch toggle
@@ -78,16 +70,11 @@ class SettingsFragment : Fragment() {
             if (switchToggle.isChecked) {
                 themeChange(requireContext(), "ON")
                 UserManager.saveThemeState(requireContext(), "ON")
-                /*(activity as MainActivity).isDarkThemeSet("ON")
-                Log.i("HFJDKHFJKSDGFJH", "FRAGMENT ON")*/
             } else {
                 themeChange(requireContext(), "OFF")
                 UserManager.saveThemeState(requireContext(), "OFF")
                 binding.themeStateTV.text = requireContext().resources.getString(R.string.disabled)
-                /*(activity as MainActivity).isDarkThemeSet("OFF")
-                Log.i("HFJDKHFJKSDGFJH", "FRAGMENT OFF")*/
             }
-            //(activity as MainActivity).isDarkThemeSet(isChecked)
         }
 
         // Map provider button is clicked then open a map provider activity

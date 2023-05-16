@@ -26,8 +26,6 @@
     <attr name="textOnItemsColor" format="color"/>
     <attr name="textObjectsInfoColor" format="color"/>
 
-    <attr name="splashScreenBackgroundColor" format="color"/>
-
     <attr name="overScrollColor" format="color"/>
     <attr name="scrollVerticalThumbColor" format="color"/>
 
@@ -61,7 +59,11 @@
 
     <attr name="logoBackgroundColor" format="color"/>
 
-    <attr name="clusterBorderColor" format="color"/>
-    <attr name="clusterBackgroundColor" format="color"/>
-    <attr name="clusterTextColor" format="color"/>
+    <attr name="placemarkIconBorderColor" format="color"/>
+    <attr name="placemarkIconBackgroundColor" format="color"/>
+    <attr name="placemarkIconColor" format="color"/>
+    <attr name="placemarkTextColor" format="color"/>
+    <attr name="placemarkTextBackgroundColor" format="color"/>
+
+    <attr name="recyclerProgressBarColor" format="color"/>
 </resources>

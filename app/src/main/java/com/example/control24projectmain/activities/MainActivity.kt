@@ -41,8 +41,11 @@ class MainActivity : AppCompatActivity() {
     private var selectedItemId: Int = R.id.list_menu
 
     private val bundle = Bundle()
+    private val listFragment = ListFragment()
+    private val mapFragment = MapFragment()
+    private val settingsFragment = SettingsFragment()
     private var coroutineJob: Job? = null
-    private val intervalMillis = 60000L // 10 seconds in milliseconds
+    private val intervalMillis = 60000L // 60 seconds in milliseconds
     private var login: String? = null
     private var password: String? = null
 
@@ -71,67 +74,44 @@ class MainActivity : AppCompatActivity() {
         login = loginCredentials?.first
         password = loginCredentials?.second
 
-        // Pass the key and objects to list fragment
-        val listFragment = ListFragment()
-        listFragment.arguments = bundle
-
-        //val isDarkTheme = UserManager.getThemeState(this@MainActivity)
-        //val darkThemeState = UserManager.getThemeState(this@MainActivity)
-
         // Get the username from login or splash screen
         val username = intent.getStringExtra("USERNAME")
-        //bundle.putBoolean("DARK_THEME", isDarkTheme)
-        //bundle.putString("DARK_THEME", darkThemeState)
         bundle.putString("USERNAME", username)
 
         // Pass the login to settings fragment
-        val settingsFragment = SettingsFragment()
         settingsFragment.arguments = bundle
 
         // Restore the previously selected nav item and fragment
         if (savedInstanceState != null) {
             selectedItemId = savedInstanceState.getInt("selectedFragmentId")
-            when (selectedItemId) {
-                R.id.list_menu -> replaceFragment(listFragment)
-                R.id.map_menu -> replaceFragment(MapFragment())
-                R.id.settings_menu -> replaceFragment(settingsFragment)
-            }
+            replaceFragment(selectedItemId)
             binding.bottomNavigationView.selectedItemId = selectedItemId
         } else {
-            replaceFragment(listFragment)
+            replaceFragment(selectedItemId)
             binding.bottomNavigationView.selectedItemId = selectedItemId
         }
 
         // Bottom navigation view
         binding.bottomNavigationView.setOnItemSelectedListener {menuItem ->
             // Check if the selected item is the same as the current fragment
-            if (menuItem.itemId == selectedItemId) {
-                return@setOnItemSelectedListener true
-            }
-            // Switch fragment inside the frameLayout
-            when (menuItem.itemId) {
-                R.id.list_menu -> {
-                    selectedItemId = R.id.list_menu
-                    replaceFragment(listFragment)
-                }
-                R.id.map_menu -> {
-                    selectedItemId = R.id.map_menu
-                    replaceFragment(MapFragment())
-                }
-                R.id.settings_menu -> {
-                    selectedItemId = R.id.settings_menu
-                    replaceFragment(settingsFragment)
-                }
-                else -> {
-                    /*Something should be here*/
-                }
+            if (menuItem.itemId != selectedItemId) {
+                selectedItemId = menuItem.itemId
+                replaceFragment(selectedItemId)
             }
             true
         }
     }
 
     // Replace Fragment in the frameLayout
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(menuItemId: Int) {
+        binding.bottomNavigationView.selectedItemId = menuItemId
+        val fragment = when (menuItemId) {
+            R.id.list_menu -> listFragment
+            R.id.map_menu -> mapFragment
+            R.id.settings_menu -> settingsFragment
+            else -> throw IllegalArgumentException("Invalid menu item id.")
+        }
+
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
@@ -170,27 +150,6 @@ class MainActivity : AppCompatActivity() {
         }, 2000)
     }
 
-    // Dark theme set
-    /*fun isDarkThemeSet (darkTheme: Boolean) {
-        UserManager.saveThemeState(this@MainActivity, darkTheme)
-        if (darkTheme) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }*/
-
-    /*fun isDarkThemeSet (darkThemeState: String) {
-        UserManager.saveThemeState(this@MainActivity, darkThemeState)
-        if (darkThemeState == "ON") {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            Log.i("HFJDKHFJKSDGFJH", "MAIN ACTIVITY ON")
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            Log.i("HFJDKHFJKSDGFJH", "MAIN ACTIVITY OFF")
-        }
-    }*/
-
     // Start coroutine
     override fun onStart() {
         super.onStart()
@@ -218,7 +177,6 @@ class MainActivity : AppCompatActivity() {
                     val json2 = JSONObject(httpResponseSecond)
 
                     val mergedJson = JSONObject()
-                    //mergedJson.put("key", json1.get("key"))
 
                     val mergedObjects = JSONArray()
                     val objects1 = json1.getJSONArray("objects")

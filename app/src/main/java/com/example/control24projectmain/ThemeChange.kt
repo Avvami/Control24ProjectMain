@@ -2,6 +2,7 @@ package com.example.control24projectmain
 
 import android.app.UiModeManager
 import android.content.Context
+import android.content.res.Configuration
 import android.text.format.DateFormat
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -14,6 +15,11 @@ import java.util.TimeZone
 private const val START_TIME = "startTime"
 private const val END_TIME = "endTime"
 
+fun isDarkModeEnabled(context: Context): Boolean {
+    val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    return currentNightMode == Configuration.UI_MODE_NIGHT_YES
+}
+
 fun themeChange(context: Context, darkThemeState: String) {
     val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
     val currentNightMode = uiModeManager.nightMode
@@ -22,7 +28,7 @@ fun themeChange(context: Context, darkThemeState: String) {
         "OFF" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         "ON" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         "SCHEDULED" -> {
-            Log.i("HDKSJFHFD", isUserTimeWithinRange(context).toString())
+            //Log.i("HDKSJFHFD", isUserTimeWithinRange(context).toString())
             if (isUserTimeWithinRange(context)) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {

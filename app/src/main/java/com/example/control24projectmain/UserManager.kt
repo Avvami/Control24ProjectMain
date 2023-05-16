@@ -5,6 +5,8 @@ import android.text.format.DateFormat
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.yandex.mapkit.mapview.MapView
+import org.osmdroid.util.GeoPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -15,12 +17,12 @@ object UserManager {
     private const val SHARED_PREFS_NAME = "USER_INFO"
     private const val LOGIN_KEY = "LOGIN"
     private const val PASSWORD_KEY = "PASSWORD"
-    private const val THEME_KEY = "THEME"
     private const val DARK_THEME = "THEME_STATE"
     private const val OBJECTS_LIST_VIEW_KEY = "OBJECTS_LIST"
     private const val LIST_STATE = "LIST_STATE"
     private const val MAP_SELECTED = "MAP"
     private const val DISPLAYED_ITEMS = "DISPLAY"
+
 
     // Save user cred inside encrypted shared pref
     fun saveLoginCredentials(context: Context, login: String, password: String) {
@@ -83,10 +85,9 @@ object UserManager {
     }
 
     // Save theme state
-    fun saveThemeState(context: Context, darkThemeState: String/*, isDarkTheme: Boolean*/) {
+    fun saveThemeState(context: Context, darkThemeState: String) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             putString(DARK_THEME, darkThemeState)
-            /*putBoolean(THEME_KEY, isDarkTheme)*/
         }
     }
 
@@ -95,14 +96,6 @@ object UserManager {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
             DARK_THEME, "OFF")
     }
-
-    // Get theme state
-    /*fun getThemeState(context: Context): Pair<String?, Boolean> {
-        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val darkThemeState = sharedPreferences.getString(THEME_STATE, "OFF")
-        val isDarkTheme = sharedPreferences.getBoolean(THEME_KEY, false)
-        return Pair(darkThemeState, isDarkTheme)
-    }*/
 
     // Save objects list view state
     fun saveObjectsListView(context: Context, isDetailedList: Boolean) {
@@ -210,9 +203,33 @@ object UserManager {
         return sharedPreferences.getString(key, defaultTimeString)
     }
 
-    fun clearScheduledTime(context: Context, key: String) {
-        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
-            remove(key)
+    fun saveYandexCameraPosition(context: Context, mapView: MapView) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val cameraPosition = mapView.map.cameraPosition
+        sharedPreferences.edit {
+            putString("yandex_lat", cameraPosition.target.latitude.toString())
+            putString("yandex_lon", cameraPosition.target.longitude.toString())
+            putString("yandex_zoom", cameraPosition.zoom.toString())
         }
+    }
+
+    fun getYandexCameraPosition(context: Context, key: String, defaultValue: String): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
+    }
+
+    fun saveOsmCameraPosition(context: Context, mapView: org.osmdroid.views.MapView) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val geoPoint = mapView.mapCenter as GeoPoint
+        val zoomLevel = mapView.zoomLevelDouble
+
+        sharedPreferences.edit {
+            putString("osm_lat", geoPoint.latitude.toString())
+            putString("osm_lon", geoPoint.longitude.toString())
+            putString("osm_zoom", zoomLevel.toString())
+        }
+    }
+
+    fun getOsmCameraPosition(context: Context, key: String, defaultValue: String): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
     }
 }
