@@ -66,4 +66,10 @@
     <attr name="placemarkTextBackgroundColor" format="color"/>
 
     <attr name="recyclerProgressBarColor" format="color"/>
+
+    <attr name="trafficBackgroundColor" format="color"/>
+    <attr name="trafficOutlineColor" format="color"/>
+    <attr name="trafficTextColor" format="color"/>
+    
+    <attr name="collapseBarColor" format="color"/>
 </resources>

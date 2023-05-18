@@ -11,21 +11,33 @@ import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
+import io.github.muddz.styleabletoast.StyleableToast
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
 
 class ObjectsListAdapter(
     private val context : Context,
-    private val item: List<CombinedResponseObject>
+    private val item: List<CombinedResponseObject>,
+    private val lifecycleScope: CoroutineScope
     ) : RecyclerView.Adapter<ObjectsListAdapter.ObjectsListViewHolder>() {
 
     private var expandedStateArray = BooleanArray(item.size)
     private var displayedItemsArray = BooleanArray(item.size)
     private var listener: OnItemClickListener? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     interface OnItemClickListener {
         fun onItemClick(position: Int, size: Int)
@@ -76,17 +88,21 @@ class ObjectsListAdapter(
         // Geocode convert to an address
         val latitude = currentItem.lat
         val longitude = currentItem.lon
-        val geocoder = Geocoder(context, Locale("ru"))
-        var addresses: List<Address>? = null
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1)
-        } catch (e: IOException) {
-            Log.i("HDFJSDHFK", e.toString())
-        }
-        val address = addresses?.get(0)
-
-        holder.carLocationTV.text = "${address?.getAddressLine(0)}"
         val app = context.applicationContext as AppLevelClass
+
+        //app.startDotAnimation(holder.carLocationTV)
+        lifecycleScope.launch {
+            try {
+                val address = app.coroutineGeocode(latitude, longitude, holder.carLocationTV)
+                withContext(Dispatchers.Main) {
+                    holder.carLocationTV.text = address
+                }
+            } catch (e: Exception) {
+                holder.carLocationTV.text = "Ошибка геокодирования"
+                Log.i("HDFJSDHFK", "Failed to get address", e)
+                // Show an error message to the user, or handle the error in some other way
+            }
+        }
         holder.carLastTimeUpdateTV.text = app.convertTime(currentItem.gmt)
         holder.ownerTV.text = currentItem.client
         holder.carTypeTV.text = currentItem.avto_model

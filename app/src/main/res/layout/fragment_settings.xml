@@ -167,13 +167,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV">
 
+                    <ImageView
+                        android:id="@+id/themeIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/icon_moon"
+                        android:contentDescription="@string/theme_image"
+                        app:tint="?attr/textOnItemsColor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/themeStateCL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/themeIV"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -239,18 +251,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/darkThemeCL">
 
+                    <ImageView
+                        android:id="@+id/mapProviderIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/icon_map"
+                        android:contentDescription="@string/map_provider_image"
+                        app:tint="?attr/textOnItemsColor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <TextView
                         android:id="@+id/mapProviderTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="8dp"
                         android:fontFamily="@font/roboto"
                         android:text="@string/map_provider"
                         android:textColor="?attr/textOnItemsColor"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/mapProviderIV"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
@@ -281,18 +304,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mapProviderCL">
 
+                    <ImageView
+                        android:id="@+id/objectsListViewIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/icon_photo_editor"
+                        android:contentDescription="@string/list_view_image"
+                        app:tint="?attr/textOnItemsColor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <TextView
                         android:id="@+id/objectsListViewSettingsTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="8dp"
                         android:fontFamily="@font/roboto"
                         android:text="@string/list_view_settings"
                         android:textColor="?attr/textOnItemsColor"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/objectsListViewIV"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
@@ -343,17 +377,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/supportSettings">
 
+                    <ImageView
+                        android:id="@+id/aboutAppIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/icon_information_sign"
+                        android:contentDescription="@string/about_app_image"
+                        app:tint="?attr/textOnItemsColor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
                     <TextView
                         android:id="@+id/aboutAppTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="8dp"
                         android:fontFamily="@font/roboto"
                         android:text="@string/about_app"
                         android:textColor="?attr/textOnItemsColor"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/aboutAppIV"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
@@ -384,17 +430,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/aboutAppCL">
 
+                    <ImageView
+                        android:id="@+id/helpIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/icon_help"
+                        android:contentDescription="@string/help_image"
+                        app:tint="?attr/textOnItemsColor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
                     <TextView
                         android:id="@+id/helpTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="8dp"
                         android:fontFamily="@font/roboto"
                         android:text="@string/help"
                         android:textColor="?attr/textOnItemsColor"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/helpIV"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView

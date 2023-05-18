@@ -1,5 +1,6 @@
 package com.example.control24projectmain.fragments
 
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.control24projectmain.CombinedResponse
 import com.example.control24projectmain.MapsConfig
 import com.example.control24projectmain.R
@@ -62,11 +65,27 @@ class MapFragment : Fragment() {
             WindowInsetsCompat.CONSUMED
         }
 
+        // Get the status bar height
+        val rectangle = Rect()
+        requireActivity().window.decorView.getWindowVisibleDisplayFrame(rectangle)
+        val statusBarHeight = rectangle.top
+
+        // Get the existing layout parameters and add the status bar height to the top margin
+        val params = binding.trafficIV.layoutParams as ConstraintLayout.LayoutParams
+        params.setMargins(params.leftMargin, params.topMargin + statusBarHeight, params.rightMargin, params.bottomMargin)
+
+        // Apply the new layout parameters to the ImageView
+        binding.trafficIV.layoutParams = params
+
         yandexMV = binding.yandexMV
         osmMV = binding.osmMV
+        val levelIcon = binding.trafficIV
+        val levelText = binding.trafficTV
+        val zoomInCL = binding.zoomInCL
+        val zoomOutCL = binding.zoomOutCL
 
         // Initialize the variable and set default position - Krasnoyarsk
-        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMV)
+        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMV, levelIcon, levelText, zoomInCL, zoomOutCL)
 
         sharedViewModel.bundleLiveData.observe(viewLifecycleOwner) { bundle ->
             // Update the UI with the new data
@@ -82,8 +101,8 @@ class MapFragment : Fragment() {
             val objectId = bundle.getInt("POSITION", -1)
 
             when (mapProvider) {
-                yandexMap -> mapsConfig.yandexMapLiveConfig(requireContext(), objectsList, array, yandexMV, objectId)
-                osmMap -> mapsConfig.osmMapLiveConfig(requireContext(), objectsList, array, osmMV, objectId)
+                yandexMap -> mapsConfig.yandexMapLiveConfig(requireContext(), objectsList, array, yandexMV, objectId, viewLifecycleOwner.lifecycleScope)
+                osmMap -> mapsConfig.osmMapLiveConfig(requireContext(), objectsList, array, osmMV, objectId, viewLifecycleOwner.lifecycleScope)
             }
             bundle.putInt("POSITION", -1)
         }
@@ -98,7 +117,7 @@ class MapFragment : Fragment() {
             osmMap -> UserManager.saveOsmCameraPosition(requireContext(), osmMV)
         }
 
-        mapsConfig.mapsOnStop(yandexMV, osmMV)
+        mapsConfig.mapsOnStop(requireContext(), yandexMV, osmMV)
         super.onStop()
 
         // Set default status bar color

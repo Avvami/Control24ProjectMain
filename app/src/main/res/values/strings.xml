@@ -20,7 +20,7 @@
     <string name="upper_arrow_image">Upper arrow icon</string>
     <string name="car_name_template">Нет данных</string>
     <string name="display_on_map">Отобразить на карте</string>
-    <string name="location_template">Нет данных</string>
+    <string name="location_template">.</string>
     <string name="speed_template">%dкм/ч</string>
     <string name="time_template">Нет данных</string>
     <string name="owner">Владелец</string>
@@ -63,6 +63,11 @@
     <string name="dev_website_text">Сайт:</string>
     <string name="dev_website_link"><u>https://контроль24.рф</u></string>
 
+    <!--Map part-->
+    <string name="traffic_image">Traffic icon</string>
+    <string name="minus_image">Minus icon</string>
+    <string name="plus_image">Plus icon</string>
+
     <!--Settings part-->
     <string name="settings_menu">Настройки</string>
     <string name="account">Аккаунт</string>
@@ -72,17 +77,24 @@
     <string name="logout_image">Logout icon</string>
     <string name="general_settings">Основные настройки</string>
     <string name="dark_theme">Настроить ночную тему</string>
+    <string name="theme_image">Moon icon</string>
     <string name="theme_state">Состояние</string>
     <string name="map_provider">Поставщик карт</string>
+    <string name="map_provider_image">Map location icon</string>
     <string name="list_view_settings">Вид списка объектов</string>
+    <string name="list_view_image">List view icon</string>
     <string name="right_arrow_image">Right arrow icon</string>
     <string name="support_settings">Поддержка</string>
     <string name="about_app">О приложении</string>
+    <string name="about_app_image">About app icon</string>
     <string name="help">Помощь</string>
+    <string name="help_image">Help icon</string>
 
     <!--Map provider activity-->
     <string name="yandex_maps">Яндекс Карты</string>
+    <string name="yandex_image">Yadex icon</string>
     <string name="open_street_maps">Open Street Maps</string>
+    <string name="open_street_maps_image">Open Street Maps icon</string>
 
     <!--Internet dialog view-->
     <string name="internet_dialog_warning">Ошибка</string>

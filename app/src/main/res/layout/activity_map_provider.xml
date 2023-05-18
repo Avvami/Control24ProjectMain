@@ -77,18 +77,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <ImageView
+                    android:id="@+id/yandexIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/icon_yandex"
+                    android:contentDescription="@string/yandex_image"
+                    app:tint="?attr/textOnItemsColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <TextView
                     android:id="@+id/yandexTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="8dp"
                     android:fontFamily="@font/roboto"
                     android:text="@string/yandex_maps"
                     android:textColor="?attr/textOnItemsColor"
                     android:textSize="16sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toEndOf="@+id/yandexIV"/>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/yandexMapsMCheckBox"
@@ -116,18 +128,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
+                <ImageView
+                    android:id="@+id/osmIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/icon_openstreetmap"
+                    android:contentDescription="@string/open_street_maps_image"
+                    app:tint="?attr/textOnItemsColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <TextView
                     android:id="@+id/osmTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="8dp"
                     android:fontFamily="@font/roboto"
                     android:text="@string/open_street_maps"
                     android:textColor="?attr/textOnItemsColor"
                     android:textSize="16sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toEndOf="@+id/osmIV"/>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/osmMCheckBox"

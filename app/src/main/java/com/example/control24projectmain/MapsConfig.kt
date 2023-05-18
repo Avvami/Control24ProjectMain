@@ -1,18 +1,19 @@
 package com.example.control24projectmain
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.control24projectmain.databinding.BottomOverlayBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.mapkit.Animation
@@ -22,20 +23,38 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
+import com.yandex.mapkit.traffic.TrafficColor
+import com.yandex.mapkit.traffic.TrafficLayer
+import com.yandex.mapkit.traffic.TrafficLevel
+import com.yandex.mapkit.traffic.TrafficListener
 import com.yandex.runtime.image.ImageProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.TilesOverlay
 
 private const val yandexMap = "YANDEX"
 private const val osmMap = "OSM"
-private var followedObjectIndex = -1
 private var mapProvider: String = yandexMap
 private val tapListeners = mutableListOf<MapObjectTapListener>()
 
-class MapsConfig {
+class MapsConfig: TrafficListener {
+
+    private lateinit var levelText: TextView
+    private lateinit var levelIcon: ImageView
+    private lateinit var zoomInButton: ConstraintLayout
+    private lateinit var zoomOutButton: ConstraintLayout
+    private var trafficLevel: TrafficLevel? = null
+    private enum class TrafficFreshness {Loading, OK, Expired}
+    private var trafficFreshness: TrafficFreshness? = null
+    private lateinit var traffic: TrafficLayer
+
     private fun getMapProvider(context: Context) {
         mapProvider = UserManager.getSelectedMap(context).toString()
     }
@@ -49,11 +68,12 @@ class MapsConfig {
         }
     }
 
-    fun mapsOnStop(yandexMV: MapView, osmMV: org.osmdroid.views.MapView) {
+    fun mapsOnStop(context: Context, yandexMV: MapView, osmMV: org.osmdroid.views.MapView) {
         when (mapProvider) {
             yandexMap -> {
                 yandexMV.onStop()
                 MapKitFactory.getInstance().onStop()
+                UserManager.saveTrafficJamState(context, traffic.isTrafficVisible)
             }
             osmMap -> osmMV.onPause()
         }
@@ -69,16 +89,34 @@ class MapsConfig {
         }
     }
 
-    fun startMapsConfig(context: Context, yandexMV: MapView, osmMV: org.osmdroid.views.MapView) {
+    fun startMapsConfig(
+        context: Context,
+        yandexMV: MapView,
+        osmMV: org.osmdroid.views.MapView,
+        levelIV: ImageView,
+        levelTV: TextView,
+        zoomInCL: ConstraintLayout,
+        zoomOutCL: ConstraintLayout
+    ) {
+        zoomInButton = zoomInCL
+        zoomOutButton = zoomOutCL
         when (mapProvider) {
             yandexMap -> {
                 osmMV.visibility = View.GONE
                 yandexMV.visibility = View.VISIBLE
+                levelIcon = levelIV
+                levelText = levelTV
+                levelIcon.visibility = View.VISIBLE
+                levelText.visibility = View.VISIBLE
                 yandexMapStartConfig(context, yandexMV)
             }
             osmMap -> {
                 yandexMV.visibility = View.GONE
                 osmMV.visibility = View.VISIBLE
+                levelIcon = levelIV
+                levelText = levelTV
+                levelIcon.visibility = View.INVISIBLE
+                levelText.visibility = View.INVISIBLE
                 osmMapStartConfig(context, osmMV)
             }
         }
@@ -87,6 +125,7 @@ class MapsConfig {
     private fun yandexMapStartConfig(context: Context, yandexMV: MapView) {
         val isDarkMode = isDarkModeEnabled(context)
         yandexMV.map.isNightModeEnabled = isDarkMode
+
         val latitude = UserManager.getYandexCameraPosition(context, "yandex_lat", 56.010569.toString())!!.toDouble()
         val longitude = UserManager.getYandexCameraPosition(context, "yandex_lon", 92.852572.toString())!!.toDouble()
         val zoom = UserManager.getYandexCameraPosition(context, "yandex_zoom", 12.0f.toString())!!.toFloat()
@@ -96,14 +135,47 @@ class MapsConfig {
             Animation(Animation.Type.SMOOTH, 0f),
             null)
         yandexMV.map.isRotateGesturesEnabled = false
+
+        traffic = MapKitFactory.getInstance().createTrafficLayer(yandexMV.mapWindow)
+        traffic.addTrafficListener(this)
+
+        if (UserManager.getTrafficJamState(context)) {
+            traffic.isTrafficVisible = true
+            updateLevel()
+        }
+
+        levelIcon.setOnClickListener {
+            traffic.isTrafficVisible = !traffic.isTrafficVisible
+            updateLevel()
+        }
+
+        zoomInButton.setOnClickListener {
+            val cameraPosition = yandexMV.map.cameraPosition
+            yandexMV.map.move(
+                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, .2f),
+                null
+            )
+        }
+
+        zoomOutButton.setOnClickListener {
+            val cameraPosition = yandexMV.map.cameraPosition
+            yandexMV.map.move(
+                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom - 1, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, .2f),
+                null
+            )
+        }
     }
 
+    @SuppressLint("InflateParams")
     fun yandexMapLiveConfig(
         context: Context,
         objectsList: List<CombinedResponseObject>,
         array: BooleanArray,
         yandexMV: MapView,
-        objectId: Int
+        objectId: Int,
+        lifecycleScope: CoroutineScope
     ) {
         // Inflate the custom layout for the placemark icon
         val inflater = LayoutInflater.from(context)
@@ -133,7 +205,7 @@ class MapsConfig {
                         Animation(Animation.Type.SMOOTH, 1f),
                         null
                     )
-                    openBottomOverlay(context, objectsList[index])
+                    openBottomOverlay(context, objectsList[index], lifecycleScope)
                     true
                 }
                 placemark.addTapListener(tapListener)
@@ -153,7 +225,7 @@ class MapsConfig {
                 Animation(Animation.Type.SMOOTH, 1f),
                 null
             )
-            openBottomOverlay(context, objectsList[objectId])
+            openBottomOverlay(context, objectsList[objectId], lifecycleScope)
         }
     }
 
@@ -176,15 +248,32 @@ class MapsConfig {
         osmMV.controller.setZoom(zoom)
         osmMV.controller.setCenter(GeoPoint(latitude, longitude))
         osmMV.setMultiTouchControls(true)
+        osmMV.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        osmMV.maxZoomLevel = 20.0
+        osmMV.minZoomLevel = 7.0
+
+        zoomInButton.setOnClickListener {
+            val point = osmMV.mapCenter as GeoPoint
+            val zoomLevel = osmMV.zoomLevelDouble
+            osmMV.controller.animateTo(point, zoomLevel + 1, 400)
+        }
+
+        zoomOutButton.setOnClickListener {
+            val point = osmMV.mapCenter as GeoPoint
+            val zoomLevel = osmMV.zoomLevelDouble
+            osmMV.controller.animateTo(point, zoomLevel - 1, 400)
+        }
     }
 
     // Configures the live settings for an OSM map view, including adding markers
+    @SuppressLint("InflateParams")
     fun osmMapLiveConfig(
         context: Context,
         objectsList: List<CombinedResponseObject>,
         array: BooleanArray,
         osmMV: org.osmdroid.views.MapView,
-        objectId: Int
+        objectId: Int,
+        lifecycleScope: CoroutineScope
     ) {
         // Clear the overlays before adding new markers
         osmMV.overlays.clear()
@@ -223,7 +312,7 @@ class MapsConfig {
                     mapView.controller.animateTo(marker.position, 18.0, 1500)
 
                     // Open the bottom overlay
-                    openBottomOverlay(context, objectsList[index])
+                    openBottomOverlay(context, objectsList[index],lifecycleScope)
                     true
                 }
                 // Add the placemark overlay to the map view
@@ -239,12 +328,12 @@ class MapsConfig {
             osmMV.controller.animateTo(point, 18.0, 1500)
 
             // Open the bottom overlay
-            openBottomOverlay(context, objectsList[objectId])
+            openBottomOverlay(context, objectsList[objectId], lifecycleScope)
         }
     }
 
 
-    private fun openBottomOverlay(context: Context, objectsList: CombinedResponseObject) {
+    private fun openBottomOverlay(context: Context, objectsList: CombinedResponseObject, lifecycleScope: CoroutineScope) {
         val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
         val binding = BottomOverlayBinding.inflate(LayoutInflater.from(context))
         bottomSheetDialog.setContentView(binding.root)
@@ -252,8 +341,25 @@ class MapsConfig {
         binding.carNameTemplateTV.text = objectsList.name
         val latitude = objectsList.lat
         val longitude = objectsList.lon
-        binding.speedTemplateTV.text = context.resources.getString(R.string.speed_template, objectsList.speed)
         val app = context.applicationContext as AppLevelClass
+
+        lifecycleScope.launch {
+            try {
+                //app.startProgressAnimation(binding.locationTemplateTV)
+                val address = app.coroutineGeocode(latitude, longitude, binding.locationTemplateTV)
+                withContext(Dispatchers.Main) {
+                    //app.stopProgressAnimation(binding.locationTemplateTV)
+                    binding.locationTemplateTV.text = address
+                }
+            } catch (e: Exception) {
+                //app.stopProgressAnimation(binding.locationTemplateTV)
+                binding.locationTemplateTV.text = "Ошибка геокодирования"
+                Log.i("HDFJSDHFK", "Failed to get address", e)
+                // Show an error message to the user, or handle the error in some other way
+            }
+        }
+        //binding.locationTemplateTV.text = app.coroutineGeocode(latitude, longitude)
+        binding.speedTemplateTV.text = context.resources.getString(R.string.speed_template, objectsList.speed)
         binding.timeTemplateTV.text = app.convertTime(objectsList.gmt)
         binding.ownerTemplateTV.text = objectsList.client
         binding.typeTemplateTV.text = objectsList.avto_model
@@ -300,5 +406,47 @@ class MapsConfig {
 
         // Return the generated bitmap
         return bitmap
+    }
+
+    private fun updateLevel() {
+        val iconId: Int
+        var level = ""
+        if (!traffic.isTrafficVisible) {
+            iconId = R.drawable.icon_traffic_grey
+        } else if (trafficFreshness == TrafficFreshness.Loading) {
+            iconId = R.drawable.icon_traffic_grey
+        } else if (trafficFreshness == TrafficFreshness.Expired) {
+            iconId = R.drawable.icon_traffic_grey
+        } else if (trafficLevel == null) { // State is fresh but region has no data
+            iconId = R.drawable.icon_traffic_blue
+        } else {
+            iconId = when (trafficLevel!!.color) {
+                TrafficColor.RED -> R.drawable.icon_traffic_red
+                TrafficColor.YELLOW -> R.drawable.icon_traffic_yellow
+                TrafficColor.GREEN -> R.drawable.icon_traffic_green
+                else -> R.drawable.icon_traffic_grey
+            }
+            level = trafficLevel!!.level.toString()
+        }
+        levelIcon.setImageResource(iconId)
+        levelText.text = level
+    }
+
+    override fun onTrafficChanged(trafficLevel: TrafficLevel?) {
+        this.trafficLevel = trafficLevel
+        this.trafficFreshness = TrafficFreshness.OK
+        updateLevel()
+    }
+
+    override fun onTrafficLoading() {
+        this.trafficLevel = null
+        this.trafficFreshness = TrafficFreshness.Loading
+        updateLevel()
+    }
+
+    override fun onTrafficExpired() {
+        this.trafficLevel = null
+        this.trafficFreshness = TrafficFreshness.Loading
+        updateLevel()
     }
 }

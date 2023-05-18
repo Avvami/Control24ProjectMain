@@ -22,6 +22,7 @@ object UserManager {
     private const val LIST_STATE = "LIST_STATE"
     private const val MAP_SELECTED = "MAP"
     private const val DISPLAYED_ITEMS = "DISPLAY"
+    private const val TRAFFIC_JAM = "TRAFFIC_JAM_STATE"
 
 
     // Save user cred inside encrypted shared pref
@@ -231,5 +232,16 @@ object UserManager {
 
     fun getOsmCameraPosition(context: Context, key: String, defaultValue: String): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
+    }
+
+    fun saveTrafficJamState(context: Context, trafficJamState: Boolean) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putBoolean(TRAFFIC_JAM, trafficJamState)
+        }
+    }
+
+    fun getTrafficJamState(context: Context): Boolean {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+            TRAFFIC_JAM, false)
     }
 }
