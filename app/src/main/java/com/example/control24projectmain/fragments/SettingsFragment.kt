@@ -31,6 +31,17 @@ class SettingsFragment : Fragment() {
             "SYSTEM" -> requireContext().resources.getString(R.string.system_default)
             else -> requireContext().resources.getString(R.string.disabled)
         }.toString()
+
+        binding.mapUsingTV.text = when (UserManager.getSelectedMap(requireContext())) {
+            "YANDEX" -> requireContext().resources.getString(R.string.yandex_maps)
+            "OSM" -> requireContext().resources.getString(R.string.open_street_maps)
+            else -> requireContext().resources.getString(R.string.yandex_maps)
+        }.toString()
+
+        binding.listViewTV.text = when (UserManager.getObjectsListView(requireContext())) {
+            false -> requireContext().resources.getString(R.string.objects_short)
+            true -> requireContext().resources.getString(R.string.objects_detailed)
+        }.toString()
     }
 
     override fun onCreateView(

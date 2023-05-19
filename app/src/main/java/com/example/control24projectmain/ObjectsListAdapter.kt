@@ -3,16 +3,20 @@ package com.example.control24projectmain
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
@@ -33,11 +37,9 @@ class ObjectsListAdapter(
     private val item: List<CombinedResponseObject>,
     private val lifecycleScope: CoroutineScope
     ) : RecyclerView.Adapter<ObjectsListAdapter.ObjectsListViewHolder>() {
-
     private var expandedStateArray = BooleanArray(item.size)
     private var displayedItemsArray = BooleanArray(item.size)
     private var listener: OnItemClickListener? = null
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     interface OnItemClickListener {
         fun onItemClick(position: Int, size: Int)
@@ -48,6 +50,7 @@ class ObjectsListAdapter(
     }
 
     class ObjectsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar4)
         val carNameTV: TextView = itemView.findViewById(R.id.carNameTemplateTV)
         val carSpeedIV: ImageView = itemView.findViewById(R.id.dashboardIconIV)
         val carSpeedTV: TextView = itemView.findViewById(R.id.speedTemplateTV)
@@ -90,19 +93,21 @@ class ObjectsListAdapter(
         val longitude = currentItem.lon
         val app = context.applicationContext as AppLevelClass
 
-        //app.startDotAnimation(holder.carLocationTV)
         lifecycleScope.launch {
+            holder.progressBar.visibility = View.VISIBLE
             try {
-                val address = app.coroutineGeocode(latitude, longitude, holder.carLocationTV)
+                val address = app.coroutineGeocode(latitude, longitude)
                 withContext(Dispatchers.Main) {
                     holder.carLocationTV.text = address
                 }
             } catch (e: Exception) {
                 holder.carLocationTV.text = "Ошибка геокодирования"
                 Log.i("HDFJSDHFK", "Failed to get address", e)
-                // Show an error message to the user, or handle the error in some other way
             }
+            holder.carLocationTV.visibility = View.VISIBLE
+            holder.progressBar.visibility = View.INVISIBLE
         }
+
         holder.carLastTimeUpdateTV.text = app.convertTime(currentItem.gmt)
         holder.ownerTV.text = currentItem.client
         holder.carTypeTV.text = currentItem.avto_model

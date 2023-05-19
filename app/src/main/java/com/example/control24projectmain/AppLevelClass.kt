@@ -1,14 +1,9 @@
 package com.example.control24projectmain
 
-import android.animation.ValueAnimator
 import android.app.Application
 import android.location.Geocoder
-import android.os.Handler
-import android.os.Looper
 import android.text.format.DateFormat
 import android.util.Log
-import android.view.animation.LinearInterpolator
-import android.widget.TextView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.yandex.mapkit.MapKitFactory
 import kotlinx.coroutines.Dispatchers
@@ -21,18 +16,13 @@ import java.util.Locale
 
 class AppLevelClass : Application() {
 
-    private val handler = Handler(Looper.getMainLooper())
-    private var dotCount = 1
-
     override fun onCreate() {
         super.onCreate()
 
         // Set the api key to access yandex maps
         MapKitFactory.setApiKey(BuildConfig.YANDEX_MAP_API_KEY)
 
-        // Code to be executed before styles are loaded
         // Load and set saved app theme
-
         when (UserManager.getThemeState(this@AppLevelClass)) {
             "OFF" -> themeChange(this@AppLevelClass, "OFF")
             "ON" -> themeChange(this@AppLevelClass, "ON")
@@ -64,10 +54,9 @@ class AppLevelClass : Application() {
         }
     }
 
-    suspend fun coroutineGeocode(latitude: Double, longitude: Double, progressTV: TextView): String {
+    suspend fun coroutineGeocode(latitude: Double, longitude: Double): String {
         var addressObject: String
 
-        //startDotAnimation(progressTV)
         withContext(Dispatchers.IO) {
             try {
                 val geocoder = Geocoder(this@AppLevelClass, Locale("ru"))
@@ -102,50 +91,6 @@ class AppLevelClass : Application() {
                 Log.i("HDFJSDHFK", "Yandex: $addressObject")
             }
         }
-        //stopDotAnimation(progressTV)
         return addressObject
     }
-
-    fun startDotAnimation(progressTV: TextView) {
-        val runnable = object : Runnable {
-            override fun run() {
-                when (dotCount % 4) {
-                    1 -> progressTV.text = "."
-                    2 -> progressTV.text = ".."
-                    3 -> progressTV.text = "..."
-                }
-                dotCount++
-                handler.postDelayed(this, 500) // Delay of 500ms
-            }
-        }
-
-        handler.post(runnable)
-    }
-
-    fun stopDotAnimation(progressTV: TextView) {
-        handler.removeCallbacksAndMessages(null)
-        dotCount = 1
-        progressTV.text = ""
-    }
-
-    /*fun startProgressAnimation(progressTV: TextView) {
-        handler.post(object : Runnable {
-            override fun run() {
-                val progressText = StringBuilder()
-                for (i in 0 until progressDotCount) {
-                    progressText.append(".")
-                }
-                progressTV.text = progressText.toString()
-
-                progressDotCount = (progressDotCount + 1) % 4
-                handler.postDelayed(this, 500) // update every 500ms
-            }
-        })
-    }
-
-    fun stopProgressAnimation(progressTV: TextView) {
-        handler.removeCallbacksAndMessages(null)
-        progressDotCount = 0
-        progressTV.text = ""
-    }*/
 }

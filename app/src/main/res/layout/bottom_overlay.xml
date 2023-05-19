@@ -93,10 +93,22 @@
             android:text="@string/location_template"
             android:textColor="?attr/textOnItemsColor"
             android:textSize="14sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/locationIconBackgroundFL"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/locationIconBackgroundFL"
             app:layout_constraintTop_toTopOf="@+id/locationIconBackgroundFL" />
+
+        <ProgressBar
+            android:id="@+id/progressBar4"
+            style="?android:attr/progressBarStyle"
+            android:indeterminateTint="?attr/textOnItemsColor"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/locationTemplateTV"
+            app:layout_constraintStart_toStartOf="@+id/locationTemplateTV"
+            app:layout_constraintTop_toTopOf="@+id/locationTemplateTV" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

@@ -65,17 +65,6 @@ class MapFragment : Fragment() {
             WindowInsetsCompat.CONSUMED
         }
 
-        // Get the status bar height
-        val rectangle = Rect()
-        requireActivity().window.decorView.getWindowVisibleDisplayFrame(rectangle)
-        val statusBarHeight = rectangle.top
-
-        // Get the existing layout parameters and add the status bar height to the top margin
-        val params = binding.trafficIV.layoutParams as ConstraintLayout.LayoutParams
-        params.setMargins(params.leftMargin, params.topMargin + statusBarHeight, params.rightMargin, params.bottomMargin)
-
-        // Apply the new layout parameters to the ImageView
-        binding.trafficIV.layoutParams = params
 
         yandexMV = binding.yandexMV
         osmMV = binding.osmMV
@@ -142,6 +131,18 @@ class MapFragment : Fragment() {
         super.onStart()
         // Start the maps
         mapsConfig.mapsOnStart(yandexMV, osmMV)
+
+        // Get the status bar height
+        val rectangle = Rect()
+        requireActivity().window.decorView.getWindowVisibleDisplayFrame(rectangle)
+        val statusBarHeight = rectangle.top
+
+        // Get the existing layout parameters and add the status bar height to the top margin
+        val params = binding.trafficIV.layoutParams as ConstraintLayout.LayoutParams
+        params.setMargins(params.leftMargin, params.topMargin + statusBarHeight, params.rightMargin, params.bottomMargin)
+
+        // Apply the new layout parameters to the ImageView
+        binding.trafficIV.layoutParams = params
 
         // Set the background for status bar
         val window: Window = requireActivity().window

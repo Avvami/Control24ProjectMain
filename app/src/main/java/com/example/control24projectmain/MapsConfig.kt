@@ -7,6 +7,8 @@ import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,10 +52,15 @@ class MapsConfig: TrafficListener {
     private lateinit var levelIcon: ImageView
     private lateinit var zoomInButton: ConstraintLayout
     private lateinit var zoomOutButton: ConstraintLayout
+
     private var trafficLevel: TrafficLevel? = null
     private enum class TrafficFreshness {Loading, OK, Expired}
     private var trafficFreshness: TrafficFreshness? = null
     private lateinit var traffic: TrafficLayer
+
+    private var handler: Handler? = null
+    private var runnable: Runnable? = null
+    private var iconState = false
 
     private fun getMapProvider(context: Context) {
         mapProvider = UserManager.getSelectedMap(context).toString()
@@ -344,21 +351,20 @@ class MapsConfig: TrafficListener {
         val app = context.applicationContext as AppLevelClass
 
         lifecycleScope.launch {
+            binding.progressBar4.visibility = View.VISIBLE
             try {
-                //app.startProgressAnimation(binding.locationTemplateTV)
-                val address = app.coroutineGeocode(latitude, longitude, binding.locationTemplateTV)
+                val address = app.coroutineGeocode(latitude, longitude)
                 withContext(Dispatchers.Main) {
-                    //app.stopProgressAnimation(binding.locationTemplateTV)
                     binding.locationTemplateTV.text = address
                 }
             } catch (e: Exception) {
-                //app.stopProgressAnimation(binding.locationTemplateTV)
                 binding.locationTemplateTV.text = "Ошибка геокодирования"
                 Log.i("HDFJSDHFK", "Failed to get address", e)
-                // Show an error message to the user, or handle the error in some other way
             }
+            binding.locationTemplateTV.visibility = View.VISIBLE
+            binding.progressBar4.visibility = View.INVISIBLE
         }
-        //binding.locationTemplateTV.text = app.coroutineGeocode(latitude, longitude)
+
         binding.speedTemplateTV.text = context.resources.getString(R.string.speed_template, objectsList.speed)
         binding.timeTemplateTV.text = app.convertTime(objectsList.gmt)
         binding.ownerTemplateTV.text = objectsList.client
@@ -414,7 +420,8 @@ class MapsConfig: TrafficListener {
         if (!traffic.isTrafficVisible) {
             iconId = R.drawable.icon_traffic_grey
         } else if (trafficFreshness == TrafficFreshness.Loading) {
-            iconId = R.drawable.icon_traffic_grey
+            startLoadingAnimation()
+            return  // Stop further execution in this call
         } else if (trafficFreshness == TrafficFreshness.Expired) {
             iconId = R.drawable.icon_traffic_grey
         } else if (trafficLevel == null) { // State is fresh but region has no data
@@ -430,6 +437,29 @@ class MapsConfig: TrafficListener {
         }
         levelIcon.setImageResource(iconId)
         levelText.text = level
+    }
+
+    private fun startLoadingAnimation() {
+        handler = Handler(Looper.getMainLooper())
+        runnable = object : Runnable {
+            override fun run() {
+                if (trafficFreshness != TrafficFreshness.Loading) {
+                    handler?.removeCallbacks(this) // Stop the loop when trafficFreshness is no longer Loading
+                    updateLevel() // Call updateLevel again to set the correct icon
+                    return
+                }
+
+                if (iconState) {
+                    levelIcon.setImageResource(R.drawable.icon_traffic_grey)
+                } else {
+                    levelIcon.setImageResource(R.drawable.icon_traffic_yellow)
+                }
+
+                iconState = !iconState // Flip the icon state
+                handler?.postDelayed(this, 1000) // Call this runnable again in 1 second
+            }
+        }
+        handler?.post(runnable as Runnable)
     }
 
     override fun onTrafficChanged(trafficLevel: TrafficLevel?) {
