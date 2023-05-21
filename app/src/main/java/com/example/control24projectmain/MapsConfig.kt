@@ -12,11 +12,15 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.control24projectmain.databinding.BottomOverlayBinding
+import com.example.control24projectmain.components.EditDialog
+import com.example.control24projectmain.components.OnDialogCloseListener
+import com.example.control24projectmain.databinding.BottomOverlayViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -129,6 +133,7 @@ class MapsConfig: TrafficListener {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun yandexMapStartConfig(context: Context, yandexMV: MapView) {
         val isDarkMode = isDarkModeEnabled(context)
         yandexMV.map.isNightModeEnabled = isDarkMode
@@ -165,6 +170,50 @@ class MapsConfig: TrafficListener {
             )
         }
 
+        val handler = Handler(Looper.getMainLooper())
+        val postDelay: Long = 200
+        val runnableZoomIn = object : Runnable {
+            override fun run() {
+                val cameraPosition = yandexMV.map.cameraPosition
+                yandexMV.map.move(
+                    CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
+                    Animation(Animation.Type.SMOOTH, .2f),
+                    null
+                )
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+        val runnableZoomOut = object : Runnable {
+            override fun run() {
+                val cameraPosition = yandexMV.map.cameraPosition
+                yandexMV.map.move(
+                    CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom - 1, 0.0f, 0.0f),
+                    Animation(Animation.Type.SMOOTH, .2f),
+                    null
+                )
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+
+        zoomInButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomIn, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomIn)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
         zoomOutButton.setOnClickListener {
             val cameraPosition = yandexMV.map.cameraPosition
             yandexMV.map.move(
@@ -172,6 +221,23 @@ class MapsConfig: TrafficListener {
                 Animation(Animation.Type.SMOOTH, .2f),
                 null
             )
+        }
+
+        zoomOutButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomOut, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomOut)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -236,6 +302,7 @@ class MapsConfig: TrafficListener {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun osmMapStartConfig(context: Context, osmMV: org.osmdroid.views.MapView) {
         val isDarkMode = isDarkModeEnabled(context)
         if (isDarkMode) {
@@ -259,16 +326,71 @@ class MapsConfig: TrafficListener {
         osmMV.maxZoomLevel = 20.0
         osmMV.minZoomLevel = 7.0
 
+        val handler = Handler(Looper.getMainLooper())
+        val postDelay: Long = 200
+        val runnableZoomIn = object : Runnable {
+            override fun run() {
+                val point = osmMV.mapCenter as GeoPoint
+                val zoomLevel = osmMV.zoomLevelDouble
+                osmMV.controller.animateTo(point, zoomLevel + 1, 400)
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+        val runnableZoomOut = object : Runnable {
+            override fun run() {
+                val point = osmMV.mapCenter as GeoPoint
+                val zoomLevel = osmMV.zoomLevelDouble
+                osmMV.controller.animateTo(point, zoomLevel - 1, 400)
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+
         zoomInButton.setOnClickListener {
             val point = osmMV.mapCenter as GeoPoint
             val zoomLevel = osmMV.zoomLevelDouble
             osmMV.controller.animateTo(point, zoomLevel + 1, 400)
         }
 
+        zoomInButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomIn, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomIn)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
         zoomOutButton.setOnClickListener {
             val point = osmMV.mapCenter as GeoPoint
             val zoomLevel = osmMV.zoomLevelDouble
             osmMV.controller.animateTo(point, zoomLevel - 1, 400)
+        }
+
+        zoomOutButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomOut, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomOut)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -339,10 +461,9 @@ class MapsConfig: TrafficListener {
         }
     }
 
-
     private fun openBottomOverlay(context: Context, objectsList: CombinedResponseObject, lifecycleScope: CoroutineScope) {
         val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
-        val binding = BottomOverlayBinding.inflate(LayoutInflater.from(context))
+        val binding = BottomOverlayViewBinding.inflate(LayoutInflater.from(context))
         bottomSheetDialog.setContentView(binding.root)
 
         binding.carNameTemplateTV.text = objectsList.name
@@ -376,6 +497,30 @@ class MapsConfig: TrafficListener {
 
         binding.categoryTemplateTV.text = category?.definition
         binding.autoNumTemplateTV.text = objectsList.avto_no
+
+        var driverInfo = UserManager.getDriverInfo(context, objectsList.id.toString())
+        binding.driverTemplateTV.text = (if (driverInfo.first != "null") {
+            driverInfo.first
+        } else {
+            context.resources.getString(R.string.driver_template)
+        }).toString()
+
+        binding.driverCL.setOnClickListener {
+            val dialog = EditDialog(objectsList.id, object : OnDialogCloseListener {
+                override fun onDialogClose() {
+                    driverInfo = UserManager.getDriverInfo(context, objectsList.id.toString())
+                    binding.driverTemplateTV.text = (if (driverInfo.first != "null") {
+                        driverInfo.first
+                    } else {
+                        context.resources.getString(R.string.driver_template)
+                    }).toString()
+                }
+
+            })
+            dialog.isCancelable = true
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            dialog.show(fragmentManager, "editDialog")
+        }
 
         bottomSheetDialog.show()
     }

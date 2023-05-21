@@ -185,6 +185,7 @@ object UserManager {
         }
     }
 
+    // Get scheduled time
     fun getScheduledTime(context: Context, key: String): String? {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val isSystem24Hour = DateFormat.is24HourFormat(context)
@@ -204,6 +205,7 @@ object UserManager {
         return sharedPreferences.getString(key, defaultTimeString)
     }
 
+    // Sava Yandex map's camera position
     fun saveYandexCameraPosition(context: Context, mapView: MapView) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val cameraPosition = mapView.map.cameraPosition
@@ -214,10 +216,12 @@ object UserManager {
         }
     }
 
+    // Get Yandex map's camera position
     fun getYandexCameraPosition(context: Context, key: String, defaultValue: String): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
     }
 
+    // Sava OSM map's camera position
     fun saveOsmCameraPosition(context: Context, mapView: org.osmdroid.views.MapView) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val geoPoint = mapView.mapCenter as GeoPoint
@@ -230,18 +234,39 @@ object UserManager {
         }
     }
 
+    // Get OSM map's camera position
     fun getOsmCameraPosition(context: Context, key: String, defaultValue: String): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
     }
 
+    // Save traffic jam state
     fun saveTrafficJamState(context: Context, trafficJamState: Boolean) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
             putBoolean(TRAFFIC_JAM, trafficJamState)
         }
     }
 
+    // Get traffic jam state
     fun getTrafficJamState(context: Context): Boolean {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
             TRAFFIC_JAM, false)
+    }
+
+    // Save driver name/phone
+    fun saveDriverInfo(context: Context, key: String, name: String?, number: String?) {
+        val combinedInfo = "$name,$number"
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putString(key, combinedInfo)
+        }
+    }
+
+    // Get driver name\phone
+    fun getDriverInfo(context: Context, key: String): Pair<String?, String?> {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        val combinedInfo = sharedPreferences.getString(key, null)
+        val nameNumber = combinedInfo?.split(",")
+        val name = nameNumber?.getOrNull(0)
+        val number = nameNumber?.getOrNull(1)
+        return Pair(name, number)
     }
 }

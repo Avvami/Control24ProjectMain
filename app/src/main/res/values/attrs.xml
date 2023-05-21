@@ -72,4 +72,14 @@
     <attr name="trafficTextColor" format="color"/>
     
     <attr name="collapseBarColor" format="color"/>
+
+    <attr name="dialogBackgroundColor" format="color"/>
+
+    <attr name="darkEditTextOutlineColor" format="color"/>
+    <attr name="darkEditTextOutlineFocusedColor" format="color"/>
+    <attr name="darkEditTextHintColor" format="color"/>
+    <attr name="darkEditTextHintActiveColor" format="color"/>
+    <attr name="darkEditTextCursorColor" format="color"/>
+
+    <attr name="textButtonRippleColor" format="color"/>
 </resources>

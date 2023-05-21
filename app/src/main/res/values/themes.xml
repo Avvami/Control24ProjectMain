@@ -17,7 +17,7 @@
         <item name="loginEditTextOutlineColor">@color/material_theme_ref_primary_primary90</item>
         <item name="loginEditTextOutlineFocusedColor">@color/material_theme_ref_primary_primary100</item>
         <item name="loginEditTextHintColor">@color/material_theme_ref_secondary_secondary90</item>
-        <item name="loginEditTextHintActiveColor">@color/material_theme_ref_secondary_secondary100</item>
+        <item name="loginEditTextHintActiveColor">@color/material_theme_ref_primary_primary100</item>
         <item name="loginEditTextCursorColor">@color/material_theme_sys_light_background</item>
         <item name="loginHelpButtonRippleColor">@color/material_theme_ref_primary_primary80</item>
 
@@ -78,6 +78,16 @@
 
         <item name="collapseBarColor">@color/material_theme_sys_light_primary</item>
 
+        <item name="dialogBackgroundColor">@color/material_theme_surfaces_light_surface3</item>
+
+        <item name="darkEditTextOutlineColor">@color/material_theme_ref_neutral_variant_neutral_variant20</item>
+        <item name="darkEditTextOutlineFocusedColor">@color/material_theme_ref_neutral_neutral10</item>
+        <item name="darkEditTextHintColor">@color/material_theme_ref_neutral_variant_neutral_variant30</item>
+        <item name="darkEditTextHintActiveColor">@color/material_theme_ref_neutral_neutral10</item>
+        <item name="darkEditTextCursorColor">@color/material_theme_ref_neutral_neutral10</item>
+
+        <item name="textButtonRippleColor">@color/material_theme_ref_primary_primary80</item>
+
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -118,13 +128,13 @@
         <item name="android:maxLines">1</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textCursorDrawable">@drawable/cursor_light_theme</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_light</item>
         <item name="android:singleLine">true</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/corner_radius_most</item>
+        <item name="cornerSize">4dp</item>
     </style>
 
     <style name="MaterialButtonSolidStyle" parent="@style/Widget.MaterialComponents.Button">
@@ -172,6 +182,25 @@
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TextInputOuterFieldStyleDark" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/input_text_outline_color_dark</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintTextColor">?attr/darkEditTextHintActiveColor</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="android:textColorHint">?attr/darkEditTextHintColor</item>
+        <item name="passwordToggleTint">@color/password_toggle_color_dark</item>
+    </style>
+
+    <style name="TextInputInnerFieldStyleDark" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColor">?attr/textOnItemsColor</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_dark</item>
+        <item name="android:singleLine">true</item>
     </style>
 
 </resources>

@@ -113,6 +113,13 @@
     <string name="scheduled_default">%s</string>
     <string name="system_default">Как в системе</string>
 
+    <!--Edit Dialog-->
+    <string name="add_driver">Добавить водителя</string>
+    <string name="driver_name_hint">Водитель</string>
+    <string name="driver_number_hint">Контактный номер</string>
+    <string name="driver_cancel">Отменить</string>
+    <string name="driver_save">Сохранить</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

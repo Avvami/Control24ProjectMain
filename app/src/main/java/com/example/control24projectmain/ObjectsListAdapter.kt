@@ -1,36 +1,27 @@
 package com.example.control24projectmain
 
 import android.content.Context
-import android.location.Address
-import android.location.Geocoder
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.control24projectmain.components.EditDialog
+import com.example.control24projectmain.components.OnDialogCloseListener
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
-import io.github.muddz.styleabletoast.StyleableToast
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.io.IOException
-import java.util.Locale
 
 class ObjectsListAdapter(
     private val context : Context,
@@ -40,13 +31,22 @@ class ObjectsListAdapter(
     private var expandedStateArray = BooleanArray(item.size)
     private var displayedItemsArray = BooleanArray(item.size)
     private var listener: OnItemClickListener? = null
+    private var callListener: OnDriverCallClickListener? = null
 
     interface OnItemClickListener {
         fun onItemClick(position: Int, size: Int)
     }
 
+    interface OnDriverCallClickListener {
+        fun onDriverCallClick(position: Int)
+    }
+
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+
+    fun setOnDriverCallClickListener(listener: OnDriverCallClickListener) {
+        this.callListener = listener
     }
 
     class ObjectsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -63,6 +63,9 @@ class ObjectsListAdapter(
         val displaySwitch: SwitchMaterial = itemView.findViewById(R.id.mapDisplayMSwitch)
         val downArrow: CheckBox = itemView.findViewById(R.id.downArrow)
         val expandableCL: ConstraintLayout = itemView.findViewById(R.id.expandableCL)
+        val driverTV: TextView = itemView.findViewById(R.id.driverTemplateTV)
+        val driverCallButton: MaterialButton = itemView.findViewById(R.id.makeCallButton)
+        val driverInfo: ConstraintLayout = itemView.findViewById(R.id.driverCL)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectsListViewHolder {
@@ -159,6 +162,34 @@ class ObjectsListAdapter(
             // Save the expandable state
             val expandedStateJsonString = gson.toJson(expandedStateArray)
             UserManager.saveExpandedListItem(context, expandedStateJsonString)
+        }
+
+        var driverInfo = UserManager.getDriverInfo(context, position.toString())
+        holder.driverTV.text = (if (driverInfo.first != "null") {
+            driverInfo.first
+        } else {
+            context.resources.getString(R.string.driver_template)
+        }).toString()
+
+        holder.driverInfo.setOnClickListener {
+            val dialog = EditDialog(position, object : OnDialogCloseListener{
+                override fun onDialogClose() {
+                    driverInfo = UserManager.getDriverInfo(context, holder.position.toString())
+                    holder.driverTV.text = (if (driverInfo.first != "null") {
+                        driverInfo.first
+                    } else {
+                        context.resources.getString(R.string.driver_template)
+                    }).toString()
+                }
+
+            })
+            dialog.isCancelable = true
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            dialog.show(fragmentManager, "editDialog")
+        }
+
+        holder.driverCallButton.setOnClickListener {
+            callListener?.onDriverCallClick(position)
         }
     }
 

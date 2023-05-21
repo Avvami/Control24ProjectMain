@@ -1,6 +1,5 @@
 package com.example.control24projectmain.fragments
 
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -62,9 +61,18 @@ class MapFragment : Fragment() {
             layoutParams?.bottomMargin = insets.bottom
             layoutParams?.rightMargin = insets.right
 
-            WindowInsetsCompat.CONSUMED
+            windowInsets
         }
 
+        val topMargin = binding.trafficIV.marginTop
+        ViewCompat.setOnApplyWindowInsetsListener(binding.trafficIV) { view, windowInsets ->
+            val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+
+            val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
+            layoutParams?.topMargin = statusBarInsets.top + topMargin
+
+            WindowInsetsCompat.CONSUMED
+        }
 
         yandexMV = binding.yandexMV
         osmMV = binding.osmMV
@@ -131,18 +139,6 @@ class MapFragment : Fragment() {
         super.onStart()
         // Start the maps
         mapsConfig.mapsOnStart(yandexMV, osmMV)
-
-        // Get the status bar height
-        val rectangle = Rect()
-        requireActivity().window.decorView.getWindowVisibleDisplayFrame(rectangle)
-        val statusBarHeight = rectangle.top
-
-        // Get the existing layout parameters and add the status bar height to the top margin
-        val params = binding.trafficIV.layoutParams as ConstraintLayout.LayoutParams
-        params.setMargins(params.leftMargin, params.topMargin + statusBarHeight, params.rightMargin, params.bottomMargin)
-
-        // Apply the new layout parameters to the ImageView
-        binding.trafficIV.layoutParams = params
 
         // Set the background for status bar
         val window: Window = requireActivity().window

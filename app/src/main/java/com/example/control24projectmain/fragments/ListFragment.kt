@@ -1,10 +1,13 @@
 package com.example.control24projectmain.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +20,7 @@ import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.activities.MainActivity
 import com.example.control24projectmain.databinding.FragmentListBinding
 import com.google.gson.Gson
+import io.github.muddz.styleabletoast.StyleableToast
 
 class ListFragment : Fragment() {
 
@@ -65,6 +69,31 @@ class ListFragment : Fragment() {
                     MapFragment().arguments = bundle
                     (activity as MainActivity).replaceFragment(R.id.map_menu)
                 }
+            })
+            adapter.setOnDriverCallClickListener(object : ObjectsListAdapter.OnDriverCallClickListener {
+                override fun onDriverCallClick(position: Int) {
+                    val driverInfo = UserManager.getDriverInfo(requireContext(), position.toString())
+                    val driverPhoneNumber = if (driverInfo.second != "null") {
+                        driverInfo.second
+                    } else {
+                        ""
+                    }
+                    if (driverPhoneNumber == "") {
+                        StyleableToast.makeText(
+                            requireContext(),
+                            "Номер не указан",
+                            Toast.LENGTH_SHORT,
+                            R.style.CustomStyleableToast
+                        ).show()
+                    } else {
+                        val phoneNumber = "tel: +7${driverPhoneNumber}"
+                        val dialIntent = Intent(Intent.ACTION_DIAL)
+                        dialIntent.data = Uri.parse(phoneNumber)
+                        startActivity(dialIntent)
+                        activity?.overridePendingTransition(R.anim.fade_in_long, R.anim.fade_out_long)
+                    }
+                }
+
             })
             recyclerView.adapter = adapter
 

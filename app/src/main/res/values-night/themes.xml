@@ -78,6 +78,16 @@
 
         <item name="collapseBarColor">@color/material_theme_sys_dark_primary</item>
 
+        <item name="dialogBackgroundColor">@color/material_theme_surfaces_dark_surface3</item>
+
+        <item name="darkEditTextOutlineColor">@color/material_theme_ref_neutral_variant_neutral_variant80</item>
+        <item name="darkEditTextOutlineFocusedColor">@color/material_theme_ref_neutral_neutral90</item>
+        <item name="darkEditTextHintColor">@color/material_theme_ref_neutral_variant_neutral_variant70</item>
+        <item name="darkEditTextHintActiveColor">@color/material_theme_ref_neutral_neutral90</item>
+        <item name="darkEditTextCursorColor">@color/material_theme_ref_neutral_neutral90</item>
+
+        <item name="textButtonRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant50</item>
+
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>

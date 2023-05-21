@@ -40,14 +40,14 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="-10dp"
-        android:background="@drawable/logout_btn_background"
+        android:background="@drawable/background_logout_btn"
         android:paddingHorizontal="10dp"
         android:paddingVertical="6dp"
         android:layout_below="@id/descriptionTV"
         android:layout_toStartOf="@id/continueBtn">
 
         <TextView
-            android:id="@+id/cancelTV"
+            android:id="@+id/retryTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
@@ -55,14 +55,13 @@
             android:textAllCaps="true"
             android:textColor="@color/material_theme_sys_light_on_background"
             android:textSize="14sp" />
-
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/continueBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/logout_btn_background"
+        android:background="@drawable/background_logout_btn"
         android:layout_marginEnd="-10dp"
         android:layout_marginTop="18dp"
         android:paddingHorizontal="10dp"
@@ -71,7 +70,7 @@
         android:layout_below="@id/descriptionTV">
 
         <TextView
-            android:id="@+id/deleteTV"
+            android:id="@+id/continueTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
