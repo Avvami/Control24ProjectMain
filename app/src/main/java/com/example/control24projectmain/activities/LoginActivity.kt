@@ -1,5 +1,6 @@
 package com.example.control24projectmain.activities
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -27,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var toast: StyleableToast
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -71,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                         performLogin(progressBar, login, password)
                     } else {
                         // Show dialog window if not connected to the network
-                        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog_view, null)
+                        val dialogBinding = layoutInflater.inflate(R.layout.alert_dialog_view, null)
                         val dialog = Dialog(this@LoginActivity)
                         dialog.setContentView(dialogBinding)
                         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

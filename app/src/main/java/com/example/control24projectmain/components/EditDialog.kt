@@ -15,7 +15,7 @@ interface OnDialogCloseListener {
 
 class EditDialog(private val itemId: Int, private val listener: OnDialogCloseListener): DialogFragment() {
 
-    private lateinit var binding: EditDialogViewBinding
+      private lateinit var binding: EditDialogViewBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = EditDialogViewBinding.inflate(layoutInflater)
@@ -44,8 +44,8 @@ class EditDialog(private val itemId: Int, private val listener: OnDialogCloseLis
         }
 
         binding.saveBtn.setOnClickListener {
-            val driverNameET = binding.driverNameET.text.toString().ifEmpty { null }
-            val driverPhoneET = binding.driverPhoneET.text.toString().ifEmpty { null }
+            val driverNameET = binding.driverNameET.text.toString().ifEmpty { "null" }
+            val driverPhoneET = binding.driverPhoneET.text.toString().ifEmpty { "null" }
             UserManager.saveDriverInfo(requireContext(), itemId.toString(), driverNameET, driverPhoneET)
             listener.onDialogClose()
             dialog.dismiss()

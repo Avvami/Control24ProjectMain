@@ -32,7 +32,7 @@ class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private val sharedViewModel by activityViewModels<SharedViewModel>()
     private lateinit var yandexMV: MapView
-    private lateinit var osmMV: org.osmdroid.views.MapView
+    private lateinit var osmMapBoxMV: com.mapbox.maps.MapView
     private var mapProvider: String = yandexMap
     private val mapsConfig = MapsConfig()
 
@@ -75,14 +75,15 @@ class MapFragment : Fragment() {
         }
 
         yandexMV = binding.yandexMV
-        osmMV = binding.osmMV
+        osmMapBoxMV = binding.osmMapBoxMV
+
         val levelIcon = binding.trafficIV
         val levelText = binding.trafficTV
         val zoomInCL = binding.zoomInCL
         val zoomOutCL = binding.zoomOutCL
 
         // Initialize the variable and set default position - Krasnoyarsk
-        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMV, levelIcon, levelText, zoomInCL, zoomOutCL)
+        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMapBoxMV, levelIcon, levelText, zoomInCL, zoomOutCL)
 
         sharedViewModel.bundleLiveData.observe(viewLifecycleOwner) { bundle ->
             // Update the UI with the new data
@@ -99,7 +100,7 @@ class MapFragment : Fragment() {
 
             when (mapProvider) {
                 yandexMap -> mapsConfig.yandexMapLiveConfig(requireContext(), objectsList, array, yandexMV, objectId, viewLifecycleOwner.lifecycleScope)
-                osmMap -> mapsConfig.osmMapLiveConfig(requireContext(), objectsList, array, osmMV, objectId, viewLifecycleOwner.lifecycleScope)
+                osmMap -> mapsConfig.osmMapLiveConfig(requireContext(), objectsList, array, osmMapBoxMV, objectId, viewLifecycleOwner.lifecycleScope)
             }
             bundle.putInt("POSITION", -1)
         }
@@ -111,10 +112,10 @@ class MapFragment : Fragment() {
         // Save maps camera position
         when (mapProvider) {
             yandexMap -> UserManager.saveYandexCameraPosition(requireContext(), yandexMV)
-            osmMap -> UserManager.saveOsmCameraPosition(requireContext(), osmMV)
+            osmMap -> UserManager.saveOsmCameraPosition(requireContext(), osmMapBoxMV)
         }
 
-        mapsConfig.mapsOnStop(requireContext(), yandexMV, osmMV)
+        mapsConfig.mapsOnStop(requireContext(), yandexMV)
         super.onStop()
 
         // Set default status bar color
@@ -138,7 +139,7 @@ class MapFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         // Start the maps
-        mapsConfig.mapsOnStart(yandexMV, osmMV)
+        mapsConfig.mapsOnStart(yandexMV)
 
         // Set the background for status bar
         val window: Window = requireActivity().window

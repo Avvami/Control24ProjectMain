@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/bg_gradient"
     tools:context=".activities.LoginActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:layout_centerInParent="true"
+        android:fitsSystemWindows="true"
         tools:ignore="UselessParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,8 @@
                 android:src="@drawable/company_logo_large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="480dp" />
 
             <TextView
                 android:id="@+id/companyDescriptionTV"
@@ -45,7 +46,9 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/companyLogoIV" />
+                app:layout_constraintTop_toBottomOf="@+id/companyLogoIV"
+                app:layout_constraintWidth_max="480dp"
+                tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginIL"
@@ -56,7 +59,8 @@
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/companyDescriptionTV">
+                app:layout_constraintTop_toBottomOf="@+id/companyDescriptionTV"
+                app:layout_constraintWidth_max="480dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginET"
@@ -64,7 +68,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_hint"
-                    android:inputType="textEmailSubject" />
+                    android:inputType="textEmailSubject"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,6 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginIL"
+                app:layout_constraintWidth_max="480dp"
                 app:passwordToggleDrawable="@drawable/password_toggle"
                 app:passwordToggleEnabled="true">
 
@@ -87,7 +93,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password_hint"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <FrameLayout
@@ -99,7 +106,8 @@
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passwordIL">
+                app:layout_constraintTop_toBottomOf="@+id/passwordIL"
+                app:layout_constraintWidth_max="480dp">
 
                 <TextView
                     android:id="@+id/loginTV"
@@ -130,7 +138,8 @@
                 android:text="@string/login_help"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+                app:layout_constraintTop_toBottomOf="@+id/loginButton"
+                tools:ignore="TextContrastCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

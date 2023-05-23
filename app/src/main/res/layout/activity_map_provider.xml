@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/bg_gradient"
     android:fitsSystemWindows="true"
     tools:context=".activities.MapProviderActivity">
 
@@ -70,7 +70,7 @@
                 android:id="@+id/yandexMapsCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +119,7 @@
                 android:id="@+id/osmCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"

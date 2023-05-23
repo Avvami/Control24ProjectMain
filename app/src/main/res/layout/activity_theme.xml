@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/bg_gradient"
     tools:context=".activities.ThemeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +69,7 @@
                 android:id="@+id/disabledCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +106,7 @@
                 android:id="@+id/enabledCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,12 +143,13 @@
                 android:id="@+id/scheduledCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/btn_settings_ripple_color"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/enabledCL">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/enabledCL"
+                tools:ignore="TextSizeCheck">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/scheduledTimeCL"
@@ -191,9 +192,9 @@
                     android:background="@drawable/switches_ripple_effect"
                     android:buttonTint="?attr/textOnItemsColor"
                     android:clickable="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,7 +202,7 @@
                 android:id="@+id/systemDefaultCL"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"

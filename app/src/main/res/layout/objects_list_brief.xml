@@ -4,7 +4,7 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="16dp"
     android:elevation="@dimen/button_elevation"
-    android:background="@drawable/background_objects_list_items"
+    android:background="@drawable/card_objects_list_ripple_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:background="@drawable/background_car_icon"
+        android:background="@drawable/bg_car_icon"
         app:layout_constraintBottom_toBottomOf="@+id/mapDisplayMSwitch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/mapDisplayMSwitch">
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:background="@drawable/background_dashboard_icon"
+        android:background="@drawable/bg_dashboard_icon"
         app:layout_constraintBottom_toBottomOf="@+id/carNameTemplateTV"
         app:layout_constraintStart_toEndOf="@+id/carNameTemplateTV"
         app:layout_constraintTop_toTopOf="@+id/carNameTemplateTV">
@@ -124,7 +124,7 @@
                 android:id="@+id/locationIconBackgroundFL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_location_icon"
+                android:background="@drawable/bg_location_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/background_time_icon"
+            android:background="@drawable/bg_time_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/locationCL">
 
@@ -349,7 +349,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/background_text_button"
+            android:background="@drawable/btn_text_ripple_color"
             app:layout_constraintBottom_toBottomOf="@+id/makeCallButton"
             app:layout_constraintEnd_toStartOf="@+id/makeCallButton"
             app:layout_constraintStart_toStartOf="parent"

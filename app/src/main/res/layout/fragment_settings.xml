@@ -9,14 +9,15 @@
 
     <TextView
         android:id="@+id/settingsTV"
+        style="@style/TextTitleLargeStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        style="@style/TextTitleLargeStyle"
         android:text="@string/settings_menu"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/companyLogoIV"
-        app:layout_constraintTop_toTopOf="@+id/companyLogoIV" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/companyLogoIV"
+        tools:ignore="TextContrastCheck" />
 
     <ImageView
         android:id="@+id/companyLogoIV"
@@ -52,7 +53,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:elevation="@dimen/button_elevation"
-                android:background="@drawable/background_settings_items"
+                android:background="@drawable/btn_settings_ripple_color"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +99,7 @@
                     android:id="@+id/logoutCLButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_settings_items"
+                    android:background="@drawable/btn_settings_ripple_color"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -153,31 +154,33 @@
                     android:textColor="?attr/textOnBackgroundColor"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/darkThemeCL"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
-                    android:layout_marginVertical="12dp"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="12dp"
+                    android:background="@drawable/btn_settings_ripple_color"
                     android:elevation="@dimen/button_elevation"
-                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV">
+                    app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV"
+                    tools:ignore="TextSizeCheck">
 
                     <ImageView
                         android:id="@+id/themeIV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:src="@drawable/icon_moon"
                         android:contentDescription="@string/theme_image"
-                        app:tint="?attr/textOnItemsColor"
+                        android:src="@drawable/icon_moon"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:tint="?attr/textOnItemsColor" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/themeStateCL"
@@ -243,25 +246,26 @@
                     android:id="@+id/mapProviderCL"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
-                    android:layout_marginVertical="12dp"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="12dp"
+                    android:background="@drawable/btn_settings_ripple_color"
                     android:elevation="@dimen/button_elevation"
-                    android:background="@drawable/background_settings_items"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/darkThemeCL">
+                    app:layout_constraintTop_toBottomOf="@+id/darkThemeCL"
+                    tools:ignore="TextSizeCheck">
 
                     <ImageView
                         android:id="@+id/mapProviderIV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:src="@drawable/icon_map"
                         android:contentDescription="@string/map_provider_image"
-                        app:tint="?attr/textOnItemsColor"
+                        android:src="@drawable/icon_map"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:tint="?attr/textOnItemsColor" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/mapUsingCL"
@@ -318,24 +322,25 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/background_settings_items"
+                    android:background="@drawable/btn_settings_ripple_color"
                     android:elevation="@dimen/button_elevation"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mapProviderCL">
+                    app:layout_constraintTop_toBottomOf="@+id/mapProviderCL"
+                    tools:ignore="TextSizeCheck">
 
                     <ImageView
                         android:id="@+id/objectsListViewIV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:src="@drawable/icon_photo_editor"
                         android:contentDescription="@string/list_view_image"
-                        app:tint="?attr/textOnItemsColor"
+                        android:src="@drawable/icon_photo_editor"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:tint="?attr/textOnItemsColor" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/listViewCL"
@@ -404,7 +409,8 @@
                     android:textColor="?attr/textOnBackgroundColor"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/aboutAppCL"
@@ -413,7 +419,7 @@
                     android:layout_marginVertical="12dp"
                     android:layout_marginHorizontal="16dp"
                     android:elevation="@dimen/button_elevation"
-                    android:background="@drawable/background_settings_items"
+                    android:background="@drawable/btn_settings_ripple_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/supportSettings">
@@ -464,7 +470,7 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/background_settings_items"
+                    android:background="@drawable/btn_settings_ripple_color"
                     android:elevation="@dimen/button_elevation"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

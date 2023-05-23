@@ -16,7 +16,8 @@
         android:text="@string/objects_list"
         app:layout_constraintBottom_toBottomOf="@+id/companyLogoIV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/companyLogoIV" />
+        app:layout_constraintTop_toTopOf="@+id/companyLogoIV"
+        tools:ignore="TextContrastCheck" />
 
     <ImageView
         android:id="@+id/companyLogoIV"

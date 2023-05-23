@@ -6,7 +6,6 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.yandex.mapkit.mapview.MapView
-import org.osmdroid.util.GeoPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -222,15 +221,13 @@ object UserManager {
     }
 
     // Sava OSM map's camera position
-    fun saveOsmCameraPosition(context: Context, mapView: org.osmdroid.views.MapView) {
+    fun saveOsmCameraPosition(context: Context, mapView: com.mapbox.maps.MapView) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val geoPoint = mapView.mapCenter as GeoPoint
-        val zoomLevel = mapView.zoomLevelDouble
-
+        val cameraPosition = mapView.getMapboxMap().cameraState
         sharedPreferences.edit {
-            putString("osm_lat", geoPoint.latitude.toString())
-            putString("osm_lon", geoPoint.longitude.toString())
-            putString("osm_zoom", zoomLevel.toString())
+            putString("osm_lat", cameraPosition.center.latitude().toString())
+            putString("osm_lon", cameraPosition.center.longitude().toString())
+            putString("osm_zoom", cameraPosition.zoom.toString())
         }
     }
 
@@ -263,7 +260,7 @@ object UserManager {
     // Get driver name\phone
     fun getDriverInfo(context: Context, key: String): Pair<String?, String?> {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val combinedInfo = sharedPreferences.getString(key, null)
+        val combinedInfo = sharedPreferences.getString(key, "null")
         val nameNumber = combinedInfo?.split(",")
         val name = nameNumber?.getOrNull(0)
         val number = nameNumber?.getOrNull(1)

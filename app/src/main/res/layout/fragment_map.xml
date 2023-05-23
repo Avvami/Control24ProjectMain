@@ -8,15 +8,14 @@
     android:paddingBottom="56dp"
     tools:context=".fragments.MapFragment">
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/osmMV"
+    <com.mapbox.maps.MapView
+        android:id="@+id/osmMapBoxMV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/yandexMV"
@@ -25,8 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/trafficIV"
@@ -37,7 +35,8 @@
         android:contentDescription="@string/traffic_image"
         android:src="@drawable/icon_traffic_grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/trafficTV"
@@ -64,7 +63,7 @@
             android:id="@+id/zoomInCL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_zoom_button"
+            android:background="@drawable/btn_zoom_bg_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -89,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/background_zoom_button"
+            android:background="@drawable/btn_zoom_bg_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/zoomInCL">

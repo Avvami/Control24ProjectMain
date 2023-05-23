@@ -22,6 +22,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,11 +60,12 @@ class SplashScreenActivity : AppCompatActivity() {
             }
         } else {
             // Show dialog window on splash screen if not connected to the net
-            val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog_view, null)
+            val dialogBinding = layoutInflater.inflate(R.layout.alert_dialog_view, null)
             val dialog = Dialog(this@SplashScreenActivity)
+
             dialog.setContentView(dialogBinding)
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.setCancelable(true)
+            dialog.setCancelable(false)
             dialog.show()
 
             val retryBtn = dialogBinding.findViewById<RelativeLayout>(R.id.retryBtn)

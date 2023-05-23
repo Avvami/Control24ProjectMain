@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/bg_gradient"
     tools:context=".activities.AboutAppActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,7 +92,8 @@
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appVersionTV"/>
+                app:layout_constraintTop_toBottomOf="@+id/appVersionTV"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
                 android:id="@+id/devInfoTV"
@@ -127,13 +128,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="@string/dev_email_link"
                 android:fontFamily="@font/roboto"
-                android:textSize="16sp"
+                android:text="@string/dev_email_link"
                 android:textColor="?attr/textLinkColor"
+                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/devEmailTV"/>
+                app:layout_constraintTop_toBottomOf="@+id/devEmailTV"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/devOfficeTV"
@@ -161,7 +163,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/devOfficeTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/devOfficeTV"
-                app:layout_constraintTop_toTopOf="@+id/devOfficeTV" />
+                app:layout_constraintTop_toTopOf="@+id/devOfficeTV"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/devWebsiteTV"
@@ -189,7 +192,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/devWebsiteTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/devWebsiteTV"
-                app:layout_constraintTop_toTopOf="@+id/devWebsiteTV" />
+                app:layout_constraintTop_toTopOf="@+id/devWebsiteTV"
+                tools:ignore="TextContrastCheck" />
 
             <ImageView
                 android:id="@+id/companyLogoIV"

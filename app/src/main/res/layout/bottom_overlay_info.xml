@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_bottom_overlay">
+    android:background="@drawable/bg_bottom_overlay">
 
     <ImageView
         android:id="@+id/collapseIV"
         android:layout_width="36dp"
         android:layout_height="16dp"
         android:layout_marginTop="2dp"
-        android:src="@drawable/icon_minus_flat"
         android:contentDescription="@string/minus_image"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/icon_minus_flat"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
     <FrameLayout
         android:id="@+id/carIconBackgroundFL"
@@ -22,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginStart="12dp"
-        android:background="@drawable/background_car_icon"
+        android:background="@drawable/bg_car_icon"
         app:layout_constraintTop_toBottomOf="@+id/collapseIV"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -67,7 +69,7 @@
             android:id="@+id/locationIconBackgroundFL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_location_icon"
+            android:background="@drawable/bg_location_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -116,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_dashboard_icon"
+        android:background="@drawable/bg_dashboard_icon"
         app:layout_constraintStart_toStartOf="@+id/locationCL"
         app:layout_constraintTop_toBottomOf="@+id/locationCL">
 
@@ -150,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:background="@drawable/background_time_icon"
+        android:background="@drawable/bg_time_icon"
         app:layout_constraintBottom_toBottomOf="@+id/speedTemplateTV"
         app:layout_constraintStart_toEndOf="@+id/speedTemplateTV"
         app:layout_constraintTop_toTopOf="@+id/speedTemplateTV">
@@ -325,7 +327,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/background_text_button"
+        android:background="@drawable/btn_text_ripple_color"
         app:layout_constraintBottom_toBottomOf="@+id/makeCallButton"
         app:layout_constraintEnd_toStartOf="@+id/makeCallButton"
         app:layout_constraintStart_toStartOf="parent"

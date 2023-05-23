@@ -9,82 +9,52 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_dialog">
+        android:background="@drawable/bg_dialog"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/addDriver"
+            android:id="@+id/titleName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="@string/add_driver"
+            android:text="@string/internet_dialog_warning"
             android:textColor="?attr/textOnItemsColor"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/divider2"
+            android:id="@+id/divider3"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="60dp"
             android:layout_marginVertical="16dp"
             android:background="?attr/textOnItemsColor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/addDriver"
-            app:layout_constraintTop_toBottomOf="@+id/addDriver" />
+            app:layout_constraintStart_toStartOf="@+id/titleName"
+            app:layout_constraintTop_toBottomOf="@+id/titleName" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/driverNameIL"
-            style="@style/TextInputOuterFieldStyleDark"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/descriptionTV"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
             android:layout_marginTop="16dp"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/internet_dialog_description"
+            android:textColor="?attr/textOnItemsColor"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/divider3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/driverNameET"
-                style="@style/TextInputInnerFieldStyleDark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/driver_name_hint"
-                android:inputType="textCapSentences" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/driverPhoneIL"
-            style="@style/TextInputOuterFieldStyleDark"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_display_bounds_horizontal"
-            android:layout_marginTop="16dp"
-            app:endIconMode="clear_text"
-            app:prefixText="+7"
-            app:prefixTextAppearance="@style/TextInputInnerFieldStyleDark"
-            app:prefixTextColor="?attr/textOnItemsColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/driverNameIL">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/driverPhoneET"
-                style="@style/TextInputInnerFieldStyleDark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/driver_number_hint"
-                android:inputType="phone"
-                android:digits="0123456789+" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <RelativeLayout
-            android:id="@+id/cancelBtn"
+            android:id="@+id/retryBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
@@ -93,22 +63,22 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveBtn"
-            app:layout_constraintTop_toBottomOf="@+id/driverPhoneIL">
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTV"
+            app:layout_constraintEnd_toStartOf="@+id/continueBtn">
 
             <TextView
-                android:id="@+id/cancelTV"
+                android:id="@+id/retryTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
-                android:text="@string/driver_cancel"
+                android:text="@string/dialog_retry"
                 android:textAllCaps="true"
                 android:textColor="?attr/textOnItemsColor"
                 android:textSize="14sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/saveBtn"
+            android:id="@+id/continueBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
@@ -118,16 +88,16 @@
             android:paddingVertical="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/driverPhoneIL">
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTV">
 
             <TextView
-                android:id="@+id/saveTV"
+                android:id="@+id/continueTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
-                android:text="@string/driver_save"
+                android:text="@string/dialog_continue"
                 android:textAllCaps="true"
-                android:textColor="?attr/textOnItemsColor"
+                android:textColor="@color/material_theme_sys_light_on_background"
                 android:textSize="14sp" />
         </RelativeLayout>
 

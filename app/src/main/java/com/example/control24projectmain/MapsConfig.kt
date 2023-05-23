@@ -9,8 +9,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.preference.PreferenceManager
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -20,8 +20,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.control24projectmain.components.EditDialog
 import com.example.control24projectmain.components.OnDialogCloseListener
-import com.example.control24projectmain.databinding.BottomOverlayViewBinding
+import com.example.control24projectmain.databinding.BottomOverlayInfoBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
+import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import com.mapbox.maps.plugin.animation.easeTo
+import com.mapbox.maps.plugin.animation.flyTo
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.attribution.attribution
+import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.logo.logo
+import com.mapbox.maps.plugin.scalebar.scalebar
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -38,12 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.CustomZoomButtonsController
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.TilesOverlay
+
 
 private const val yandexMap = "YANDEX"
 private const val osmMap = "OSM"
@@ -75,35 +84,32 @@ class MapsConfig: TrafficListener {
         getMapProvider(context)
         when (mapProvider) {
             yandexMap -> MapKitFactory.initialize(context) // Yandex Maps
-            osmMap -> Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context)) // Open Street Maps
         }
     }
 
-    fun mapsOnStop(context: Context, yandexMV: MapView, osmMV: org.osmdroid.views.MapView) {
+    fun mapsOnStop(context: Context, yandexMV: MapView) {
         when (mapProvider) {
             yandexMap -> {
                 yandexMV.onStop()
                 MapKitFactory.getInstance().onStop()
                 UserManager.saveTrafficJamState(context, traffic.isTrafficVisible)
             }
-            osmMap -> osmMV.onPause()
         }
     }
 
-    fun mapsOnStart(yandexMV: MapView, osmMV: org.osmdroid.views.MapView) {
+    fun mapsOnStart(yandexMV: MapView) {
         when (mapProvider) {
             yandexMap -> {
                 MapKitFactory.getInstance().onStart()
                 yandexMV.onStart()
             }
-            osmMap -> osmMV.onResume()
         }
     }
 
     fun startMapsConfig(
         context: Context,
         yandexMV: MapView,
-        osmMV: org.osmdroid.views.MapView,
+        osmMapBoxMV: com.mapbox.maps.MapView,
         levelIV: ImageView,
         levelTV: TextView,
         zoomInCL: ConstraintLayout,
@@ -113,7 +119,7 @@ class MapsConfig: TrafficListener {
         zoomOutButton = zoomOutCL
         when (mapProvider) {
             yandexMap -> {
-                osmMV.visibility = View.GONE
+                osmMapBoxMV.visibility = View.GONE
                 yandexMV.visibility = View.VISIBLE
                 levelIcon = levelIV
                 levelText = levelTV
@@ -123,12 +129,12 @@ class MapsConfig: TrafficListener {
             }
             osmMap -> {
                 yandexMV.visibility = View.GONE
-                osmMV.visibility = View.VISIBLE
+                osmMapBoxMV.visibility = View.VISIBLE
                 levelIcon = levelIV
                 levelText = levelTV
                 levelIcon.visibility = View.INVISIBLE
                 levelText.visibility = View.INVISIBLE
-                osmMapStartConfig(context, osmMV)
+                osmMapStartConfig(context, osmMapBoxMV)
             }
         }
     }
@@ -303,54 +309,75 @@ class MapsConfig: TrafficListener {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun osmMapStartConfig(context: Context, osmMV: org.osmdroid.views.MapView) {
+    private fun osmMapStartConfig(context: Context, osmMapBoxMV: com.mapbox.maps.MapView) {
         val isDarkMode = isDarkModeEnabled(context)
         if (isDarkMode) {
-            // If dark mode is enabled, set the color filter of the tiles overlay to invert colors
-            osmMV.overlayManager.tilesOverlay.setColorFilter(TilesOverlay.INVERT_COLORS)
+            osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_NIGHT)
         } else {
-            // If dark mode is not enabled, remove any color filter from the tiles overlay
-            osmMV.overlayManager.tilesOverlay.setColorFilter(null)
+            osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
         }
 
         // Get the saved camera position values from UserManager
         val latitude = UserManager.getOsmCameraPosition(context, "osm_lat", 56.010569.toString())!!.toDouble()
         val longitude = UserManager.getOsmCameraPosition(context, "osm_lon", 92.852572.toString())!!.toDouble()
-        val zoom = UserManager.getOsmCameraPosition(context, "osm_zoom", 14.0.toString())!!.toDouble()
+        val zoom = UserManager.getOsmCameraPosition(context, "osm_zoom", 11.0.toString())!!.toDouble()
 
-        osmMV.setTileSource(TileSourceFactory.MAPNIK)
-        osmMV.controller.setZoom(zoom)
-        osmMV.controller.setCenter(GeoPoint(latitude, longitude))
-        osmMV.setMultiTouchControls(true)
-        osmMV.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        osmMV.maxZoomLevel = 20.0
-        osmMV.minZoomLevel = 7.0
+        val cameraPosition = CameraOptions.Builder()
+            .center(com.mapbox.geojson.Point.fromLngLat(longitude, latitude))
+            .zoom(zoom)
+            .build()
+        osmMapBoxMV.getMapboxMap().setCamera(cameraPosition)
+        osmMapBoxMV.gestures.rotateEnabled = false
+        osmMapBoxMV.compass.enabled = false
+        osmMapBoxMV.scalebar.enabled = false
+        osmMapBoxMV.logo.updateSettings {
+            position = Gravity.BOTTOM or Gravity.END
+            marginRight = 80f
+        }
+        osmMapBoxMV.attribution.updateSettings {
+            position = Gravity.BOTTOM or Gravity.END
+        }
 
         val handler = Handler(Looper.getMainLooper())
         val postDelay: Long = 200
         val runnableZoomIn = object : Runnable {
             override fun run() {
-                val point = osmMV.mapCenter as GeoPoint
-                val zoomLevel = osmMV.zoomLevelDouble
-                osmMV.controller.animateTo(point, zoomLevel + 1, 400)
+                val cameraState = osmMapBoxMV.getMapboxMap().cameraState
+                val cameraOptions = CameraOptions.Builder()
+                    .zoom(cameraState.zoom + 1)
+                    .build()
+                val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                    duration(500)
+                }
+                osmMapBoxMV.getMapboxMap().easeTo(cameraOptions, animationOptions)
 
                 handler.postDelayed(this, postDelay)
             }
         }
         val runnableZoomOut = object : Runnable {
             override fun run() {
-                val point = osmMV.mapCenter as GeoPoint
-                val zoomLevel = osmMV.zoomLevelDouble
-                osmMV.controller.animateTo(point, zoomLevel - 1, 400)
+                val cameraState = osmMapBoxMV.getMapboxMap().cameraState
+                val cameraOptions = CameraOptions.Builder()
+                    .zoom(cameraState.zoom - 1)
+                    .build()
+                val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                    duration(500)
+                }
+                osmMapBoxMV.getMapboxMap().easeTo(cameraOptions, animationOptions)
 
                 handler.postDelayed(this, postDelay)
             }
         }
 
         zoomInButton.setOnClickListener {
-            val point = osmMV.mapCenter as GeoPoint
-            val zoomLevel = osmMV.zoomLevelDouble
-            osmMV.controller.animateTo(point, zoomLevel + 1, 400)
+            val cameraState = osmMapBoxMV.getMapboxMap().cameraState
+            val cameraOptions = CameraOptions.Builder()
+                .zoom(cameraState.zoom + 1)
+                .build()
+            val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                duration(500)
+            }
+            osmMapBoxMV.getMapboxMap().easeTo(cameraOptions, animationOptions)
         }
 
         zoomInButton.setOnTouchListener { view, event ->
@@ -371,9 +398,14 @@ class MapsConfig: TrafficListener {
         }
 
         zoomOutButton.setOnClickListener {
-            val point = osmMV.mapCenter as GeoPoint
-            val zoomLevel = osmMV.zoomLevelDouble
-            osmMV.controller.animateTo(point, zoomLevel - 1, 400)
+            val cameraState = osmMapBoxMV.getMapboxMap().cameraState
+            val cameraOptions = CameraOptions.Builder()
+                .zoom(cameraState.zoom - 1)
+                .build()
+            val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                duration(500)
+            }
+            osmMapBoxMV.getMapboxMap().easeTo(cameraOptions, animationOptions)
         }
 
         zoomOutButton.setOnTouchListener { view, event ->
@@ -394,19 +426,16 @@ class MapsConfig: TrafficListener {
         }
     }
 
-    // Configures the live settings for an OSM map view, including adding markers
+    // Configures the live settings for an OSM mapbox, including adding markers
     @SuppressLint("InflateParams")
     fun osmMapLiveConfig(
         context: Context,
         objectsList: List<CombinedResponseObject>,
         array: BooleanArray,
-        osmMV: org.osmdroid.views.MapView,
+        osmMapBoxMV: com.mapbox.maps.MapView,
         objectId: Int,
         lifecycleScope: CoroutineScope
     ) {
-        // Clear the overlays before adding new markers
-        osmMV.overlays.clear()
-
         // Inflate the custom layout for the placemark icon
         val inflater = LayoutInflater.from(context)
         val customIconView = inflater.inflate(R.layout.placemark, null)
@@ -415,46 +444,69 @@ class MapsConfig: TrafficListener {
         val iconRotateImage = customIconView.findViewById<ImageView>(R.id.rotateImage)
         val textView = customIconView.findViewById<TextView>(R.id.text_view)
 
+        // Create an instance of the Annotation API
+        val annotationApi = osmMapBoxMV.annotations
+        annotationApi.cleanup()
+
         for ((index, obj) in objectsList.withIndex()) {
             if (index < array.size && array[index]) {
-                // Create a GeoPoint object from the latitude and longitude values of the object
-                val point = GeoPoint(obj.lat, obj.lon)
-
-                // Create a new marker for the placemark
-                val placemark = Marker(osmMV)
-                placemark.position = point
+                //  Get the PointAnnotationManager
+                val pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
                 // Set name and rotation angle
                 textView.text = obj.name
                 iconRotateImage.rotation = obj.heading.toFloat()
 
-                // Create a Drawable from the custom layout and set icon to a placemark
-                val drawable = createDrawableFromLayout(context, customIconView)
-                placemark.icon = drawable
+                // Create a Bitmap from the custom layout and set icon to a placemark
+                val bitmap = createBitmapFromView(customIconView)
 
-                // Set the anchor point of the placemark
-                placemark.setAnchor(0.85f, Marker.ANCHOR_CENTER)
+                // Set options for point annotation
+                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                    // Define a geographic coordinate
+                    .withPoint(com.mapbox.geojson.Point.fromLngLat(obj.lon, obj.lat))
+                    // Specify the bitmap
+                    .withIconImage(bitmap)
+                    // Set the anchor and offset
+                    .withIconAnchor(IconAnchor.RIGHT)
+                    .withIconOffset(listOf(20.0, 0.0))
 
-                // Set a marker click listener
-                placemark.setOnMarkerClickListener { marker, mapView ->
-                    // Animate the map view to the marker's position
-                    mapView.controller.animateTo(marker.position, 18.0, 1500)
+                // Add the resulting pointAnnotation to the map.
+                pointAnnotationManager.create(pointAnnotationOptions)
+
+                // Set a point annotation click listener
+                pointAnnotationManager.addClickListener {pointAnnotation ->
+                    // Animate the to the point's position
+                    val cameraOptions = CameraOptions.Builder()
+                        .center(pointAnnotation.point)
+                        .zoom(16.0)
+                        .build()
+                    val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                        duration(1500)
+                    }
+                    osmMapBoxMV.getMapboxMap().flyTo(cameraOptions, animationOptions)
 
                     // Open the bottom overlay
                     openBottomOverlay(context, objectsList[index],lifecycleScope)
+
                     true
                 }
-                // Add the placemark overlay to the map view
-                osmMV.overlays.add(placemark)
             }
         }
-        // Refresh the map view
-        osmMV.invalidate()
 
+        // If came from list fragment
         if (objectId != -1) {
             // If an objectId is specified, animate the map view to the corresponding object's position
-            val point = GeoPoint(objectsList[objectId].lat, objectsList[objectId].lon)
-            osmMV.controller.animateTo(point, 18.0, 1500)
+            val latitude = objectsList[objectId].lat
+            val longitude = objectsList[objectId].lon
+
+            val cameraOptions = CameraOptions.Builder()
+                .center(com.mapbox.geojson.Point.fromLngLat(longitude, latitude))
+                .zoom(16.0)
+                .build()
+            val animationOptions = MapAnimationOptions.mapAnimationOptions {
+                duration(1500)
+            }
+            osmMapBoxMV.getMapboxMap().flyTo(cameraOptions, animationOptions)
 
             // Open the bottom overlay
             openBottomOverlay(context, objectsList[objectId], lifecycleScope)
@@ -463,7 +515,7 @@ class MapsConfig: TrafficListener {
 
     private fun openBottomOverlay(context: Context, objectsList: CombinedResponseObject, lifecycleScope: CoroutineScope) {
         val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
-        val binding = BottomOverlayViewBinding.inflate(LayoutInflater.from(context))
+        val binding = BottomOverlayInfoBinding.inflate(LayoutInflater.from(context))
         bottomSheetDialog.setContentView(binding.root)
 
         binding.carNameTemplateTV.text = objectsList.name
@@ -480,7 +532,7 @@ class MapsConfig: TrafficListener {
                 }
             } catch (e: Exception) {
                 binding.locationTemplateTV.text = "Ошибка геокодирования"
-                Log.i("HDFJSDHFK", "Failed to get address", e)
+                Log.i("GEOCODER ERROR", "Failed to get address", e)
             }
             binding.locationTemplateTV.visibility = View.VISIBLE
             binding.progressBar4.visibility = View.INVISIBLE

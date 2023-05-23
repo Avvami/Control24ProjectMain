@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/bg_gradient"
     tools:context=".activities.HelpActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -133,7 +133,8 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/supportNumberTV" />
+                app:layout_constraintTop_toBottomOf="@+id/supportNumberTV"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/youtubeGuideTV"
@@ -160,7 +161,8 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/youtubeGuideTV" />
+                app:layout_constraintTop_toBottomOf="@+id/youtubeGuideTV"
+                tools:ignore="TextContrastCheck" />
 
             <ImageView
                 android:id="@+id/companyLogoIV"

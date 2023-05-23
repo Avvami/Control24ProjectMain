@@ -114,7 +114,7 @@
     </style>
 
     <style name="TextInputOuterFieldStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/input_text_outline_color</item>
+        <item name="boxStrokeColor">@color/input_text_outline_color_light</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded</item>
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="hintTextColor">?attr/loginEditTextHintActiveColor</item>
@@ -139,7 +139,7 @@
 
     <style name="MaterialButtonSolidStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="backgroundTint">?attr/loginButtonColor</item>
-        <item name="android:background">@drawable/btn_login_ripple_solid</item>
+        <item name="android:background">@drawable/btn_login_ripple_solid_color</item>
         <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
         <item name="android:elevation">@dimen/button_elevation</item>
     </style>
@@ -191,7 +191,6 @@
         <item name="hintTextColor">?attr/darkEditTextHintActiveColor</item>
         <item name="errorIconDrawable">@null</item>
         <item name="android:textColorHint">?attr/darkEditTextHintColor</item>
-        <item name="passwordToggleTint">@color/password_toggle_color_dark</item>
     </style>
 
     <style name="TextInputInnerFieldStyleDark" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
