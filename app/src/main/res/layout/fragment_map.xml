@@ -26,6 +26,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layersCL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/btn_zoom_bg_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/layersIV"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginVertical="12dp"
+            android:layout_marginHorizontal="12dp"
+            android:contentDescription="LAYERS"
+            android:src="@drawable/icon_layers"
+            app:tint="?attr/trafficTextColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/trafficIV"
         android:layout_width="wrap_content"
@@ -35,7 +60,7 @@
         android:contentDescription="@string/traffic_image"
         android:src="@drawable/icon_traffic_grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layersCL"
         tools:ignore="ImageContrastCheck" />
 
     <TextView

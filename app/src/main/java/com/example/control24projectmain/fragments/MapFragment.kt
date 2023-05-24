@@ -64,8 +64,8 @@ class MapFragment : Fragment() {
             windowInsets
         }
 
-        val topMargin = binding.trafficIV.marginTop
-        ViewCompat.setOnApplyWindowInsetsListener(binding.trafficIV) { view, windowInsets ->
+        val topMargin = binding.layersCL.marginTop
+        ViewCompat.setOnApplyWindowInsetsListener(binding.layersCL) { view, windowInsets ->
             val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
 
             val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
@@ -77,13 +77,15 @@ class MapFragment : Fragment() {
         yandexMV = binding.yandexMV
         osmMapBoxMV = binding.osmMapBoxMV
 
+        val layersCL = binding.layersCL
         val levelIcon = binding.trafficIV
         val levelText = binding.trafficTV
+        val zoomCL = binding.zoomCL
         val zoomInCL = binding.zoomInCL
         val zoomOutCL = binding.zoomOutCL
 
         // Initialize the variable and set default position - Krasnoyarsk
-        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMapBoxMV, levelIcon, levelText, zoomInCL, zoomOutCL)
+        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMapBoxMV, layersCL, levelIcon, levelText, zoomCL, zoomInCL, zoomOutCL)
 
         sharedViewModel.bundleLiveData.observe(viewLifecycleOwner) { bundle ->
             // Update the UI with the new data

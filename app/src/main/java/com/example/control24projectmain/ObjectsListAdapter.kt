@@ -1,6 +1,9 @@
 package com.example.control24projectmain
 
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +13,9 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.control24projectmain.components.EditDialog
-import com.example.control24projectmain.components.OnDialogCloseListener
+import com.example.control24projectmain.databinding.EditDialogViewBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
@@ -172,20 +173,7 @@ class ObjectsListAdapter(
         }).toString()
 
         holder.driverInfo.setOnClickListener {
-            val dialog = EditDialog(position, object : OnDialogCloseListener{
-                override fun onDialogClose() {
-                    driverInfo = UserManager.getDriverInfo(context, holder.position.toString())
-                    holder.driverTV.text = (if (driverInfo.first != "null") {
-                        driverInfo.first
-                    } else {
-                        context.resources.getString(R.string.driver_template)
-                    }).toString()
-                }
-
-            })
-            dialog.isCancelable = true
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            dialog.show(fragmentManager, "editDialog")
+            openEditDialog(context, position, holder.driverTV)
         }
 
         holder.driverCallButton.setOnClickListener {
@@ -195,5 +183,46 @@ class ObjectsListAdapter(
 
     override fun getItemCount(): Int {
         return item.size
+    }
+
+    private fun openEditDialog(context: Context, itemId: Int, driverTemplateTV: TextView) {
+        val binding = EditDialogViewBinding.inflate(LayoutInflater.from(context))
+        val editDialog = AlertDialog.Builder(context)
+        editDialog.setView(binding.root)
+        val dialog = editDialog.create()
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val driverInfo = UserManager.getDriverInfo(context, itemId.toString())
+        binding.driverNameET.setText(if (driverInfo.first != "null") {
+            driverInfo.first
+        } else {
+            ""
+        })
+
+        binding.driverPhoneET.setText(if (driverInfo.second != "null") {
+            driverInfo.second
+        } else {
+            ""
+        })
+
+        binding.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.saveBtn.setOnClickListener {
+            val driverNameET = binding.driverNameET.text.toString().ifEmpty { "null" }
+            val driverPhoneET = binding.driverPhoneET.text.toString().ifEmpty { "null" }
+            UserManager.saveDriverInfo(context, itemId.toString(), driverNameET, driverPhoneET)
+
+            driverTemplateTV.text = (if (driverNameET != "null") {
+                driverNameET
+            } else {
+                context.resources.getString(R.string.driver_template)
+            }).toString()
+            //listener.onDialogClose()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

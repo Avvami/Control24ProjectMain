@@ -120,6 +120,14 @@
     <string name="driver_cancel">Отменить</string>
     <string name="driver_save">Сохранить</string>
 
+    <!--Bottom overlay layers-->
+    <string name="map_type">Тип карты</string>
+    <string name="map_scheme">Схема</string>
+    <string name="map_satellite">Спутник</string>
+    <string name="map_hybrid">Гибрид</string>
+    <string name="miscellaneous">Прочее</string>
+    <string name="zoom_controls">Кнопки масштаба</string>
+
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 
     <!-- TODO: Remove or change this placeholder text -->

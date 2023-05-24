@@ -1,11 +1,14 @@
 package com.example.control24projectmain
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
@@ -16,12 +19,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.control24projectmain.components.EditDialog
-import com.example.control24projectmain.components.OnDialogCloseListener
+import androidx.core.content.res.ResourcesCompat
 import com.example.control24projectmain.databinding.BottomOverlayInfoBinding
+import com.example.control24projectmain.databinding.BottomOverlayLayersBinding
+import com.example.control24projectmain.databinding.EditDialogViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.color.MaterialColors
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
@@ -56,6 +60,9 @@ import kotlinx.coroutines.withContext
 
 private const val yandexMap = "YANDEX"
 private const val osmMap = "OSM"
+private const val SCHEME = "SCHEME"
+private const val SATELLITE = "SATELLITE"
+private const val HYBRID = "HYBRID"
 private var mapProvider: String = yandexMap
 private val tapListeners = mutableListOf<MapObjectTapListener>()
 
@@ -110,8 +117,10 @@ class MapsConfig: TrafficListener {
         context: Context,
         yandexMV: MapView,
         osmMapBoxMV: com.mapbox.maps.MapView,
+        layersCL: ConstraintLayout,
         levelIV: ImageView,
         levelTV: TextView,
+        zoomCL: ConstraintLayout,
         zoomInCL: ConstraintLayout,
         zoomOutCL: ConstraintLayout
     ) {
@@ -132,10 +141,20 @@ class MapsConfig: TrafficListener {
                 osmMapBoxMV.visibility = View.VISIBLE
                 levelIcon = levelIV
                 levelText = levelTV
-                levelIcon.visibility = View.INVISIBLE
-                levelText.visibility = View.INVISIBLE
+                levelIcon.visibility = View.GONE
+                levelText.visibility = View.GONE
                 osmMapStartConfig(context, osmMapBoxMV)
             }
+        }
+
+        if (UserManager.getZoomControlsState(context)) {
+            zoomCL.visibility = View.VISIBLE
+        } else {
+            zoomCL.visibility = View.GONE
+        }
+
+        layersCL.setOnClickListener {
+            openBottomOverlayLayers(context, zoomCL, osmMapBoxMV)
         }
     }
 
@@ -284,7 +303,7 @@ class MapsConfig: TrafficListener {
                         Animation(Animation.Type.SMOOTH, 1f),
                         null
                     )
-                    openBottomOverlay(context, objectsList[index], lifecycleScope)
+                    openBottomOverlayInfo(context, objectsList[index], lifecycleScope)
                     true
                 }
                 placemark.addTapListener(tapListener)
@@ -304,18 +323,32 @@ class MapsConfig: TrafficListener {
                 Animation(Animation.Type.SMOOTH, 1f),
                 null
             )
-            openBottomOverlay(context, objectsList[objectId], lifecycleScope)
+            openBottomOverlayInfo(context, objectsList[objectId], lifecycleScope)
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun osmMapStartConfig(context: Context, osmMapBoxMV: com.mapbox.maps.MapView) {
         val isDarkMode = isDarkModeEnabled(context)
-        if (isDarkMode) {
-            osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_NIGHT)
-        } else {
-            osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
-        }
+
+        osmMapBoxMV.getMapboxMap().loadStyleUri(when (UserManager.getMapType(context)) {
+            SCHEME -> {
+                if (isDarkMode) {
+                    Style.TRAFFIC_NIGHT
+                } else {
+                    Style.TRAFFIC_DAY
+                }
+            }
+            SATELLITE -> Style.SATELLITE
+            HYBRID -> Style.SATELLITE_STREETS
+            else -> {
+                if (isDarkMode) {
+                    Style.TRAFFIC_NIGHT
+                } else {
+                    Style.TRAFFIC_DAY
+                }
+            }
+        })
 
         // Get the saved camera position values from UserManager
         val latitude = UserManager.getOsmCameraPosition(context, "osm_lat", 56.010569.toString())!!.toDouble()
@@ -481,12 +514,12 @@ class MapsConfig: TrafficListener {
                         .zoom(16.0)
                         .build()
                     val animationOptions = MapAnimationOptions.mapAnimationOptions {
-                        duration(1500)
+                        duration(2000)
                     }
                     osmMapBoxMV.getMapboxMap().flyTo(cameraOptions, animationOptions)
 
                     // Open the bottom overlay
-                    openBottomOverlay(context, objectsList[index],lifecycleScope)
+                    openBottomOverlayInfo(context, objectsList[index],lifecycleScope)
 
                     true
                 }
@@ -509,11 +542,12 @@ class MapsConfig: TrafficListener {
             osmMapBoxMV.getMapboxMap().flyTo(cameraOptions, animationOptions)
 
             // Open the bottom overlay
-            openBottomOverlay(context, objectsList[objectId], lifecycleScope)
+            openBottomOverlayInfo(context, objectsList[objectId], lifecycleScope)
         }
     }
 
-    private fun openBottomOverlay(context: Context, objectsList: CombinedResponseObject, lifecycleScope: CoroutineScope) {
+    // Open bottom overlay with object information
+    private fun openBottomOverlayInfo(context: Context, objectsList: CombinedResponseObject, lifecycleScope: CoroutineScope) {
         val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
         val binding = BottomOverlayInfoBinding.inflate(LayoutInflater.from(context))
         bottomSheetDialog.setContentView(binding.root)
@@ -558,20 +592,126 @@ class MapsConfig: TrafficListener {
         }).toString()
 
         binding.driverCL.setOnClickListener {
-            val dialog = EditDialog(objectsList.id, object : OnDialogCloseListener {
-                override fun onDialogClose() {
-                    driverInfo = UserManager.getDriverInfo(context, objectsList.id.toString())
-                    binding.driverTemplateTV.text = (if (driverInfo.first != "null") {
-                        driverInfo.first
-                    } else {
-                        context.resources.getString(R.string.driver_template)
-                    }).toString()
-                }
+            openEditDialog(context, objectsList.id, binding.driverTemplateTV)
+        }
 
-            })
-            dialog.isCancelable = true
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            dialog.show(fragmentManager, "editDialog")
+        bottomSheetDialog.show()
+    }
+
+    private fun openEditDialog(context: Context, itemId: Int, driverTemplateTV: TextView) {
+        val binding = EditDialogViewBinding.inflate(LayoutInflater.from(context))
+        val editDialog = AlertDialog.Builder(context)
+        editDialog.setView(binding.root)
+        val dialog = editDialog.create()
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val driverInfo = UserManager.getDriverInfo(context, itemId.toString())
+        binding.driverNameET.setText(if (driverInfo.first != "null") {
+            driverInfo.first
+        } else {
+            ""
+        })
+
+        binding.driverPhoneET.setText(if (driverInfo.second != "null") {
+            driverInfo.second
+        } else {
+            ""
+        })
+
+        binding.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.saveBtn.setOnClickListener {
+            val driverNameET = binding.driverNameET.text.toString().ifEmpty { "null" }
+            val driverPhoneET = binding.driverPhoneET.text.toString().ifEmpty { "null" }
+            UserManager.saveDriverInfo(context, itemId.toString(), driverNameET, driverPhoneET)
+
+            driverTemplateTV.text = (if (driverNameET != "null") {
+                driverNameET
+            } else {
+                context.resources.getString(R.string.driver_template)
+            }).toString()
+            //listener.onDialogClose()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    // Open bottom overlay with object information
+    private fun openBottomOverlayLayers(context: Context, zoomCL: ConstraintLayout, osmMapBoxMV: com.mapbox.maps.MapView) {
+        val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
+        val binding = BottomOverlayLayersBinding.inflate(LayoutInflater.from(context))
+        bottomSheetDialog.setContentView(binding.root)
+
+        binding.mapTypeCL.visibility = when (UserManager.getSelectedMap(context)) {
+            yandexMap -> View.GONE
+            osmMap -> View.VISIBLE
+            else -> View.GONE
+        }
+
+        val schemeRB = binding.schemeMRadioButton
+        val satelliteRB = binding.satelliteMRadioButton
+        val hybridRD = binding.hybridMRadioButton
+
+        var checkedRadioButton = when (UserManager.getMapType(context)) {
+            SCHEME -> schemeRB
+            SATELLITE -> satelliteRB
+            HYBRID -> hybridRD
+            else -> schemeRB
+        }
+
+        checkedRadioButton.isChecked = true
+        checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+        checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+
+        binding.layersRG.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                schemeRB.id -> {
+                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    schemeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+                    schemeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+                    checkedRadioButton = schemeRB
+                    UserManager.saveMapType(context, SCHEME)
+                    if (isDarkModeEnabled(context)) {
+                        osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_NIGHT)
+                    } else {
+                        osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
+                    }
+                }
+                satelliteRB.id -> {
+                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    satelliteRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+                    satelliteRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+                    checkedRadioButton = satelliteRB
+                    UserManager.saveMapType(context, SATELLITE)
+                    osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE)
+                }
+                hybridRD.id -> {
+                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    hybridRD.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+                    hybridRD.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+                    checkedRadioButton = hybridRD
+                    UserManager.saveMapType(context, HYBRID)
+                    osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE_STREETS)
+                }
+            }
+        }
+
+        binding.zoomButtonsMCheckBox.isChecked = UserManager.getZoomControlsState(context)
+
+        binding.zoomButtonsMCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                UserManager.saveZoomControlsState(context, true)
+                zoomCL.visibility = View.VISIBLE
+            } else {
+                UserManager.saveZoomControlsState(context, false)
+                zoomCL.visibility = View.GONE
+            }
         }
 
         bottomSheetDialog.show()

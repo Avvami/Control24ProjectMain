@@ -22,6 +22,8 @@ object UserManager {
     private const val MAP_SELECTED = "MAP"
     private const val DISPLAYED_ITEMS = "DISPLAY"
     private const val TRAFFIC_JAM = "TRAFFIC_JAM_STATE"
+    private const val MAP_TYPE = "MAP_TYPE"
+    private const val ZOOM_CONTROLS = "ZOOM_CONTROLS_STATE"
 
 
     // Save user cred inside encrypted shared pref
@@ -265,5 +267,31 @@ object UserManager {
         val name = nameNumber?.getOrNull(0)
         val number = nameNumber?.getOrNull(1)
         return Pair(name, number)
+    }
+
+    // Save map type
+    fun saveMapType(context: Context, mapType: String) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putString(MAP_TYPE, mapType)
+        }
+    }
+
+    // Get map type
+    fun getMapType(context: Context): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
+            MAP_TYPE, "SCHEME")
+    }
+
+    // Save map type
+    fun saveZoomControlsState(context: Context, zoomEnabled: Boolean) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putBoolean(ZOOM_CONTROLS, zoomEnabled)
+        }
+    }
+
+    // Get map type
+    fun getZoomControlsState(context: Context): Boolean {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+            ZOOM_CONTROLS, true)
     }
 }
