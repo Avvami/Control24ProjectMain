@@ -90,6 +90,7 @@
 
         <item name="radioButtonCheckedColor">@color/material_theme_sys_light_primary</item>
         <item name="radioButtonUncheckedColor">@color/material_theme_ref_primary_primary80</item>
+        <item name="radioButtonOutlineColor">@color/material_theme_sys_light_background</item>
         <item name="radioButtonTextCheckedColor">@color/material_theme_sys_light_background</item>
         <item name="radioButtonTextUncheckedColor">@color/material_theme_sys_light_on_background</item>
 

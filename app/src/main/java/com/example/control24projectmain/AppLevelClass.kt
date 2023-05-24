@@ -14,6 +14,13 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
+
+const val yandexMap = "YANDEX"
+const val osmMap = "OSM"
+const val SCHEME = "SCHEME"
+const val SATELLITE = "SATELLITE"
+const val HYBRID = "HYBRID"
+
 class AppLevelClass : Application() {
 
     override fun onCreate() {

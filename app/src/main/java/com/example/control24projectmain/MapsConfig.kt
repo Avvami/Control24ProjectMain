@@ -20,12 +20,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
 import com.example.control24projectmain.databinding.BottomOverlayInfoBinding
-import com.example.control24projectmain.databinding.BottomOverlayLayersBinding
 import com.example.control24projectmain.databinding.EditDialogViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.color.MaterialColors
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
@@ -57,17 +54,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
-private const val yandexMap = "YANDEX"
-private const val osmMap = "OSM"
-private const val SCHEME = "SCHEME"
-private const val SATELLITE = "SATELLITE"
-private const val HYBRID = "HYBRID"
 private var mapProvider: String = yandexMap
 private val tapListeners = mutableListOf<MapObjectTapListener>()
 
 class MapsConfig: TrafficListener {
 
+    private lateinit var trafficSignal: ImageView
     private lateinit var levelText: TextView
     private lateinit var levelIcon: ImageView
     private lateinit var zoomInButton: ConstraintLayout
@@ -117,30 +109,35 @@ class MapsConfig: TrafficListener {
         context: Context,
         yandexMV: MapView,
         osmMapBoxMV: com.mapbox.maps.MapView,
-        layersCL: ConstraintLayout,
+        trafficSignalIV: ImageView,
         levelIV: ImageView,
         levelTV: TextView,
         zoomCL: ConstraintLayout,
         zoomInCL: ConstraintLayout,
         zoomOutCL: ConstraintLayout
     ) {
+        trafficSignal = trafficSignalIV
         zoomInButton = zoomInCL
         zoomOutButton = zoomOutCL
+        levelIcon = levelIV
+        levelText = levelTV
+
         when (mapProvider) {
             yandexMap -> {
                 osmMapBoxMV.visibility = View.GONE
                 yandexMV.visibility = View.VISIBLE
-                levelIcon = levelIV
-                levelText = levelTV
-                levelIcon.visibility = View.VISIBLE
-                levelText.visibility = View.VISIBLE
+                if (UserManager.getTrafficControlsState(context)) {
+                    levelIcon.visibility = View.VISIBLE
+                    levelText.visibility = View.VISIBLE
+                } else {
+                    levelIcon.visibility = View.GONE
+                    levelText.visibility = View.GONE
+                }
                 yandexMapStartConfig(context, yandexMV)
             }
             osmMap -> {
                 yandexMV.visibility = View.GONE
                 osmMapBoxMV.visibility = View.VISIBLE
-                levelIcon = levelIV
-                levelText = levelTV
                 levelIcon.visibility = View.GONE
                 levelText.visibility = View.GONE
                 osmMapStartConfig(context, osmMapBoxMV)
@@ -151,10 +148,6 @@ class MapsConfig: TrafficListener {
             zoomCL.visibility = View.VISIBLE
         } else {
             zoomCL.visibility = View.GONE
-        }
-
-        layersCL.setOnClickListener {
-            openBottomOverlayLayers(context, zoomCL, osmMapBoxMV)
         }
     }
 
@@ -176,13 +169,19 @@ class MapsConfig: TrafficListener {
         traffic = MapKitFactory.getInstance().createTrafficLayer(yandexMV.mapWindow)
         traffic.addTrafficListener(this)
 
-        if (UserManager.getTrafficJamState(context)) {
+        if (UserManager.getTrafficJamState(context) && UserManager.getTrafficControlsState(context)) {
+            trafficSignal.visibility = View.GONE
             traffic.isTrafficVisible = true
             updateLevel()
         }
 
         levelIcon.setOnClickListener {
             traffic.isTrafficVisible = !traffic.isTrafficVisible
+            if (traffic.isTrafficVisible) {
+                trafficSignal.visibility = View.GONE
+            } else {
+                trafficSignal.visibility = View.VISIBLE
+            }
             updateLevel()
         }
 
@@ -584,7 +583,7 @@ class MapsConfig: TrafficListener {
         binding.categoryTemplateTV.text = category?.definition
         binding.autoNumTemplateTV.text = objectsList.avto_no
 
-        var driverInfo = UserManager.getDriverInfo(context, objectsList.id.toString())
+        val driverInfo = UserManager.getDriverInfo(context, objectsList.id.toString())
         binding.driverTemplateTV.text = (if (driverInfo.first != "null") {
             driverInfo.first
         } else {
@@ -640,10 +639,89 @@ class MapsConfig: TrafficListener {
     }
 
     // Open bottom overlay with object information
-    private fun openBottomOverlayLayers(context: Context, zoomCL: ConstraintLayout, osmMapBoxMV: com.mapbox.maps.MapView) {
+    /*private fun openBottomOverlayLayers(
+        context: Context,
+        osmMapBoxMV: com.mapbox.maps.MapView,
+        zoomCL: ConstraintLayout
+    ) {
         val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
         val binding = BottomOverlayLayersBinding.inflate(LayoutInflater.from(context))
         bottomSheetDialog.setContentView(binding.root)
+
+        val yandexMapsProvider = binding.yandexMapsMRadioButton
+        val osmMapsProvider = binding.osmMapsMRadioButton
+
+        var checkedMapProviderRB = when (UserManager.getSelectedMap(context)) {
+            yandexMap -> yandexMapsProvider
+            osmMap -> osmMapsProvider
+            else -> yandexMapsProvider
+        }
+        checkedMapProviderRB.isChecked = true
+        checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+        checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+
+        binding.mapProviderRG.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                yandexMapsProvider.id -> {
+                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    yandexMapsProvider.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+                    yandexMapsProvider.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+                    checkedMapProviderRB = yandexMapsProvider
+                    UserManager.saveSelectedMap(context, yandexMap)
+
+                    val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+
+                    val newFragment = MapFragment()
+                    fragmentTransaction.replace(R.id.frameLayout, newFragment)
+
+                    fragmentTransaction.commit()
+                }
+                osmMapsProvider.id -> {
+                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    osmMapsProvider.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+                    osmMapsProvider.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+                    checkedMapProviderRB = osmMapsProvider
+                    UserManager.saveSelectedMap(context, osmMap)
+
+                    val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+
+                    val newFragment = MapFragment()
+                    fragmentTransaction.replace(R.id.frameLayout, newFragment)
+
+                    fragmentTransaction.commit()
+                }
+            }
+        }
+
+        binding.yandex.setOnClickListener {
+            UserManager.saveSelectedMap(context, yandexMap)
+            val mapViewModel = ViewModelProvider((context as AppCompatActivity))[MapViewModel::class.java]
+            mapViewModel.selectMap(context, yandexMap)
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+
+            val newFragment = MapFragment()
+            fragmentTransaction.replace(R.id.frameLayout, newFragment)
+
+            fragmentTransaction.commit()
+        }
+
+        binding.osm.setOnClickListener {
+            UserManager.saveSelectedMap(context, osmMap)
+            val mapViewModel = ViewModelProvider((context as AppCompatActivity))[MapViewModel::class.java]
+            mapViewModel.selectMap(context, osmMap)
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+
+            val newFragment = MapFragment()
+            fragmentTransaction.replace(R.id.frameLayout, newFragment)
+
+            fragmentTransaction.commit()
+        }
 
         binding.mapTypeCL.visibility = when (UserManager.getSelectedMap(context)) {
             yandexMap -> View.GONE
@@ -655,25 +733,25 @@ class MapsConfig: TrafficListener {
         val satelliteRB = binding.satelliteMRadioButton
         val hybridRD = binding.hybridMRadioButton
 
-        var checkedRadioButton = when (UserManager.getMapType(context)) {
+        var checkedMapTypeRB = when (UserManager.getMapType(context)) {
             SCHEME -> schemeRB
             SATELLITE -> satelliteRB
             HYBRID -> hybridRD
             else -> schemeRB
         }
 
-        checkedRadioButton.isChecked = true
-        checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-        checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
+        checkedMapTypeRB.isChecked = true
+        checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
+        checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
 
         binding.layersRG.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 schemeRB.id -> {
-                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
                     schemeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     schemeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedRadioButton = schemeRB
+                    checkedMapTypeRB = schemeRB
                     UserManager.saveMapType(context, SCHEME)
                     if (isDarkModeEnabled(context)) {
                         osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_NIGHT)
@@ -682,20 +760,20 @@ class MapsConfig: TrafficListener {
                     }
                 }
                 satelliteRB.id -> {
-                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
                     satelliteRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     satelliteRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedRadioButton = satelliteRB
+                    checkedMapTypeRB = satelliteRB
                     UserManager.saveMapType(context, SATELLITE)
                     osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE)
                 }
                 hybridRD.id -> {
-                    checkedRadioButton.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedRadioButton.typeface = ResourcesCompat.getFont(context, R.font.roboto)
+                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
+                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
                     hybridRD.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     hybridRD.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedRadioButton = hybridRD
+                    checkedMapTypeRB = hybridRD
                     UserManager.saveMapType(context, HYBRID)
                     osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE_STREETS)
                 }
@@ -715,7 +793,7 @@ class MapsConfig: TrafficListener {
         }
 
         bottomSheetDialog.show()
-    }
+    }*/
 
     // Creates a drawable object from a given layout view
     private fun createDrawableFromLayout(context: Context, view: View): Drawable {

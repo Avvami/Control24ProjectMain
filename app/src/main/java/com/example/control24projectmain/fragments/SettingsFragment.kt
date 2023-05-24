@@ -89,7 +89,7 @@ class SettingsFragment : Fragment() {
         }
 
         // Map provider button is clicked then open a map provider activity
-        binding.mapProviderCL.setOnClickListener {
+        binding.mapSettingsCL.setOnClickListener {
             val intent = Intent(activity, MapProviderActivity::class.java)
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)

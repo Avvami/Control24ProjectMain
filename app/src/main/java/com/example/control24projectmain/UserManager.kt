@@ -24,6 +24,7 @@ object UserManager {
     private const val TRAFFIC_JAM = "TRAFFIC_JAM_STATE"
     private const val MAP_TYPE = "MAP_TYPE"
     private const val ZOOM_CONTROLS = "ZOOM_CONTROLS_STATE"
+    private const val TRAFFIC_CONTROLS = "TRAFFIC_CONTROLS_STATE"
 
 
     // Save user cred inside encrypted shared pref
@@ -293,5 +294,18 @@ object UserManager {
     fun getZoomControlsState(context: Context): Boolean {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
             ZOOM_CONTROLS, true)
+    }
+
+    // Save map type
+    fun saveTrafficControlsState(context: Context, trafficControlsEnabled: Boolean) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putBoolean(TRAFFIC_CONTROLS, trafficControlsEnabled)
+        }
+    }
+
+    // Get map type
+    fun getTrafficControlsState(context: Context): Boolean {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+            TRAFFIC_CONTROLS, true)
     }
 }

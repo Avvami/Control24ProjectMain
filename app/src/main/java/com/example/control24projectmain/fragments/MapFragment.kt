@@ -21,11 +21,10 @@ import com.example.control24projectmain.SharedViewModel
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.FragmentMapBinding
 import com.example.control24projectmain.isDarkModeEnabled
+import com.example.control24projectmain.osmMap
+import com.example.control24projectmain.yandexMap
 import com.google.gson.Gson
 import com.yandex.mapkit.mapview.MapView
-
-private const val yandexMap = "YANDEX"
-private const val osmMap = "OSM"
 
 class MapFragment : Fragment() {
 
@@ -64,8 +63,8 @@ class MapFragment : Fragment() {
             windowInsets
         }
 
-        val topMargin = binding.layersCL.marginTop
-        ViewCompat.setOnApplyWindowInsetsListener(binding.layersCL) { view, windowInsets ->
+        val topMargin = binding.trafficIV.marginTop
+        ViewCompat.setOnApplyWindowInsetsListener(binding.trafficIV) { view, windowInsets ->
             val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
 
             val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
@@ -77,7 +76,7 @@ class MapFragment : Fragment() {
         yandexMV = binding.yandexMV
         osmMapBoxMV = binding.osmMapBoxMV
 
-        val layersCL = binding.layersCL
+        val trafficSignal = binding.trafficSignalIV
         val levelIcon = binding.trafficIV
         val levelText = binding.trafficTV
         val zoomCL = binding.zoomCL
@@ -85,7 +84,7 @@ class MapFragment : Fragment() {
         val zoomOutCL = binding.zoomOutCL
 
         // Initialize the variable and set default position - Krasnoyarsk
-        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMapBoxMV, layersCL, levelIcon, levelText, zoomCL, zoomInCL, zoomOutCL)
+        mapsConfig.startMapsConfig(requireContext(), yandexMV, osmMapBoxMV, trafficSignal, levelIcon, levelText, zoomCL, zoomInCL, zoomOutCL)
 
         sharedViewModel.bundleLiveData.observe(viewLifecycleOwner) { bundle ->
             // Update the UI with the new data

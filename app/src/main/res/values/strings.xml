@@ -79,7 +79,7 @@
     <string name="dark_theme">Настроить ночную тему</string>
     <string name="theme_image">Moon icon</string>
     <string name="theme_state">Состояние</string>
-    <string name="map_provider">Поставщик карт</string>
+    <string name="map_settings">Настройки карт</string>
     <string name="map_provider_image">Map location icon</string>
     <string name="map_using">Постовщик</string>
     <string name="list_view_settings">Вид списка объектов</string>
@@ -91,12 +91,6 @@
     <string name="about_app_image">About app icon</string>
     <string name="help">Помощь</string>
     <string name="help_image">Help icon</string>
-
-    <!--Map provider activity-->
-    <string name="yandex_maps">Яндекс Карты</string>
-    <string name="yandex_image">Yadex icon</string>
-    <string name="open_street_maps">Open Street Maps</string>
-    <string name="open_street_maps_image">Open Street Maps icon</string>
 
     <!--Internet dialog view-->
     <string name="internet_dialog_warning">Ошибка</string>
@@ -120,13 +114,20 @@
     <string name="driver_cancel">Отменить</string>
     <string name="driver_save">Сохранить</string>
 
-    <!--Bottom overlay layers-->
+    <!--Map Settings-->
+    <string name="yandex_maps">Яндекс Карты</string>
+    <string name="yandex_image">Yadex icon</string>
+    <string name="open_street_maps">Open Street Maps</string>
+    <string name="open_street_maps_image">Open Street Maps icon</string>
     <string name="map_type">Тип карты</string>
     <string name="map_scheme">Схема</string>
     <string name="map_satellite">Спутник</string>
     <string name="map_hybrid">Гибрид</string>
     <string name="miscellaneous">Прочее</string>
+    <string name="map_provider">Поставщик карт</string>
     <string name="zoom_controls">Кнопки масштаба</string>
+    <string name="traffic">Пробки</string>
+    <string name="map_layers_image">Layers icon</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 

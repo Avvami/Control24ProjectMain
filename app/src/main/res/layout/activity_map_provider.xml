@@ -31,12 +31,12 @@
             app:tint="?attr/textOnBackgroundColor" />
 
         <TextView
-            android:id="@+id/mapProviderTV"
+            android:id="@+id/mapSettingsTV"
             style="@style/TextTitleLargeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="@string/map_provider"
+            android:text="@string/map_settings"
             app:layout_constraintBaseline_toBaselineOf="@+id/leftArrow"
             app:layout_constraintStart_toEndOf="@+id/leftArrow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -66,105 +66,192 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/yandexMapsCL"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/btn_settings_ripple_color"
-                android:layout_marginHorizontal="16dp"
+            <TextView
+                android:id="@+id/mapProviderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:textSize="16sp"
+                android:text="@string/map_provider"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/mapProviderRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/mapProviderTV"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
-                    android:id="@+id/yandexIV"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/yandexMapsMRadioButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:src="@drawable/icon_yandex"
-                    android:contentDescription="@string/yandex_image"
-                    app:tint="?attr/textOnItemsColor"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/yandexTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/radio_button_selector"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:button="@color/transparent"
                     android:fontFamily="@font/roboto"
-                    android:text="@string/yandex_maps"
                     android:textColor="?attr/textOnItemsColor"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/yandexIV"/>
+                    android:textSize="14sp"
+                    android:text="@string/yandex_maps"
+                    tools:ignore="VisualLintButtonSize"/>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/yandexMapsMCheckBox"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/osmMapsMRadioButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/switches_ripple_effect"
-                    android:buttonTint="?attr/textOnItemsColor"
-                    android:clickable="false"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/osmCL"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/constraint_buttons_height"
-                android:background="@drawable/btn_settings_ripple_color"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/yandexMapsCL"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <ImageView
-                    android:id="@+id/osmIV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:src="@drawable/icon_openstreetmap"
-                    android:contentDescription="@string/open_street_maps_image"
-                    app:tint="?attr/textOnItemsColor"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/osmTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button_selector"
+                    android:button="@color/transparent"
                     android:fontFamily="@font/roboto"
+                    android:gravity="center"
                     android:text="@string/open_street_maps"
                     android:textColor="?attr/textOnItemsColor"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/osmIV"/>
+                    android:textSize="14sp"
+                    tools:ignore="VisualLintButtonSize" />
+            </RadioGroup>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/osmMCheckBox"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mapTypeCL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapProviderRG"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/mapTypeTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/switches_ripple_effect"
-                    android:buttonTint="?attr/textOnItemsColor"
-                    android:clickable="false"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="?attr/textOnBackgroundColor"
+                    android:textSize="16sp"
+                    android:text="@string/map_type"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <RadioGroup
+                    android:id="@+id/layersRG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mapTypeTV">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/schemeMRadioButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@drawable/radio_button_selector"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:button="@color/transparent"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="?attr/textOnItemsColor"
+                        android:textSize="14sp"
+                        android:text="@string/map_scheme"
+                        tools:ignore="VisualLintButtonSize" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/satelliteMRadioButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/radio_button_selector"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:button="@color/transparent"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="?attr/textOnItemsColor"
+                        android:textSize="14sp"
+                        android:text="@string/map_satellite"
+                        tools:ignore="VisualLintButtonSize" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/hybridMRadioButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/radio_button_selector"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:button="@color/transparent"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="?attr/textOnItemsColor"
+                        android:textSize="14sp"
+                        android:text="@string/map_hybrid"
+                        tools:ignore="VisualLintButtonSize" />
+                </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/miscellaneousTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:textSize="16sp"
+                android:text="@string/miscellaneous"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapTypeCL"/>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/zoomButtonsMCheckBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:paddingHorizontal="8dp"
+                android:text="@string/zoom_controls"
+                android:background="@drawable/switches_ripple_effect"
+                android:buttonTint="?attr/textOnBackgroundColor"
+                android:fontFamily="@font/roboto"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/miscellaneousTV"
+                tools:ignore="VisualLintButtonSize" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/trafficControlsMCheckBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:paddingHorizontal="8dp"
+                android:text="@string/traffic"
+                android:background="@drawable/switches_ripple_effect"
+                android:buttonTint="?attr/textOnBackgroundColor"
+                android:fontFamily="@font/roboto"
+                android:textColor="?attr/textOnBackgroundColor"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/zoomButtonsMCheckBox"
+                tools:ignore="VisualLintButtonSize" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

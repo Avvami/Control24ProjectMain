@@ -85,6 +85,7 @@
 
     <attr name="radioButtonCheckedColor" format="color"/>
     <attr name="radioButtonUncheckedColor" format="color"/>
+    <attr name="radioButtonOutlineColor" format="color"/>
     <attr name="radioButtonTextCheckedColor" format="color"/>
     <attr name="radioButtonTextUncheckedColor" format="color"/>
 </resources>

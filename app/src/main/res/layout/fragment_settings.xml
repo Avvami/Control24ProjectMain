@@ -243,7 +243,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/mapProviderCL"
+                    android:id="@+id/mapSettingsCL"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/constraint_buttons_height"
                     android:layout_marginHorizontal="16dp"
@@ -256,7 +256,7 @@
                     tools:ignore="TextSizeCheck">
 
                     <ImageView
-                        android:id="@+id/mapProviderIV"
+                        android:id="@+id/mapSettingsIV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
@@ -273,15 +273,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/mapProviderIV"
+                        app:layout_constraintStart_toEndOf="@+id/mapSettingsIV"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/mapProviderTV"
+                            android:id="@+id/mapSettingsTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto"
-                            android:text="@string/map_provider"
+                            android:text="@string/map_settings"
                             android:textColor="?attr/textOnItemsColor"
                             android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -297,7 +297,7 @@
                             android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/mapProviderTV" />
+                            app:layout_constraintTop_toBottomOf="@+id/mapSettingsTV" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -327,7 +327,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mapProviderCL"
+                    app:layout_constraintTop_toBottomOf="@+id/mapSettingsCL"
                     tools:ignore="TextSizeCheck">
 
                     <ImageView
