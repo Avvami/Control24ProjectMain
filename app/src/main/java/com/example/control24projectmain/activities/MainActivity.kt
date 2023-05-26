@@ -160,6 +160,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         coroutineJob?.cancel()
+        UserManager.clearResponse(this@MainActivity)
     }
 
     // Coroutine for http requests to a database
@@ -173,42 +174,49 @@ class MainActivity : AppCompatActivity() {
                     val firstResponseData = gson.fromJson(httpResponseFirst, FirstResponse::class.java)
                     val httpResponseSecond = HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/update2&${firstResponseData.key}")
 
-                    val json1 = JSONObject(httpResponseFirst)
-                    val json2 = JSONObject(httpResponseSecond)
+                    if (UserManager.getResponse(this@MainActivity) != httpResponseSecond) {
+                        val json1 = JSONObject(httpResponseFirst)
+                        val json2 = JSONObject(httpResponseSecond)
 
-                    val mergedJson = JSONObject()
+                        val mergedJson = JSONObject()
 
-                    val mergedObjects = JSONArray()
-                    val objects1 = json1.getJSONArray("objects")
-                    val objects2 = json2.getJSONArray("objects")
+                        val mergedObjects = JSONArray()
+                        val objects1 = json1.getJSONArray("objects")
+                        val objects2 = json2.getJSONArray("objects")
 
-                    for (i in 0 until objects1.length()) {
-                        val obj1 = objects1.getJSONObject(i)
-                        val obj2 = objects2.getJSONObject(i)
+                        for (i in 0 until objects1.length()) {
+                            val obj1 = objects1.getJSONObject(i)
+                            val obj2 = objects2.getJSONObject(i)
 
-                        val mergedObj = JSONObject()
-                        mergedObj.put("id", obj1.get("id"))
-                        mergedObj.put("name", obj1.get("name"))
-                        mergedObj.put("category", obj1.get("category"))
-                        mergedObj.put("client", obj1.get("client"))
-                        mergedObj.put("avto_no", obj1.get("avto_no"))
-                        mergedObj.put("avto_model", obj1.get("avto_model"))
-                        mergedObj.put("gmt", obj2.get("gmt"))
-                        mergedObj.put("lat", obj2.get("lat"))
-                        mergedObj.put("lon", obj2.get("lon"))
-                        mergedObj.put("speed", obj2.get("speed"))
-                        mergedObj.put("heading", obj2.get("heading"))
-                        mergedObj.put("gps", obj2.get("gps"))
-                        mergedObjects.put(mergedObj)
+                            val mergedObj = JSONObject()
+                            mergedObj.put("id", obj1.get("id"))
+                            mergedObj.put("name", obj1.get("name"))
+                            mergedObj.put("category", obj1.get("category"))
+                            mergedObj.put("client", obj1.get("client"))
+                            mergedObj.put("avto_no", obj1.get("avto_no"))
+                            mergedObj.put("avto_model", obj1.get("avto_model"))
+                            mergedObj.put("gmt", obj2.get("gmt"))
+                            mergedObj.put("lat", obj2.get("lat"))
+                            mergedObj.put("lon", obj2.get("lon"))
+                            mergedObj.put("speed", obj2.get("speed"))
+                            mergedObj.put("heading", obj2.get("heading"))
+                            mergedObj.put("gps", obj2.get("gps"))
+                            mergedObjects.put(mergedObj)
+                        }
+
+                        mergedJson.put("objects", mergedObjects)
+                        val finalJsonStr = mergedJson.toString()
+
+                        val combinedData = gson.fromJson(finalJsonStr, CombinedResponse::class.java)
+                        // Update the bundle with the new data
+                        bundle.putSerializable("OBJECTS_DATA", combinedData)
+                        sharedViewModel.bundleLiveData.postValue(bundle)
+                        Log.i("HDFJSDHFK", "We update data")
+                        UserManager.saveResponse(this@MainActivity, httpResponseSecond)
+                    } else {
+                        // Do nothing
+                        Log.i("HDFJSDHFK", "We don't update data")
                     }
-
-                    mergedJson.put("objects", mergedObjects)
-                    val finalJsonStr = mergedJson.toString()
-
-                    val combinedData = gson.fromJson(finalJsonStr, CombinedResponse::class.java)
-                    // Update the bundle with the new data
-                    bundle.putSerializable("OBJECTS_DATA", combinedData)
-                    sharedViewModel.bundleLiveData.postValue(bundle)
 
                     // Wait for the specified interval before making the next request
                     delay(intervalMillis)

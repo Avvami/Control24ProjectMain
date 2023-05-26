@@ -88,4 +88,6 @@
     <attr name="radioButtonOutlineColor" format="color"/>
     <attr name="radioButtonTextCheckedColor" format="color"/>
     <attr name="radioButtonTextUncheckedColor" format="color"/>
+
+    <attr name="backButtonColor" format="color"/>
 </resources>

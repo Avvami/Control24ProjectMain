@@ -129,6 +129,9 @@
     <string name="traffic">Пробки</string>
     <string name="map_layers_image">Layers icon</string>
 
+    <!--Route Activity-->
+    <string name="back_button">Назад</string>
+
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 
     <!-- TODO: Remove or change this placeholder text -->

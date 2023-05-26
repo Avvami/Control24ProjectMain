@@ -46,7 +46,7 @@
         <item name="bottomNavigationItemRippleColor">@color/material_theme_surfaces_dark_surface1</item>
 
         <item name="carIconBackgroundColor">@color/material_theme_sys_dark_primary</item>
-        <item name="carIconColor">@color/material_theme_sys_dark_on_primary</item>
+        <item name="carIconColor">@color/material_theme_sys_dark_background</item>
         <item name="dashboardIconBackgroundColor">@color/material_theme_sys_dark_tertiary</item>
         <item name="dashboardIconColor">@color/material_theme_sys_dark_on_tertiary</item>
         <item name="locationIconBackgroundColor">@color/material_theme_sys_dark_error_container</item>
@@ -93,6 +93,8 @@
         <item name="radioButtonOutlineColor">@color/material_theme_sys_dark_primary</item>
         <item name="radioButtonTextCheckedColor">@color/material_theme_sys_dark_background</item>
         <item name="radioButtonTextUncheckedColor">@color/material_theme_sys_dark_on_background</item>
+
+        <item name="backButtonColor">@color/material_theme_ref_neutral_neutral10_75p</item>
 
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>

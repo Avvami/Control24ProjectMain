@@ -404,9 +404,24 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/make_call"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/categoryCL" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/routeTestButton"
+            style="@style/MaterialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="12dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="ТЕСТОВЫЙ"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/makeCallButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

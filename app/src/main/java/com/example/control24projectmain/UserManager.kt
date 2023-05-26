@@ -25,6 +25,7 @@ object UserManager {
     private const val MAP_TYPE = "MAP_TYPE"
     private const val ZOOM_CONTROLS = "ZOOM_CONTROLS_STATE"
     private const val TRAFFIC_CONTROLS = "TRAFFIC_CONTROLS_STATE"
+    private const val RESPONSE = "SAVED_RESPONSE"
 
 
     // Save user cred inside encrypted shared pref
@@ -307,5 +308,24 @@ object UserManager {
     fun getTrafficControlsState(context: Context): Boolean {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
             TRAFFIC_CONTROLS, true)
+    }
+
+    // Save response
+    fun saveResponse(context: Context, response: String) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            putString(RESPONSE, response)
+        }
+    }
+
+    // Get saved response
+    fun getResponse(context: Context): String? {
+        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
+            RESPONSE, "No data")
+    }
+    // Clear saved response
+    fun clearResponse(context: Context) {
+        context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {
+            remove(RESPONSE)
+        }
     }
 }

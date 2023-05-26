@@ -55,6 +55,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'io.github.muddz:styleabletoast:2.4.0'
+    implementation 'com.mapbox.navigation:android:2.13.0'
     implementation 'com.mapbox.maps:android:10.13.0'
     implementation 'com.yandex.android:maps.mobile:4.3.1-full'
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'

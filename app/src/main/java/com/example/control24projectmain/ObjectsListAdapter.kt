@@ -2,6 +2,7 @@ package com.example.control24projectmain
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -15,6 +16,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.control24projectmain.activities.MainActivity
+import com.example.control24projectmain.activities.RouteActivity
 import com.example.control24projectmain.databinding.EditDialogViewBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -67,6 +70,7 @@ class ObjectsListAdapter(
         val driverTV: TextView = itemView.findViewById(R.id.driverTemplateTV)
         val driverCallButton: MaterialButton = itemView.findViewById(R.id.makeCallButton)
         val driverInfo: ConstraintLayout = itemView.findViewById(R.id.driverCL)
+        val routeTestButton: MaterialButton = itemView.findViewById(R.id.routeTestButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectsListViewHolder {
@@ -165,7 +169,7 @@ class ObjectsListAdapter(
             UserManager.saveExpandedListItem(context, expandedStateJsonString)
         }
 
-        var driverInfo = UserManager.getDriverInfo(context, position.toString())
+        val driverInfo = UserManager.getDriverInfo(context, position.toString())
         holder.driverTV.text = (if (driverInfo.first != "null") {
             driverInfo.first
         } else {
@@ -178,6 +182,14 @@ class ObjectsListAdapter(
 
         holder.driverCallButton.setOnClickListener {
             callListener?.onDriverCallClick(position)
+        }
+
+        holder.routeTestButton.setOnClickListener {
+            val activity = (context as MainActivity)
+            val intent = Intent(activity, RouteActivity::class.java)
+            intent.putExtra("carName", currentItem.name)
+            intent.putExtra("carId", currentItem.id)
+            activity.startActivity(intent)
         }
     }
 

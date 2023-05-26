@@ -17,20 +17,6 @@ data class FirstResponseObject (
     var is_expanded: Boolean // Maybe this need to be deleted later
 ) : Serializable
 
-data class SecondResponse (
-    val objects: List<SecondResponseObject>
-) : Serializable
-
-data class SecondResponseObject (
-    val id: Int,
-    val gmt: String,
-    val lat: Double,
-    val lon: Double,
-    val speed: Int,
-    val heading: Int,
-    val gps: Int
-) : Serializable
-
 data class CombinedResponse (
     val objects: List<CombinedResponseObject>
 ) : Serializable
@@ -49,3 +35,13 @@ data class CombinedResponseObject (
     val heading: Int,
     val gps: Int
 ) : Serializable
+
+data class Data(
+    val points: List<Point>
+)
+
+data class Point(
+    val gmt: String,
+    val lat: Double,
+    val lon: Double
+)

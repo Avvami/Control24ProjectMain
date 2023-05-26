@@ -3,13 +3,12 @@ package com.example.control24projectmain
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PointF
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -20,8 +19,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
+import com.example.control24projectmain.activities.MainActivity
 import com.example.control24projectmain.databinding.BottomOverlayInfoBinding
 import com.example.control24projectmain.databinding.EditDialogViewBinding
+import com.example.control24projectmain.activities.RouteActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
@@ -594,6 +596,14 @@ class MapsConfig: TrafficListener {
             openEditDialog(context, objectsList.id, binding.driverTemplateTV)
         }
 
+        binding.routeTestButton.setOnClickListener {
+            val activity = (context as MainActivity)
+            val intent = Intent(activity, RouteActivity::class.java)
+            intent.putExtra("carName", objectsList.name)
+            intent.putExtra("carId", objectsList.id)
+            activity.startActivity(intent)
+        }
+
         bottomSheetDialog.show()
     }
 
@@ -631,185 +641,10 @@ class MapsConfig: TrafficListener {
             } else {
                 context.resources.getString(R.string.driver_template)
             }).toString()
-            //listener.onDialogClose()
             dialog.dismiss()
         }
 
         dialog.show()
-    }
-
-    // Open bottom overlay with object information
-    /*private fun openBottomOverlayLayers(
-        context: Context,
-        osmMapBoxMV: com.mapbox.maps.MapView,
-        zoomCL: ConstraintLayout
-    ) {
-        val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogStyle)
-        val binding = BottomOverlayLayersBinding.inflate(LayoutInflater.from(context))
-        bottomSheetDialog.setContentView(binding.root)
-
-        val yandexMapsProvider = binding.yandexMapsMRadioButton
-        val osmMapsProvider = binding.osmMapsMRadioButton
-
-        var checkedMapProviderRB = when (UserManager.getSelectedMap(context)) {
-            yandexMap -> yandexMapsProvider
-            osmMap -> osmMapsProvider
-            else -> yandexMapsProvider
-        }
-        checkedMapProviderRB.isChecked = true
-        checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-        checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-
-        binding.mapProviderRG.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                yandexMapsProvider.id -> {
-                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
-                    yandexMapsProvider.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    yandexMapsProvider.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedMapProviderRB = yandexMapsProvider
-                    UserManager.saveSelectedMap(context, yandexMap)
-
-                    val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-
-                    val newFragment = MapFragment()
-                    fragmentTransaction.replace(R.id.frameLayout, newFragment)
-
-                    fragmentTransaction.commit()
-                }
-                osmMapsProvider.id -> {
-                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
-                    osmMapsProvider.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    osmMapsProvider.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedMapProviderRB = osmMapsProvider
-                    UserManager.saveSelectedMap(context, osmMap)
-
-                    val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-
-                    val newFragment = MapFragment()
-                    fragmentTransaction.replace(R.id.frameLayout, newFragment)
-
-                    fragmentTransaction.commit()
-                }
-            }
-        }
-
-        binding.yandex.setOnClickListener {
-            UserManager.saveSelectedMap(context, yandexMap)
-            val mapViewModel = ViewModelProvider((context as AppCompatActivity))[MapViewModel::class.java]
-            mapViewModel.selectMap(context, yandexMap)
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-
-            val newFragment = MapFragment()
-            fragmentTransaction.replace(R.id.frameLayout, newFragment)
-
-            fragmentTransaction.commit()
-        }
-
-        binding.osm.setOnClickListener {
-            UserManager.saveSelectedMap(context, osmMap)
-            val mapViewModel = ViewModelProvider((context as AppCompatActivity))[MapViewModel::class.java]
-            mapViewModel.selectMap(context, osmMap)
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-
-            val newFragment = MapFragment()
-            fragmentTransaction.replace(R.id.frameLayout, newFragment)
-
-            fragmentTransaction.commit()
-        }
-
-        binding.mapTypeCL.visibility = when (UserManager.getSelectedMap(context)) {
-            yandexMap -> View.GONE
-            osmMap -> View.VISIBLE
-            else -> View.GONE
-        }
-
-        val schemeRB = binding.schemeMRadioButton
-        val satelliteRB = binding.satelliteMRadioButton
-        val hybridRD = binding.hybridMRadioButton
-
-        var checkedMapTypeRB = when (UserManager.getMapType(context)) {
-            SCHEME -> schemeRB
-            SATELLITE -> satelliteRB
-            HYBRID -> hybridRD
-            else -> schemeRB
-        }
-
-        checkedMapTypeRB.isChecked = true
-        checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-        checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-
-        binding.layersRG.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                schemeRB.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
-                    schemeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    schemeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedMapTypeRB = schemeRB
-                    UserManager.saveMapType(context, SCHEME)
-                    if (isDarkModeEnabled(context)) {
-                        osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_NIGHT)
-                    } else {
-                        osmMapBoxMV.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
-                    }
-                }
-                satelliteRB.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
-                    satelliteRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    satelliteRB.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedMapTypeRB = satelliteRB
-                    UserManager.saveMapType(context, SATELLITE)
-                    osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE)
-                }
-                hybridRD.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(context, R.font.roboto)
-                    hybridRD.setTextColor(MaterialColors.getColor(context, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    hybridRD.typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                    checkedMapTypeRB = hybridRD
-                    UserManager.saveMapType(context, HYBRID)
-                    osmMapBoxMV.getMapboxMap().loadStyleUri(Style.SATELLITE_STREETS)
-                }
-            }
-        }
-
-        binding.zoomButtonsMCheckBox.isChecked = UserManager.getZoomControlsState(context)
-
-        binding.zoomButtonsMCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                UserManager.saveZoomControlsState(context, true)
-                zoomCL.visibility = View.VISIBLE
-            } else {
-                UserManager.saveZoomControlsState(context, false)
-                zoomCL.visibility = View.GONE
-            }
-        }
-
-        bottomSheetDialog.show()
-    }*/
-
-    // Creates a drawable object from a given layout view
-    private fun createDrawableFromLayout(context: Context, view: View): Drawable {
-        // Measure the view to determine its dimensions
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-
-        // Create a bitmap with the measured dimensions and ARGB_8888 configuration
-        val bitmap = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-
-        // Draw the view onto the bitmap
-        view.draw(canvas)
-
-        // Create a BitmapDrawable from the generated bitmap
-        return BitmapDrawable(context.resources, bitmap)
     }
 
     // Create a bitmap from a given view
