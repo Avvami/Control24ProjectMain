@@ -25,10 +25,8 @@ class ObjectsListViewActivity : AppCompatActivity() {
         // Change the font for either of view selected
         if (!isDetailedView) {
             shortCheckBox.isChecked = true
-            shortCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
         } else {
             detailedCheckBox.isChecked = true
-            detailedCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
         }
 
         // Go back when click on textView
@@ -40,8 +38,6 @@ class ObjectsListViewActivity : AppCompatActivity() {
         shortCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 detailedCheckBox.isChecked = false
-                detailedCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                shortCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
                 UserManager.saveObjectsListView(this@ObjectsListViewActivity, false)
             }
         }
@@ -50,8 +46,6 @@ class ObjectsListViewActivity : AppCompatActivity() {
         detailedCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 shortCheckBox.isChecked = false
-                shortCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                binding.detailedMCheckBox.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
                 UserManager.saveObjectsListView(this@ObjectsListViewActivity, true)
             }
         }

@@ -3,11 +3,9 @@ package com.example.control24projectmain.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityThemeBinding
-import com.example.control24projectmain.fragments.SettingsFragment
 import com.example.control24projectmain.themeChange
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -125,8 +123,9 @@ class ThemeActivity : AppCompatActivity() {
 
         val startPicker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
-            .setHour(calendar.time.hours)
-            .setMinute(calendar.time.minutes)
+            .setHour(calendar.get(Calendar.HOUR))
+            .setMinute(calendar.get(Calendar.MINUTE))
+            .setTheme(R.style.CustomMaterialTimePickerStyle)
             .setTitleText("Начало")
             .build()
         startPicker.show(supportFragmentManager, "START_TAG")
@@ -171,8 +170,9 @@ class ThemeActivity : AppCompatActivity() {
 
         val endPicker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
-            .setHour(calendar.time.hours)
-            .setMinute(calendar.time.minutes)
+            .setHour(calendar.get(Calendar.HOUR))
+            .setMinute(calendar.get(Calendar.MINUTE))
+            .setTheme(R.style.CustomMaterialTimePickerStyle)
             .setTitleText("Конец")
             .build()
         endPicker.show(supportFragmentManager, "END_TAG")

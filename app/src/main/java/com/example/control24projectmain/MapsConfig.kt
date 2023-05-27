@@ -596,7 +596,7 @@ class MapsConfig: TrafficListener {
             openEditDialog(context, objectsList.id, binding.driverTemplateTV)
         }
 
-        binding.routeTestButton.setOnClickListener {
+        binding.routeMButton.setOnClickListener {
             val activity = (context as MainActivity)
             val intent = Intent(activity, RouteActivity::class.java)
             intent.putExtra("carName", objectsList.name)

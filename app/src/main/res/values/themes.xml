@@ -2,7 +2,36 @@
     <!-- Base application theme. -->
     <style name="Theme.Control24ProjectMain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-    </style>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="colorErrorContainer">@color/md_theme_light_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
+
+</style>
     
     <style name="AppTheme" parent="Theme.Control24ProjectMain">
         <item name="logoBackgroundColor">@color/material_theme_sys_light_primary</item>
@@ -96,6 +125,13 @@
 
         <item name="backButtonColor">@color/material_theme_ref_neutral_neutral99_75p</item>
 
+        <item name="periodInfoButtonColor">@color/material_theme_sys_light_primary</item>
+        <item name="periodInfoButtonRippleColor">@color/material_theme_ref_primary_primary50</item>
+        <item name="periodInfoButtonTextColor">@color/material_theme_sys_light_background</item>
+
+        <item name="textSecondaryColor">@color/material_theme_ref_secondary_secondary40</item>
+        <item name="dividerColor">@color/material_theme_ref_secondary_secondary80</item>
+
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -137,23 +173,34 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textCursorDrawable">@drawable/cursor_light</item>
+        <item name="android:textColorHighlight">?attr/gradientCenterColor</item>
         <item name="android:singleLine">true</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
+        <item name="cornerSize">@dimen/shape_extra_small</item>
     </style>
 
-    <style name="MaterialButtonSolidStyle" parent="@style/Widget.MaterialComponents.Button">
+    <style name="MaterialButtonLoginSolidStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="backgroundTint">?attr/loginButtonColor</item>
         <item name="android:background">@drawable/btn_login_ripple_solid_color</item>
         <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
-        <item name="android:elevation">@dimen/button_elevation</item>
+    </style>
+
+    <style name="MaterialButtonInfoSolidStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="cornerRadius">@dimen/shape_small</item>
+        <item name="backgroundTint">?attr/periodInfoButtonColor</item>
+        <item name="rippleColor">?attr/periodInfoButtonRippleColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/periodInfoButtonTextColor</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
     </style>
 
     <style name="MaterialTextButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="cornerRadius">@dimen/corner_radius_most</item>
+        <item name="cornerRadius">@dimen/shape_small</item>
         <item name="rippleColor">?attr/loginHelpButtonRippleColor</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
@@ -162,7 +209,7 @@
     </style>
 
     <style name="MaterialButtonOutlinedStyle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="cornerRadius">@dimen/corner_radius_most</item>
+        <item name="cornerRadius">@dimen/shape_small</item>
         <item name="rippleColor">?attr/callButtonRippleColor</item>
         <item name="strokeColor">?attr/textObjectsInfoColor</item>
         <item name="android:textSize">12sp</item>
@@ -207,7 +254,42 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textCursorDrawable">@drawable/cursor_dark</item>
+        <item name="android:textColorHighlight">?attr/gradientStartColor</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="CustomMaterialDatePickerStyle" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="shapeAppearanceLargeComponent">@style/CustomShapeAppearance</item>
+        <item name="shapeAppearance">@style/CustomShapeAppearance</item>
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearance</item>
+        <item name="shapeAppearanceMediumComponent">@style/CustomShapeAppearance</item>
+    </style>
+
+    <style name="CustomMaterialTimePickerStyle" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearance</item>
+        <item name="shapeAppearanceLargeComponent">@style/CustomShapeAppearanceLarge</item>
+        <item name="shapeAppearanceMediumComponent">@style/CustomShapeAppearanceMedium</item>
+        <item name="shapeAppearanceSmallComponent">@style/CustomShapeAppearanceSmall</item>
+    </style>
+
+    <style name="CustomShapeAppearance" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSize">@dimen/shape_extra_large</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="CustomShapeAppearanceLarge" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerSize">@dimen/shape_large</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="CustomShapeAppearanceMedium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">@dimen/shape_medium</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="CustomShapeAppearanceSmall" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">@dimen/shape_small</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 
 </resources>

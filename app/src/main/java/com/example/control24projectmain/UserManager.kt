@@ -322,6 +322,7 @@ object UserManager {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
             RESPONSE, "No data")
     }
+
     // Clear saved response
     fun clearResponse(context: Context) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).edit {

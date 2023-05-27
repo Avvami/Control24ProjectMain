@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="shape_extra_large">28dp</dimen>
+    <dimen name="shape_large">16dp</dimen>
+    <dimen name="shape_medium">12dp</dimen>
+    <dimen name="shape_small">8dp</dimen>
+    <dimen name="shape_extra_small">4dp</dimen>
     <dimen name="button_elevation">8dp</dimen>
     <dimen name="corner_radius_most">8dp</dimen>
     <dimen name="margin_display_bounds_horizontal">16dp</dimen>

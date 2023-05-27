@@ -70,7 +70,7 @@ class ObjectsListAdapter(
         val driverTV: TextView = itemView.findViewById(R.id.driverTemplateTV)
         val driverCallButton: MaterialButton = itemView.findViewById(R.id.makeCallButton)
         val driverInfo: ConstraintLayout = itemView.findViewById(R.id.driverCL)
-        val routeTestButton: MaterialButton = itemView.findViewById(R.id.routeTestButton)
+        val routeButton: MaterialButton = itemView.findViewById(R.id.routeMButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectsListViewHolder {
@@ -184,7 +184,7 @@ class ObjectsListAdapter(
             callListener?.onDriverCallClick(position)
         }
 
-        holder.routeTestButton.setOnClickListener {
+        holder.routeButton.setOnClickListener {
             val activity = (context as MainActivity)
             val intent = Intent(activity, RouteActivity::class.java)
             intent.putExtra("carName", currentItem.name)

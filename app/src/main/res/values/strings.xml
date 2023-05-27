@@ -123,7 +123,7 @@
     <string name="map_scheme">Схема</string>
     <string name="map_satellite">Спутник</string>
     <string name="map_hybrid">Гибрид</string>
-    <string name="miscellaneous">Прочее</string>
+    <string name="map_controls">Элементы управления</string>
     <string name="map_provider">Поставщик карт</string>
     <string name="zoom_controls">Кнопки масштаба</string>
     <string name="traffic">Пробки</string>
@@ -131,6 +131,11 @@
 
     <!--Route Activity-->
     <string name="back_button">Назад</string>
+    <string name="period_info_button">Информация за период</string>
+    <string name="period">За период</string>
+    <string name="days">Суточно</string>
+    <string name="date">Дата</string>
+    <string name="day_of_week">День недели</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 

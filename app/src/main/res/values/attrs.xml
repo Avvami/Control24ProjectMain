@@ -90,4 +90,12 @@
     <attr name="radioButtonTextUncheckedColor" format="color"/>
 
     <attr name="backButtonColor" format="color"/>
+
+    <attr name="periodInfoButtonColor" format="color"/>
+    <attr name="periodInfoButtonRippleColor" format="color"/>
+    <attr name="periodInfoButtonTextColor" format="color"/>
+
+    <attr name="textSecondaryColor" format="color"/>
+
+    <attr name="dividerColor" format="color"/>
 </resources>
