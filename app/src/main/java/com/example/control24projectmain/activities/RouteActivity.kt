@@ -1,10 +1,8 @@
 package com.example.control24projectmain.activities
 
-import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +27,6 @@ import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityRouteBinding
 import com.example.control24projectmain.isDarkModeEnabled
-import com.example.control24projectmain.yandexMap
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.datepicker.CalendarConstraints
@@ -67,8 +64,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
     private lateinit var yandexMVRoute: MapView
     private lateinit var routePoints: Data
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-    private lateinit var dateTV: TextView
-    private lateinit var weekDayTV: TextView
+    private lateinit var dateTopTV: TextView
+    private lateinit var dateBottomTV: TextView
 
     private lateinit var mapObjectsColl: MapObjectCollection
     private lateinit var drivingRouter: DrivingRouter
@@ -76,6 +73,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     private lateinit var isPeriodCheckedRB: RadioButton
     private lateinit var calendar: Calendar
+    private lateinit var rangeCalendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,8 +98,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val infoTypeRG = findViewById<RadioGroup>(R.id.infoTypeRG)
         val periodInfoRB = findViewById<MaterialRadioButton>(R.id.periodInfoMRadioButton)
         val dayInfoRB = findViewById<MaterialRadioButton>(R.id.dayInfoMRadioButton)
-        dateTV = findViewById(R.id.dateTV)
-        weekDayTV = findViewById(R.id.weekDayTV)
+        dateTopTV = findViewById(R.id.dateTopTV)
+        dateBottomTV = findViewById(R.id.dateBottomTV)
         val leftArrowCL = findViewById<ConstraintLayout>(R.id.leftArrowCL)
         val rightArrowCL = findViewById<ConstraintLayout>(R.id.rightArrowCL)
         val dateChangeCL = findViewById<ConstraintLayout>(R.id.dateChangeCL)
@@ -137,12 +135,11 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         carNameTV.text = carName
 
         calendar = Calendar.getInstance()
+        rangeCalendar = Calendar.getInstance()
 
         if (savedInstanceState != null) {
             // Restore the saved state
             calendar.timeInMillis = savedInstanceState.getLong("calendarTime")
-            dateTV.text = savedInstanceState.getString("date").toString()
-            weekDayTV.text = savedInstanceState.getString("weekday").toString()
             if (savedInstanceState.getBoolean("isPeriodChecked")) {
                 isPeriodCheckedRB = periodInfoRB
                 isPeriodCheckedRB.isChecked = true
@@ -150,9 +147,18 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 isPeriodCheckedRB = dayInfoRB
                 isPeriodCheckedRB.isChecked = true
             }
+            if (!isPeriodCheckedRB.isChecked) {
+                dateTopTV.text = savedInstanceState.getString("dateTop").toString()
+                dateBottomTV.text = savedInstanceState.getString("dateBottom").toString()
+            } else {
+                dateTopTV.text = resources.getString(R.string.pick_range)
+                dateBottomTV.text = resources.getString(R.string.range)
+                leftArrowCL.visibility = View.GONE
+                rightArrowCL.visibility = View.GONE
+            }
         } else {
-            dateTV.text = formattedDate(calendar)
-            weekDayTV.text = formattedDayOfWeek(calendar)
+            dateTopTV.text = formattedDate(calendar)
+            dateBottomTV.text = formattedDayOfWeek(calendar)
             isPeriodCheckedRB = dayInfoRB
             isPeriodCheckedRB.isChecked = true
         }
@@ -168,7 +174,13 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     periodInfoRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
                     periodInfoRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     isPeriodCheckedRB = periodInfoRB
-                    dateChangeCL.visibility = View.GONE
+
+                    dateChangeCL.isClickable = true
+                    dateCL.isClickable = false
+                    dateTopTV.text = resources.getString(R.string.pick_range)
+                    dateBottomTV.text = resources.getString(R.string.range)
+                    leftArrowCL.visibility = View.GONE
+                    rightArrowCL.visibility = View.GONE
                 }
                 dayInfoRB.id -> {
                     isPeriodCheckedRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
@@ -176,15 +188,21 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     dayInfoRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
                     dayInfoRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     isPeriodCheckedRB = dayInfoRB
-                    dateChangeCL.visibility = View.VISIBLE
+
+                    dateChangeCL.isClickable = false
+                    dateCL.isClickable = true
+                    dateTopTV.text = formattedDate(calendar)
+                    dateBottomTV.text = formattedDayOfWeek(calendar)
+                    leftArrowCL.visibility = View.VISIBLE
+                    rightArrowCL.visibility = View.VISIBLE
                 }
             }
         }
 
         leftArrowCL.setOnClickListener {
             calendar.add(Calendar.DATE, -1)
-            dateTV.text = formattedDate(calendar)
-            weekDayTV.text = formattedDayOfWeek(calendar)
+            dateTopTV.text = formattedDate(calendar)
+            dateBottomTV.text = formattedDayOfWeek(calendar)
         }
 
         rightArrowCL.setOnClickListener {
@@ -195,12 +213,16 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 return@setOnClickListener
             }
             calendar.add(Calendar.DATE, 1)
-            dateTV.text = formattedDate(calendar)
-            weekDayTV.text = formattedDayOfWeek(calendar)
+            dateTopTV.text = formattedDate(calendar)
+            dateBottomTV.text = formattedDayOfWeek(calendar)
         }
 
         dateCL.setOnClickListener {
             openTimePicker(calendar)
+        }
+
+        dateChangeCL.setOnClickListener {
+            openPeriodTimePicker(rangeCalendar)
         }
 
         if (carId == -1) {
@@ -245,8 +267,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("date", dateTV.text.toString())
-        outState.putString("weekday", weekDayTV.text.toString())
+        outState.putString("dateTop", dateTopTV.text.toString())
+        outState.putString("dateBottom", dateBottomTV.text.toString())
         outState.putBoolean("isPeriodChecked", isPeriodCheckedRB.isChecked)
         outState.putLong("calendarTime", calendar.timeInMillis)
     }
@@ -321,7 +343,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         } else if (error is NetworkError) {
             errorMessage = "Network error"
         }
-        Log.i("HDFJSDHFK", errorMessage)
+        Log.i("DRIVING ROUTE ERROR", errorMessage)
     }
 
     @Deprecated("This method is deprecated. Use the new onBackPressedDispatcher instead.")
@@ -370,8 +392,37 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             val selectedCalendar = calendar.apply {
                 time = selectedDate
             }
-            dateTV.text = formattedDate(selectedCalendar)
-            weekDayTV.text = formattedDate(selectedCalendar)
+            dateTopTV.text = formattedDate(selectedCalendar)
+            dateBottomTV.text = formattedDayOfWeek(selectedCalendar)
+        }
+    }
+
+    private fun openPeriodTimePicker(calendar: Calendar) {
+        val today = MaterialDatePicker.todayInUtcMilliseconds()
+        val datePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Выберите период")
+            .setTheme(R.style.CustomMaterialDatePickerStyle)
+            .setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointBackward.before(today))
+                    .build()
+            )
+            .build()
+        datePicker.show(supportFragmentManager, "DATE_RANGE_PICKER")
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val startDate = Date(selection.first)
+            val endDate = Date(selection.second)
+
+            val selectedStartCalendar = Calendar.getInstance().apply {
+                time = startDate
+            }
+
+            val selectedEndCalendar = Calendar.getInstance().apply {
+                time = endDate
+            }
+
+            dateBottomTV.text = "${formattedDate(selectedStartCalendar)} - ${formattedDate(selectedEndCalendar)}"
         }
     }
 }

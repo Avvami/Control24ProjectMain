@@ -127,7 +127,8 @@
         android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dividerTop" >
+        app:layout_constraintTop_toBottomOf="@+id/dividerTop"
+        android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/leftArrowCL"
@@ -165,7 +166,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/dateTV"
+                android:id="@+id/dateTopTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -177,16 +178,16 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/weekDayTV"
+                android:id="@+id/dateBottomTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
                 android:textSize="14sp"
                 android:textColor="?attr/textSecondaryColor"
                 android:text="@string/day_of_week"
-                app:layout_constraintStart_toStartOf="@id/dateTV"
-                app:layout_constraintTop_toBottomOf="@+id/dateTV"
-                app:layout_constraintEnd_toEndOf="@id/dateTV" />
+                app:layout_constraintStart_toStartOf="@id/dateTopTV"
+                app:layout_constraintTop_toBottomOf="@+id/dateTopTV"
+                app:layout_constraintEnd_toEndOf="@id/dateTopTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -215,7 +216,6 @@
                 app:tint="?attr/textOnItemsColor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View

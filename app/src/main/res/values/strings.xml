@@ -136,6 +136,8 @@
     <string name="days">Суточно</string>
     <string name="date">Дата</string>
     <string name="day_of_week">День недели</string>
+    <string name="pick_range">Выберите диапазон</string>
+    <string name="range">....</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 

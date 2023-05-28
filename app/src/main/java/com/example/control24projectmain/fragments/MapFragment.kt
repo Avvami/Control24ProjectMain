@@ -123,8 +123,24 @@ class MapFragment : Fragment() {
     override fun onStop() {
         // Save maps camera position
         when (mapProvider) {
-            yandexMap -> UserManager.saveYandexCameraPosition(requireContext(), yandexMV)
-            osmMap -> UserManager.saveOsmCameraPosition(requireContext(), osmMapBoxMV)
+            yandexMap -> {
+                val cameraPosition = yandexMV.map.cameraPosition
+                UserManager.saveMapsCameraPosition(
+                    requireContext(),
+                    cameraPosition.target.latitude,
+                    cameraPosition.target.longitude,
+                    cameraPosition.zoom.toDouble()
+                )
+            }
+            osmMap -> {
+                val cameraPosition = osmMapBoxMV.getMapboxMap().cameraState
+                UserManager.saveMapsCameraPosition(
+                    requireContext(),
+                    cameraPosition.center.latitude(),
+                    cameraPosition.center.longitude(),
+                    cameraPosition.zoom
+                )
+            }
         }
 
         mapsConfig.mapsOnStop(requireContext(), yandexMV)

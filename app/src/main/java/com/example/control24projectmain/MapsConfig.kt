@@ -19,7 +19,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentActivity
 import com.example.control24projectmain.activities.MainActivity
 import com.example.control24projectmain.databinding.BottomOverlayInfoBinding
 import com.example.control24projectmain.databinding.EditDialogViewBinding
@@ -158,9 +157,9 @@ class MapsConfig: TrafficListener {
         val isDarkMode = isDarkModeEnabled(context)
         yandexMV.map.isNightModeEnabled = isDarkMode
 
-        val latitude = UserManager.getYandexCameraPosition(context, "yandex_lat", 56.010569.toString())!!.toDouble()
-        val longitude = UserManager.getYandexCameraPosition(context, "yandex_lon", 92.852572.toString())!!.toDouble()
-        val zoom = UserManager.getYandexCameraPosition(context, "yandex_zoom", 12.0f.toString())!!.toFloat()
+        val latitude = UserManager.getMapsCameraPosition(context, "latitude", 56.010569.toString())!!.toDouble()
+        val longitude = UserManager.getMapsCameraPosition(context, "longitude", 92.852572.toString())!!.toDouble()
+        val zoom = UserManager.getMapsCameraPosition(context, "zoom", 12.0f.toString())!!.toFloat()
 
         yandexMV.map.move(
             CameraPosition(Point(latitude, longitude), zoom, 0.0f, 0.0f),
@@ -352,9 +351,9 @@ class MapsConfig: TrafficListener {
         })
 
         // Get the saved camera position values from UserManager
-        val latitude = UserManager.getOsmCameraPosition(context, "osm_lat", 56.010569.toString())!!.toDouble()
-        val longitude = UserManager.getOsmCameraPosition(context, "osm_lon", 92.852572.toString())!!.toDouble()
-        val zoom = UserManager.getOsmCameraPosition(context, "osm_zoom", 11.0.toString())!!.toDouble()
+        val latitude = UserManager.getMapsCameraPosition(context, "latitude", 56.010569.toString())!!.toDouble()
+        val longitude = UserManager.getMapsCameraPosition(context, "longitude", 92.852572.toString())!!.toDouble()
+        val zoom = UserManager.getMapsCameraPosition(context, "zoom", 11.0.toString())!!.toDouble()
 
         val cameraPosition = CameraOptions.Builder()
             .center(com.mapbox.geojson.Point.fromLngLat(longitude, latitude))

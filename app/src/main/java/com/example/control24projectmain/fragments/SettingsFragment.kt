@@ -1,12 +1,21 @@
 package com.example.control24projectmain.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateFormat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.control24projectmain.AppLevelClass
+import com.example.control24projectmain.END_TIME
+import com.example.control24projectmain.OFF
+import com.example.control24projectmain.ON
 import com.example.control24projectmain.R
+import com.example.control24projectmain.SCHEDULED
+import com.example.control24projectmain.START_TIME
+import com.example.control24projectmain.SYSTEM
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.activities.AboutAppActivity
 import com.example.control24projectmain.activities.HelpActivity
@@ -15,7 +24,9 @@ import com.example.control24projectmain.activities.MapProviderActivity
 import com.example.control24projectmain.activities.ObjectsListViewActivity
 import com.example.control24projectmain.activities.ThemeActivity
 import com.example.control24projectmain.databinding.FragmentSettingsBinding
+import com.example.control24projectmain.osmMap
 import com.example.control24projectmain.themeChange
+import com.example.control24projectmain.yandexMap
 
 class SettingsFragment : Fragment() {
 
@@ -23,18 +34,18 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.darkThemeMSwitch.isChecked = UserManager.getThemeState(requireContext()) != "OFF"
+        binding.darkThemeMSwitch.isChecked = UserManager.getThemeState(requireContext()) != OFF
         binding.themeStateTV.text = when (UserManager.getThemeState(requireContext())) {
-            "OFF" -> requireContext().resources.getString(R.string.disabled)
-            "ON" -> requireContext().resources.getString(R.string.enabled)
-            "SCHEDULED" -> requireContext().resources.getString(R.string.scheduled, setTimeText())
-            "SYSTEM" -> requireContext().resources.getString(R.string.system_default)
+            OFF -> requireContext().resources.getString(R.string.disabled)
+            ON -> requireContext().resources.getString(R.string.enabled)
+            SCHEDULED -> requireContext().resources.getString(R.string.scheduled, setTimeText(requireContext()))
+            SYSTEM -> requireContext().resources.getString(R.string.system_default)
             else -> requireContext().resources.getString(R.string.disabled)
         }.toString()
 
         binding.mapUsingTV.text = when (UserManager.getSelectedMap(requireContext())) {
-            "YANDEX" -> requireContext().resources.getString(R.string.yandex_maps)
-            "OSM" -> requireContext().resources.getString(R.string.open_street_maps)
+            yandexMap -> requireContext().resources.getString(R.string.yandex_maps)
+            osmMap -> requireContext().resources.getString(R.string.open_street_maps)
             else -> requireContext().resources.getString(R.string.yandex_maps)
         }.toString()
 
@@ -79,11 +90,11 @@ class SettingsFragment : Fragment() {
         // Set the dark theme for the app from function inside the main activity, click on switch toggle
         switchToggle.setOnClickListener {
             if (switchToggle.isChecked) {
-                themeChange(requireContext(), "ON")
-                UserManager.saveThemeState(requireContext(), "ON")
+                themeChange(requireContext(), ON)
+                UserManager.saveThemeState(requireContext(), ON)
             } else {
-                themeChange(requireContext(), "OFF")
-                UserManager.saveThemeState(requireContext(), "OFF")
+                themeChange(requireContext(), OFF)
+                UserManager.saveThemeState(requireContext(), OFF)
                 binding.themeStateTV.text = requireContext().resources.getString(R.string.disabled)
             }
         }
@@ -120,16 +131,18 @@ class SettingsFragment : Fragment() {
     }
 
     // Set time text
-    private fun setTimeText(): String {
+    private fun setTimeText(context: Context): String {
         // Get start and end time
-        val startTime = UserManager.getScheduledTime(requireContext(), "startTime")
-        val endTime = UserManager.getScheduledTime(requireContext(), "endTime")
+        val (startHour, startMinute) = UserManager.getScheduledTime(context, START_TIME)
+        val (endHour, endMinute) = UserManager.getScheduledTime(context, END_TIME)
 
-        // Set text to default otherwise set what we got
-        return if (startTime != null && endTime != null) {
-            "$startTime - $endTime"
-        } else {
-            "Not set"
-        }
+        // Get user's preferred 24-hour format setting
+        val is24HourFormat = DateFormat.is24HourFormat(context)
+
+        // Convert the start and end time to the user's preferred format
+        val startTime = AppLevelClass().convertTimeToUserFormat(startHour, startMinute, is24HourFormat)
+        val endTime = AppLevelClass().convertTimeToUserFormat(endHour, endMinute, is24HourFormat)
+
+        return "$startTime - $endTime"
     }
 }

@@ -3,7 +3,6 @@ package com.example.control24projectmain
 import android.app.Application
 import android.location.Geocoder
 import android.text.format.DateFormat
-import android.util.Log
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.yandex.mapkit.MapKitFactory
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +11,8 @@ import org.json.JSONObject
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 
@@ -20,6 +21,12 @@ const val osmMap = "OSM"
 const val SCHEME = "SCHEME"
 const val SATELLITE = "SATELLITE"
 const val HYBRID = "HYBRID"
+const val START_TIME = "START"
+const val END_TIME = "END"
+const val OFF = "OFF"
+const val ON = "ON"
+const val SCHEDULED = "SCHEDULED"
+const val SYSTEM = "SYSTEM"
 
 class AppLevelClass : Application() {
 
@@ -31,14 +38,26 @@ class AppLevelClass : Application() {
 
         // Load and set saved app theme
         when (UserManager.getThemeState(this@AppLevelClass)) {
-            "OFF" -> themeChange(this@AppLevelClass, "OFF")
-            "ON" -> themeChange(this@AppLevelClass, "ON")
-            "SCHEDULED" -> themeChange(this@AppLevelClass, "SCHEDULED")
-            "SYSTEM" -> themeChange(this@AppLevelClass, "SYSTEM")
+            OFF -> themeChange(this@AppLevelClass, OFF)
+            ON -> themeChange(this@AppLevelClass, ON)
+            SCHEDULED -> themeChange(this@AppLevelClass, SCHEDULED)
+            SYSTEM -> themeChange(this@AppLevelClass, SYSTEM)
         }
 
         // Initialize ThreeTenABP
         AndroidThreeTen.init(this@AppLevelClass)
+    }
+
+    fun convertTimeToUserFormat(hour: Int, minute: Int, is24HourFormat: Boolean): String {
+        // Create a Calendar instance and set hour and minute
+        val calendar = Calendar.getInstance()
+        calendar.set(0, 0, 0, hour, minute)
+
+        // Format time as per the user's default locale
+        val format = if (is24HourFormat) SimpleDateFormat("HH:mm", Locale.getDefault())
+        else SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+        return format.format(calendar.time)
     }
 
     fun convertTime(timeGMT: String): String {
@@ -82,7 +101,6 @@ class AppLevelClass : Application() {
                     }
                 }
                 addressObject = formattedAddress.toString()
-                Log.i("HDFJSDHFK", "Standard: $addressObject")
             } catch (e: Exception) {
                 val httpGeocodeResponse = HttpGeocoder.makeHttp("https://geocode-maps.yandex.ru/1.x/?apikey=${BuildConfig.YANDEX_GEOCODE_API_KEY}&geocode=$longitude,$latitude&format=json")
                 val jsonResponse = JSONObject(httpGeocodeResponse)
@@ -95,7 +113,6 @@ class AppLevelClass : Application() {
                     .getJSONObject("GeocoderMetaData")
                     .getJSONObject("Address")
                     .getString("formatted")
-                Log.i("HDFJSDHFK", "Yandex: $addressObject")
             }
         }
         return addressObject

@@ -1,15 +1,10 @@
 package com.example.control24projectmain
 
 import android.content.Context
-import android.text.format.DateFormat
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.yandex.mapkit.mapview.MapView
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
 
 object UserManager {
 
@@ -144,7 +139,7 @@ object UserManager {
     // Get expanded list item
     fun getSelectedMap(context: Context): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
-            MAP_SELECTED, "YANDEX")
+            MAP_SELECTED, yandexMap)
     }
 
     // Save displayed items
@@ -170,73 +165,31 @@ object UserManager {
     // Save selected time
     fun saveScheduledTime(context: Context, key: String, hour: Int, minute: Int) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val isSystem24Hour = DateFormat.is24HourFormat(context)
-
-        val timeString = if (isSystem24Hour) {
-            String.format("%02d:%02d", hour, minute)
-        } else {
-            val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
-            format.timeZone = TimeZone.getDefault()
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, hour)
-                set(Calendar.MINUTE, minute)
-            }
-            format.format(calendar.time)
-        }
         sharedPreferences.edit {
-            putString(key, timeString)
+            putInt("${key}Hour", hour)
+            putInt("${key}Minute", minute)
         }
     }
 
     // Get scheduled time
-    fun getScheduledTime(context: Context, key: String): String? {
+    fun getScheduledTime(context: Context, key: String): Pair<Int, Int> {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val isSystem24Hour = DateFormat.is24HourFormat(context)
-        val defaultHour = if (key == "startTime") 22 else 7
-        val defaultMinute = 0
-        val defaultTimeString = if (isSystem24Hour) {
-            String.format("%02d:%02d", defaultHour, defaultMinute)
-        } else {
-            val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
-            format.timeZone = TimeZone.getDefault()
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, defaultHour)
-                set(Calendar.MINUTE, defaultMinute)
-            }
-            format.format(calendar.time)
-        }
-        return sharedPreferences.getString(key, defaultTimeString)
+        val defaultHour = if (key == START_TIME) 20 else 8
+        val hour = sharedPreferences.getInt("${key}Hour", defaultHour)
+        val minute = sharedPreferences.getInt("${key}Minute", 0)
+        return Pair(hour, minute)
     }
 
-    // Sava Yandex map's camera position
-    fun saveYandexCameraPosition(context: Context, mapView: MapView) {
+    fun saveMapsCameraPosition(context: Context, latitude: Double, longitude: Double, zoom: Double) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val cameraPosition = mapView.map.cameraPosition
         sharedPreferences.edit {
-            putString("yandex_lat", cameraPosition.target.latitude.toString())
-            putString("yandex_lon", cameraPosition.target.longitude.toString())
-            putString("yandex_zoom", cameraPosition.zoom.toString())
+            putString("latitude", latitude.toString())
+            putString("longitude", longitude.toString())
+            putString("zoom", zoom.toString())
         }
     }
 
-    // Get Yandex map's camera position
-    fun getYandexCameraPosition(context: Context, key: String, defaultValue: String): String? {
-        return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
-    }
-
-    // Sava OSM map's camera position
-    fun saveOsmCameraPosition(context: Context, mapView: com.mapbox.maps.MapView) {
-        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        val cameraPosition = mapView.getMapboxMap().cameraState
-        sharedPreferences.edit {
-            putString("osm_lat", cameraPosition.center.latitude().toString())
-            putString("osm_lon", cameraPosition.center.longitude().toString())
-            putString("osm_zoom", cameraPosition.zoom.toString())
-        }
-    }
-
-    // Get OSM map's camera position
-    fun getOsmCameraPosition(context: Context, key: String, defaultValue: String): String? {
+    fun getMapsCameraPosition(context: Context, key: String, defaultValue: String): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(key, defaultValue)
     }
 
@@ -281,7 +234,7 @@ object UserManager {
     // Get map type
     fun getMapType(context: Context): String? {
         return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getString(
-            MAP_TYPE, "SCHEME")
+            MAP_TYPE, SCHEME)
     }
 
     // Save map type

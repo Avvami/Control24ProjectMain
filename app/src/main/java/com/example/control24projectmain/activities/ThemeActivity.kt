@@ -3,20 +3,19 @@ package com.example.control24projectmain.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat
+import com.example.control24projectmain.AppLevelClass
+import com.example.control24projectmain.END_TIME
+import com.example.control24projectmain.OFF
+import com.example.control24projectmain.ON
 import com.example.control24projectmain.R
+import com.example.control24projectmain.SCHEDULED
+import com.example.control24projectmain.START_TIME
+import com.example.control24projectmain.SYSTEM
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityThemeBinding
 import com.example.control24projectmain.themeChange
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
-
-private const val START_TIME = "startTime"
-private const val END_TIME = "endTime"
 
 class ThemeActivity : AppCompatActivity() {
 
@@ -38,10 +37,10 @@ class ThemeActivity : AppCompatActivity() {
         val systemDefaultCB = binding.systemDefaultMCheckBox
 
         var checkedCheckBoxID = when (darkThemeState) {
-            "OFF" -> binding.disabledMCheckBox
-            "ON" -> binding.enabledMCheckBox
-            "SCHEDULED" -> binding.scheduledMCheckBox
-            "SYSTEM" -> binding.systemDefaultMCheckBox
+            OFF -> binding.disabledMCheckBox
+            ON -> binding.enabledMCheckBox
+            SCHEDULED -> binding.scheduledMCheckBox
+            SYSTEM -> binding.systemDefaultMCheckBox
             else -> {binding.disabledMCheckBox}
         }
         checkedCheckBoxID.isChecked = true
@@ -109,22 +108,13 @@ class ThemeActivity : AppCompatActivity() {
         // Check time format
         val isSystem24Hour = DateFormat.is24HourFormat(this@ThemeActivity)
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-        val calendar = Calendar.getInstance()
-        val format = if (isSystem24Hour) {
-            SimpleDateFormat("HH:mm", Locale.getDefault())
-        } else {
-            SimpleDateFormat("hh:mm a", Locale.getDefault())
-        }
 
-        format.timeZone = TimeZone.getDefault()
-        val date = UserManager.getScheduledTime(this, START_TIME)
-            ?.let { format.parse(it) } ?: throw ParseException("Unable to parse time", 0)
-        calendar.time = date
+        val startTime = UserManager.getScheduledTime(this@ThemeActivity, START_TIME)
 
         val startPicker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
-            .setHour(calendar.get(Calendar.HOUR))
-            .setMinute(calendar.get(Calendar.MINUTE))
+            .setHour(startTime.first)
+            .setMinute(startTime.second)
             .setTheme(R.style.CustomMaterialTimePickerStyle)
             .setTitleText("Начало")
             .build()
@@ -156,22 +146,13 @@ class ThemeActivity : AppCompatActivity() {
     private fun openEndTimePicker() {
         val isSystem24Hour = DateFormat.is24HourFormat(this@ThemeActivity)
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-        val calendar = Calendar.getInstance()
-        val format = if (isSystem24Hour) {
-            SimpleDateFormat("HH:mm", Locale.getDefault())
-        } else {
-            SimpleDateFormat("hh:mm a", Locale.getDefault())
-        }
 
-        format.timeZone = TimeZone.getDefault()
-        val date = UserManager.getScheduledTime(this, END_TIME)
-            ?.let { format.parse(it) } ?: throw ParseException("Unable to parse time", 0)
-        calendar.time = date
+        val endTime = UserManager.getScheduledTime(this@ThemeActivity, END_TIME)
 
         val endPicker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
-            .setHour(calendar.get(Calendar.HOUR))
-            .setMinute(calendar.get(Calendar.MINUTE))
+            .setHour(endTime.first)
+            .setMinute(endTime.second)
             .setTheme(R.style.CustomMaterialTimePickerStyle)
             .setTitleText("Конец")
             .build()
@@ -204,14 +185,16 @@ class ThemeActivity : AppCompatActivity() {
     // Set time text
     private fun setTimeText(): String {
         // Get start and end time
-        val startTime = UserManager.getScheduledTime(this@ThemeActivity, START_TIME)
-        val endTime = UserManager.getScheduledTime(this@ThemeActivity, END_TIME)
+        val (startHour, startMinute) = UserManager.getScheduledTime(this, START_TIME)
+        val (endHour, endMinute) = UserManager.getScheduledTime(this, END_TIME)
 
-        // Set text to default otherwise set what we got
-        return if (startTime != null && endTime != null) {
-            "$startTime - $endTime"
-        } else {
-            "Not set"
-        }
+        // Get user's preferred 24-hour format setting
+        val is24HourFormat = DateFormat.is24HourFormat(this)
+
+        // Convert the start and end time to the user's preferred format
+        val startTime = AppLevelClass().convertTimeToUserFormat(startHour, startMinute, is24HourFormat)
+        val endTime = AppLevelClass().convertTimeToUserFormat(endHour, endMinute, is24HourFormat)
+
+        return "$startTime - $endTime"
     }
 }
