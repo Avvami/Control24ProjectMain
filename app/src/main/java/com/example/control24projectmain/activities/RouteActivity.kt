@@ -1,6 +1,7 @@
 package com.example.control24projectmain.activities
 
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -44,11 +46,13 @@ import com.yandex.mapkit.directions.driving.DrivingRoute
 import com.yandex.mapkit.directions.driving.DrivingRouter
 import com.yandex.mapkit.directions.driving.DrivingSession
 import com.yandex.mapkit.directions.driving.VehicleOptions
+import com.yandex.mapkit.geometry.BoundingBox
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.Error
+import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.network.NetworkError
 import com.yandex.runtime.network.RemoteError
 import io.github.muddz.styleabletoast.StyleableToast
@@ -57,6 +61,11 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
+import kotlin.math.abs
+import kotlin.math.ln
+import kotlin.math.max
+import kotlin.math.min
 
 class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
@@ -104,6 +113,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val rightArrowCL = findViewById<ConstraintLayout>(R.id.rightArrowCL)
         val dateChangeCL = findViewById<ConstraintLayout>(R.id.dateChangeCL)
         val dateCL = findViewById<ConstraintLayout>(R.id.dateCL)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar3)
 
         if (UserManager.getZoomControlsState(this)) {
             binding.zoomCL.visibility = View.VISIBLE
@@ -126,9 +136,9 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         mapObjectsColl = yandexMVRoute.map.mapObjects.addCollection()
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        bottomSheetBehavior.isFitToContents = false
-        bottomSheetBehavior.halfExpandedRatio = 0.6f
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        /*bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.halfExpandedRatio = 0.6f*/
 
         val carId = intent.getIntExtra("carId", -1)
         val carName = intent.getStringExtra("carName")
@@ -203,6 +213,9 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             calendar.add(Calendar.DATE, -1)
             dateTopTV.text = formattedDate(calendar)
             dateBottomTV.text = formattedDayOfWeek(calendar)
+
+            val (calendar1, calendar2) = getCalendars(calendar)
+            requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
 
         rightArrowCL.setOnClickListener {
@@ -215,10 +228,13 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             calendar.add(Calendar.DATE, 1)
             dateTopTV.text = formattedDate(calendar)
             dateBottomTV.text = formattedDayOfWeek(calendar)
+
+            val (calendar1, calendar2) = getCalendars(calendar)
+            requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
 
         dateCL.setOnClickListener {
-            openTimePicker(calendar)
+            openTimePicker(carId, calendar, progressBar)
         }
 
         dateChangeCL.setOnClickListener {
@@ -233,31 +249,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 R.style.CustomStyleableToast
             ).show()
         } else {
-            lifecycleScope.launch {
-                try {
-                    val loginCredentials = UserManager.getLoginCredentials(this@RouteActivity)
-                    val httpResponseFirst = HttpRequestHelper.makeHttpRequest(
-                        "http://91.193.225.170:8012/login2&${loginCredentials?.first}&${loginCredentials?.second}"
-                    )
-                    val gson = Gson()
-                    val firstResponseData = gson.fromJson(httpResponseFirst, FirstResponse::class.java)
-                    val httpResponseSecond = HttpRequestHelper.makeHttpRequest(
-                        "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&2023/05/23%2017:00:00&2023/05/24%2017:00:00"
-                    )
-                    routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
-                } catch (e: Exception) {
-                    StyleableToast.makeText(
-                        this@RouteActivity,
-                        e.toString(),
-                        Toast.LENGTH_LONG,
-                        R.style.CustomStyleableToast
-                    ).show()
-                } finally {
-                    // Some code
-
-                    submitRequest()
-                }
-            }
+            val (calendar1, calendar2) = getCalendars(calendar)
+            requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
 
         binding.routeBackCL.setOnClickListener {
@@ -319,15 +312,91 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         }
     }
 
+    private fun getCalendars(calendar: Calendar): Pair<Calendar, Calendar> {
+        val calendar1 = calendar.clone() as Calendar
+        calendar1.set(Calendar.HOUR_OF_DAY, 5)
+        calendar1.set(Calendar.MINUTE, 0)
+        calendar1.set(Calendar.SECOND, 0)
+
+        val calendar2: Calendar
+        if (calendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
+            calendar2 = calendar1.clone() as Calendar
+            calendar2.set(Calendar.HOUR_OF_DAY, 21)
+        } else {
+            calendar2 = calendar.clone() as Calendar
+        }
+
+        return Pair(calendar1, calendar2)
+    }
+
+    private fun requestToDatabase(carId: Int, startDate: String, endDate: String, progressBar: ProgressBar) {
+        progressBar.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            try {
+                val loginCredentials = UserManager.getLoginCredentials(this@RouteActivity)
+                val httpResponseFirst = HttpRequestHelper.makeHttpRequest(
+                    "http://91.193.225.170:8012/login2&${loginCredentials?.first}&${loginCredentials?.second}"
+                )
+                val gson = Gson()
+                val firstResponseData = gson.fromJson(httpResponseFirst, FirstResponse::class.java)
+
+                val httpResponseSecond = HttpRequestHelper.makeHttpRequest(
+                    "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate"
+                )
+                Log.i("HDFJSDHFK", "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate")
+                Log.i("HDFJSDHFK", httpResponseSecond)
+                routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
+            } catch (e: Exception) {
+                StyleableToast.makeText(
+                    this@RouteActivity,
+                    e.toString(),
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+            } finally {
+                if (routePoints.points.isNotEmpty()) {
+                    submitRequest()
+                    progressBar.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     private fun submitRequest() {
         val drivingOptions = DrivingOptions()
         val vehicleOptions = VehicleOptions()
         val requestPoints = ArrayList<RequestPoint>()
+        mapObjectsColl.clear()
+
         for (point in routePoints.points) {
             val requestPoint = RequestPoint(Point(point.lat, point.lon), RequestPointType.WAYPOINT, null)
             requestPoints.add(requestPoint)
         }
+
         drivingSession = drivingRouter.requestRoutes(requestPoints, drivingOptions, vehicleOptions, this)
+
+        val firstPoint = routePoints.points.first()
+        firstPoint.let {
+            val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
+            placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))
+        }
+
+        val lastPoint = routePoints.points.last()
+        lastPoint.let {
+            val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
+            placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))
+        }
+
+        val routeCenter = Point(
+            (firstPoint.lat + lastPoint.lat) / 2,
+            (firstPoint.lon + lastPoint.lon) / 2
+        )
+
+        yandexMVRoute.map.move(
+            CameraPosition(routeCenter, 12.0f, 0.0f, 0.0f),
+            Animation(Animation.Type.SMOOTH, 1f),
+            null
+        )
     }
 
     override fun onDrivingRoutes(routes: MutableList<DrivingRoute>) {
@@ -353,6 +422,12 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         overridePendingTransition(R.anim.scale_in, R.anim.slide_out_left)
     }
 
+    private fun formattedDateToDatabase(calendar: Calendar): String {
+        val dateFormat = SimpleDateFormat("yyyy/M/d%20HH:mm:ss", Locale("ru", "RU"))
+        dateFormat.timeZone = TimeZone.getTimeZone("GMT")
+        return dateFormat.format(calendar.time)
+    }
+
     private fun formattedDate(calendar: Calendar): String {
         val dateFormat = SimpleDateFormat("d MMMM, yyyy", Locale("ru", "RU"))
 
@@ -373,7 +448,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
-    private fun openTimePicker(calendar: Calendar) {
+    private fun openTimePicker(carId: Int, calendar: Calendar, progressBar: ProgressBar) {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Выберите дату")
@@ -394,6 +469,9 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             }
             dateTopTV.text = formattedDate(selectedCalendar)
             dateBottomTV.text = formattedDayOfWeek(selectedCalendar)
+
+            val (calendar1, calendar2) = getCalendars(selectedCalendar)
+            requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
     }
 
