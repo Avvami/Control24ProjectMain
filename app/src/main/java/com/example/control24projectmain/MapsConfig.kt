@@ -186,15 +186,6 @@ class MapsConfig: TrafficListener {
             updateLevel()
         }
 
-        zoomInButton.setOnClickListener {
-            val cameraPosition = yandexMV.map.cameraPosition
-            yandexMV.map.move(
-                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
-                Animation(Animation.Type.SMOOTH, .2f),
-                null
-            )
-        }
-
         val handler = Handler(Looper.getMainLooper())
         val postDelay: Long = 200
         val runnableZoomIn = object : Runnable {
@@ -220,6 +211,15 @@ class MapsConfig: TrafficListener {
 
                 handler.postDelayed(this, postDelay)
             }
+        }
+
+        zoomInButton.setOnClickListener {
+            val cameraPosition = yandexMV.map.cameraPosition
+            yandexMV.map.move(
+                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, .2f),
+                null
+            )
         }
 
         zoomInButton.setOnTouchListener { view, event ->
@@ -601,6 +601,7 @@ class MapsConfig: TrafficListener {
             intent.putExtra("carName", objectsList.name)
             intent.putExtra("carId", objectsList.id)
             activity.startActivity(intent)
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
 
         bottomSheetDialog.show()

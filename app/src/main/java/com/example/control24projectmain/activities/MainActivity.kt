@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
     // Start coroutine
     override fun onStart() {
         super.onStart()
+        UserManager.clearResponse(this@MainActivity)
         coroutineScopeLaunch()
     }
 
@@ -160,7 +161,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         coroutineJob?.cancel()
-        UserManager.clearResponse(this@MainActivity)
     }
 
     // Coroutine for http requests to a database

@@ -110,7 +110,7 @@ class ObjectsListAdapter(
                 }
             } catch (e: Exception) {
                 holder.carLocationTV.text = "Ошибка геокодирования"
-                Log.i("HDFJSDHFK", "Failed to get address", e)
+                Log.i("GEOCODER ERROR", "Failed to get address", e)
             }
             holder.carLocationTV.visibility = View.VISIBLE
             holder.progressBar.visibility = View.INVISIBLE
@@ -190,6 +190,7 @@ class ObjectsListAdapter(
             intent.putExtra("carName", currentItem.name)
             intent.putExtra("carId", currentItem.id)
             activity.startActivity(intent)
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out)
         }
     }
 

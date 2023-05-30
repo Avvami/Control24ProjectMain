@@ -1,10 +1,14 @@
 package com.example.control24projectmain.activities
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -82,8 +86,10 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     private lateinit var isPeriodCheckedRB: RadioButton
     private lateinit var calendar: Calendar
-    private lateinit var rangeCalendar: Calendar
+    private lateinit var startCalendar: Calendar
+    private lateinit var endCalendar: Calendar
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize the maps
@@ -121,6 +127,85 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             binding.zoomCL.visibility = View.GONE
         }
 
+        val handler = Handler(Looper.getMainLooper())
+        val postDelay: Long = 200
+        val runnableZoomIn = object : Runnable {
+            override fun run() {
+                val cameraPosition = yandexMVRoute.map.cameraPosition
+                yandexMVRoute.map.move(
+                    CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
+                    Animation(Animation.Type.SMOOTH, .2f),
+                    null
+                )
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+        val runnableZoomOut = object : Runnable {
+            override fun run() {
+                val cameraPosition = yandexMVRoute.map.cameraPosition
+                yandexMVRoute.map.move(
+                    CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom - 1, 0.0f, 0.0f),
+                    Animation(Animation.Type.SMOOTH, .2f),
+                    null
+                )
+
+                handler.postDelayed(this, postDelay)
+            }
+        }
+
+        binding.zoomInCL.setOnClickListener {
+            val cameraPosition = yandexMVRoute.map.cameraPosition
+            yandexMVRoute.map.move(
+                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom + 1, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, .2f),
+                null
+            )
+        }
+
+        binding.zoomInCL.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomIn, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomIn)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.zoomOutCL.setOnClickListener {
+            val cameraPosition = yandexMVRoute.map.cameraPosition
+            yandexMVRoute.map.move(
+                CameraPosition(Point(cameraPosition.target.latitude, cameraPosition.target.longitude), cameraPosition.zoom - 1, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, .2f),
+                null
+            )
+        }
+
+        binding.zoomOutCL.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the continuous zooming
+                    handler.postDelayed(runnableZoomOut, postDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Stop the continuous zooming
+                    handler.removeCallbacks(runnableZoomOut)
+                    view.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
         yandexMVRoute = binding.yandexMVRoute
 
         val isDarkMode = isDarkModeEnabled(this)
@@ -136,20 +221,23 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         mapObjectsColl = yandexMVRoute.map.mapObjects.addCollection()
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        /*bottomSheetBehavior.isFitToContents = false
-        bottomSheetBehavior.halfExpandedRatio = 0.6f*/
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.halfExpandedRatio = 0.31f
 
         val carId = intent.getIntExtra("carId", -1)
         val carName = intent.getStringExtra("carName")
         carNameTV.text = carName
 
         calendar = Calendar.getInstance()
-        rangeCalendar = Calendar.getInstance()
+        startCalendar = Calendar.getInstance()
+        endCalendar = Calendar.getInstance()
 
         if (savedInstanceState != null) {
             // Restore the saved state
             calendar.timeInMillis = savedInstanceState.getLong("calendarTime")
+            startCalendar.timeInMillis = savedInstanceState.getLong("startCalendarTime")
+            endCalendar.timeInMillis = savedInstanceState.getLong("endCalendarTime")
             if (savedInstanceState.getBoolean("isPeriodChecked")) {
                 isPeriodCheckedRB = periodInfoRB
                 isPeriodCheckedRB.isChecked = true
@@ -162,7 +250,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 dateBottomTV.text = savedInstanceState.getString("dateBottom").toString()
             } else {
                 dateTopTV.text = resources.getString(R.string.pick_range)
-                dateBottomTV.text = resources.getString(R.string.range)
+                dateBottomTV.text = savedInstanceState.getString("dateBottom").toString()
                 leftArrowCL.visibility = View.GONE
                 rightArrowCL.visibility = View.GONE
             }
@@ -188,9 +276,19 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     dateChangeCL.isClickable = true
                     dateCL.isClickable = false
                     dateTopTV.text = resources.getString(R.string.pick_range)
-                    dateBottomTV.text = resources.getString(R.string.range)
+                    if (startCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
+                        dateBottomTV.text = resources.getString(R.string.range_template, formattedDate(startCalendar), formattedDate(endCalendar))
+                    } else {
+                        dateBottomTV.text = resources.getString(R.string.range)
+                    }
                     leftArrowCL.visibility = View.GONE
                     rightArrowCL.visibility = View.GONE
+
+                    mapObjectsColl.clear()
+                    if (startCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
+                        val (calendar1, calendar2) = getCalendarsRange(startCalendar, endCalendar)
+                        requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
+                    }
                 }
                 dayInfoRB.id -> {
                     isPeriodCheckedRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
@@ -205,6 +303,10 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     dateBottomTV.text = formattedDayOfWeek(calendar)
                     leftArrowCL.visibility = View.VISIBLE
                     rightArrowCL.visibility = View.VISIBLE
+
+                    mapObjectsColl.clear()
+                    val (calendar1, calendar2) = getCalendars(calendar)
+                    requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
                 }
             }
         }
@@ -238,7 +340,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         }
 
         dateChangeCL.setOnClickListener {
-            openPeriodTimePicker(rangeCalendar)
+            openPeriodTimePicker(carId, startCalendar, endCalendar, progressBar)
         }
 
         if (carId == -1) {
@@ -264,6 +366,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         outState.putString("dateBottom", dateBottomTV.text.toString())
         outState.putBoolean("isPeriodChecked", isPeriodCheckedRB.isChecked)
         outState.putLong("calendarTime", calendar.timeInMillis)
+        outState.putLong("startCalendarTime", startCalendar.timeInMillis)
+        outState.putLong("endCalendarTime", endCalendar.timeInMillis)
     }
 
     override fun onStop() {
@@ -314,16 +418,33 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     private fun getCalendars(calendar: Calendar): Pair<Calendar, Calendar> {
         val calendar1 = calendar.clone() as Calendar
-        calendar1.set(Calendar.HOUR_OF_DAY, 5)
+        calendar1.set(Calendar.HOUR_OF_DAY, 0)
         calendar1.set(Calendar.MINUTE, 0)
         calendar1.set(Calendar.SECOND, 0)
 
         val calendar2: Calendar
         if (calendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
             calendar2 = calendar1.clone() as Calendar
-            calendar2.set(Calendar.HOUR_OF_DAY, 21)
+            calendar2.set(Calendar.HOUR_OF_DAY, 24)
         } else {
             calendar2 = calendar.clone() as Calendar
+        }
+
+        return Pair(calendar1, calendar2)
+    }
+
+    private fun getCalendarsRange(startCalendar: Calendar, endCalendar: Calendar): Pair<Calendar, Calendar> {
+        val calendar1 = startCalendar.clone() as Calendar
+        calendar1.set(Calendar.HOUR_OF_DAY, 0)
+        calendar1.set(Calendar.MINUTE, 0)
+        calendar1.set(Calendar.SECOND, 0)
+
+        val calendar2: Calendar
+        if (endCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
+            calendar2 = endCalendar.clone() as Calendar
+            calendar2.set(Calendar.HOUR_OF_DAY, 24)
+        } else {
+            calendar2 = Calendar.getInstance()
         }
 
         return Pair(calendar1, calendar2)
@@ -475,7 +596,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         }
     }
 
-    private fun openPeriodTimePicker(calendar: Calendar) {
+    @SuppressLint("SetTextI18n")
+    private fun openPeriodTimePicker(carId: Int, startCalendar: Calendar, endCalendar: Calendar, progressBar: ProgressBar) {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         val datePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Выберите период")
@@ -492,15 +614,17 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             val startDate = Date(selection.first)
             val endDate = Date(selection.second)
 
-            val selectedStartCalendar = Calendar.getInstance().apply {
+            val selectedStartCalendar = startCalendar.apply {
                 time = startDate
             }
 
-            val selectedEndCalendar = Calendar.getInstance().apply {
+            val selectedEndCalendar = endCalendar.apply {
                 time = endDate
             }
 
             dateBottomTV.text = "${formattedDate(selectedStartCalendar)} - ${formattedDate(selectedEndCalendar)}"
+            val (calendar1, calendar2) = getCalendarsRange(selectedStartCalendar, selectedEndCalendar)
+            requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
     }
 }
