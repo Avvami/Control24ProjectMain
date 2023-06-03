@@ -32,6 +32,7 @@ class ObjectsListAdapter(
     private val item: List<CombinedResponseObject>,
     private val lifecycleScope: CoroutineScope
     ) : RecyclerView.Adapter<ObjectsListAdapter.ObjectsListViewHolder>() {
+
     private var expandedStateArray = BooleanArray(item.size)
     private var displayedItemsArray = BooleanArray(item.size)
     private var listener: OnItemClickListener? = null
@@ -232,7 +233,6 @@ class ObjectsListAdapter(
             } else {
                 context.resources.getString(R.string.driver_template)
             }).toString()
-            //listener.onDialogClose()
             dialog.dismiss()
         }
 

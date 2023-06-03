@@ -2,7 +2,6 @@ package com.example.control24projectmain.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.res.ResourcesCompat
 import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityObjectsListViewBinding

@@ -24,19 +24,7 @@ import com.example.control24projectmain.isDarkModeEnabled
 import com.example.control24projectmain.osmMap
 import com.example.control24projectmain.yandexMap
 import com.google.gson.Gson
-import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.RequestPoint
-import com.yandex.mapkit.RequestPointType
-import com.yandex.mapkit.directions.DirectionsFactory
-import com.yandex.mapkit.directions.driving.DrivingOptions
-import com.yandex.mapkit.directions.driving.DrivingRoute
-import com.yandex.mapkit.directions.driving.DrivingSession
-import com.yandex.mapkit.directions.driving.VehicleOptions
-import com.yandex.mapkit.geometry.BoundingBoxHelper
-import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.runtime.Error
-import java.util.ArrayList
 
 class MapFragment : Fragment() {
 

@@ -2,7 +2,6 @@ package com.example.control24projectmain.activities
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -26,10 +25,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.marginTop
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.control24projectmain.Data
 import com.example.control24projectmain.FirstResponse
 import com.example.control24projectmain.HttpRequestHelper
+import com.example.control24projectmain.ObjectRoutesAdapter
 import com.example.control24projectmain.R
+import com.example.control24projectmain.Routes
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityRouteBinding
 import com.example.control24projectmain.isDarkModeEnabled
@@ -50,7 +53,6 @@ import com.yandex.mapkit.directions.driving.DrivingRoute
 import com.yandex.mapkit.directions.driving.DrivingRouter
 import com.yandex.mapkit.directions.driving.DrivingSession
 import com.yandex.mapkit.directions.driving.VehicleOptions
-import com.yandex.mapkit.geometry.BoundingBox
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObjectCollection
@@ -61,21 +63,17 @@ import com.yandex.runtime.network.NetworkError
 import com.yandex.runtime.network.RemoteError
 import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.math.abs
-import kotlin.math.ln
-import kotlin.math.max
-import kotlin.math.min
 
 class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     private lateinit var binding: ActivityRouteBinding
     private lateinit var yandexMVRoute: MapView
-    private lateinit var routePoints: Data
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private lateinit var dateTopTV: TextView
     private lateinit var dateBottomTV: TextView
@@ -88,6 +86,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
     private lateinit var calendar: Calendar
     private lateinit var startCalendar: Calendar
     private lateinit var endCalendar: Calendar
+    private lateinit var routesRV: RecyclerView
+    private var routePoints: Data? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +120,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val dateChangeCL = findViewById<ConstraintLayout>(R.id.dateChangeCL)
         val dateCL = findViewById<ConstraintLayout>(R.id.dateCL)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar3)
+        routesRV = findViewById(R.id.routesRV)
 
         if (UserManager.getZoomControlsState(this)) {
             binding.zoomCL.visibility = View.VISIBLE
@@ -347,7 +348,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             StyleableToast.makeText(
                 this@RouteActivity,
                 "Неизвестная ошибка",
-                Toast.LENGTH_SHORT,
+                Toast.LENGTH_LONG,
                 R.style.CustomStyleableToast
             ).show()
         } else {
@@ -465,8 +466,30 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate"
                 )
                 Log.i("HDFJSDHFK", "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate")
-                Log.i("HDFJSDHFK", httpResponseSecond)
+                //Log.i("HDFJSDHFK", httpResponseSecond)
                 routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
+                //Log.i("HDFJSDHFK", routePoints.toString())
+            } catch (e: HttpRequestHelper.BadRequestException) {
+                StyleableToast.makeText(
+                    this@RouteActivity,
+                    "Bad request: ${e.message}",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+            } catch (e: HttpRequestHelper.TimeoutException) {
+                StyleableToast.makeText(
+                    this@RouteActivity,
+                    "Ошибка: Превышено время ожидания ответа от сервера",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+            } catch (e: ConnectException) {
+                StyleableToast.makeText(
+                    this@RouteActivity,
+                    "Ошибка подключения",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
             } catch (e: Exception) {
                 StyleableToast.makeText(
                     this@RouteActivity,
@@ -475,12 +498,47 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     R.style.CustomStyleableToast
                 ).show()
             } finally {
-                if (routePoints.points.isNotEmpty()) {
+                if (routePoints != null && routePoints!!.points.size > 1) {
                     submitRequest()
                     progressBar.visibility = View.GONE
+
+                    val routes = fillRoutes(routePoints!!)
+                    //Log.i("HDFJSDHFK", fillRoutes(routePoints!!).toString())
+
+                    // Filter the data to get only Data objects with more than 1 Point
+                    val filteredData = routes.route.filter { data ->
+                        data.points.size > 1
+                    }
+
+                    // Set the layout manager for the RecyclerView
+                    routesRV.layoutManager = LinearLayoutManager(this@RouteActivity)
+                    routesRV.setHasFixedSize(true)
+
+                    val adapter = ObjectRoutesAdapter(this@RouteActivity, filteredData, lifecycleScope)
+                    routesRV.adapter = adapter
                 }
             }
         }
+    }
+
+    private fun fillRoutes(data: Data): Routes {
+        val routesList = mutableListOf<Data>()
+        var currentPoints = mutableListOf<com.example.control24projectmain.Point>()
+
+        for (point in data.points) {
+            if (currentPoints.isEmpty() || (point.lat != currentPoints.last().lat || point.lon != currentPoints.last().lon)) {
+                currentPoints.add(point)
+            } else {
+                routesList.add(Data(currentPoints.toList()))
+                currentPoints = mutableListOf(point)
+            }
+        }
+
+        if (currentPoints.isNotEmpty()) {
+            routesList.add(Data(currentPoints.toList()))
+        }
+
+        return Routes(routesList)
     }
 
     private fun submitRequest() {
@@ -489,20 +547,20 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val requestPoints = ArrayList<RequestPoint>()
         mapObjectsColl.clear()
 
-        for (point in routePoints.points) {
+        for (point in routePoints?.points!!) {
             val requestPoint = RequestPoint(Point(point.lat, point.lon), RequestPointType.WAYPOINT, null)
             requestPoints.add(requestPoint)
         }
 
         drivingSession = drivingRouter.requestRoutes(requestPoints, drivingOptions, vehicleOptions, this)
 
-        val firstPoint = routePoints.points.first()
+        val firstPoint = routePoints?.points!!.first()
         firstPoint.let {
             val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
             placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))
         }
 
-        val lastPoint = routePoints.points.last()
+        val lastPoint = routePoints?.points!!.last()
         lastPoint.let {
             val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
             placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))

@@ -37,6 +37,15 @@ class AboutAppActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Open yandex conditions link
+        binding.yandexConditionsLinkTV.setOnClickListener {
+            val websiteUrl = binding.yandexConditionsLinkTV.text.toString()
+            val websiteIntent = Intent(Intent.ACTION_VIEW)
+            websiteIntent.data = Uri.parse(websiteUrl)
+            startActivity(websiteIntent)
+            overridePendingTransition(R.anim.fade_in_long, R.anim.fade_out_long)
+        }
+
         // Open an email link
         binding.devEmailLinkTV.setOnClickListener {
             val email = "mailto:${binding.devEmailLinkTV.text}"

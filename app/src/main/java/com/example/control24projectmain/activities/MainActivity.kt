@@ -2,15 +2,12 @@ package com.example.control24projectmain.activities
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.control24projectmain.CombinedResponse
 import com.example.control24projectmain.FirstResponse
@@ -31,6 +28,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
+import java.net.ConnectException
 
 class MainActivity : AppCompatActivity() {
 
@@ -211,14 +209,42 @@ class MainActivity : AppCompatActivity() {
                         // Update the bundle with the new data
                         bundle.putSerializable("OBJECTS_DATA", combinedData)
                         sharedViewModel.bundleLiveData.postValue(bundle)
-                        Log.i("HDFJSDHFK", "We update data")
                         UserManager.saveResponse(this@MainActivity, httpResponseSecond)
                     } else {
                         // Do nothing
-                        Log.i("HDFJSDHFK", "We don't update data")
                     }
 
                     // Wait for the specified interval before making the next request
+                    delay(intervalMillis)
+                } catch (e: HttpRequestHelper.BadRequestException) {
+                    StyleableToast.makeText(
+                        this@MainActivity,
+                        "Bad request: ${e.message}",
+                        Toast.LENGTH_LONG,
+                        R.style.CustomStyleableToast
+                    ).show()
+
+                    // Wait for the specified interval even if an error occurs
+                    delay(intervalMillis)
+                } catch (e: HttpRequestHelper.TimeoutException) {
+                    StyleableToast.makeText(
+                        this@MainActivity,
+                        "Ошибка: Превышено время ожидания ответа от сервера",
+                        Toast.LENGTH_LONG,
+                        R.style.CustomStyleableToast
+                    ).show()
+
+                    // Wait for the specified interval even if an error occurs
+                    delay(intervalMillis)
+                } catch (e: ConnectException) {
+                    StyleableToast.makeText(
+                        this@MainActivity,
+                        "Ошибка подключения",
+                        Toast.LENGTH_LONG,
+                        R.style.CustomStyleableToast
+                    ).show()
+
+                    // Wait for the specified interval even if an error occurs
                     delay(intervalMillis)
                 } catch (e: Exception) {
                     if (e !is CancellationException) {

@@ -20,6 +20,7 @@ import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.ActivityLoginBinding
 import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.*
+import java.net.ConnectException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -161,6 +162,27 @@ class LoginActivity : AppCompatActivity() {
                     this@LoginActivity,
                     "Ошибка: Неверный логин или пароль",
                     Toast.LENGTH_SHORT,
+                    R.style.CustomStyleableToast
+                ).show()
+            } catch (e: HttpRequestHelper.BadRequestException) {
+                StyleableToast.makeText(
+                    this@LoginActivity,
+                    "Bad request: ${e.message}",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+            } catch (e: HttpRequestHelper.TimeoutException) {
+                StyleableToast.makeText(
+                    this@LoginActivity,
+                    "Ошибка: Превышено время ожидания ответа от сервера",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+            } catch (e: ConnectException) {
+                StyleableToast.makeText(
+                    this@LoginActivity,
+                    "Ошибка подключения",
+                    Toast.LENGTH_LONG,
                     R.style.CustomStyleableToast
                 ).show()
             } catch (e: Exception) {

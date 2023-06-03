@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 object HttpRequestHelper {
 
@@ -15,15 +16,20 @@ object HttpRequestHelper {
             .build()
 
         return withContext(Dispatchers.IO) {
-            val response = client.newCall(request).execute()
-            val responseBody = response.body?.string() ?: ""
-            if (response.code == 400) {
-                throw BadRequestException(responseBody)
-            } else {
-                response.isSuccessful
-                responseBody
+            try {
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string() ?: ""
+                if (response.code == 400) {
+                    throw BadRequestException(responseBody)
+                } else {
+                    response.isSuccessful
+                    responseBody
+                }
+            } catch (exception: SocketTimeoutException) {
+                throw TimeoutException("Connection timed out", exception)
             }
         }
     }
     class BadRequestException(message: String) : IOException(message)
+    class TimeoutException(message: String, cause: Throwable? = null) : IOException(message, cause)
 }

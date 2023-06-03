@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.yandex.mapkit.mapview.MapView
 
 object UserManager {
 

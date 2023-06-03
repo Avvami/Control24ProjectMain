@@ -36,6 +36,10 @@ data class CombinedResponseObject (
     val gps: Int
 ) : Serializable
 
+data class Routes(
+    val route: List<Data>
+)
+
 data class Data(
     val points: List<Point>
 )
@@ -43,5 +47,6 @@ data class Data(
 data class Point(
     val gmt: String,
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val speed: Int
 )

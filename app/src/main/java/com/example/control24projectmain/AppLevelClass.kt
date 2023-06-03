@@ -8,6 +8,8 @@ import com.yandex.mapkit.MapKitFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.threeten.bp.Duration
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -78,6 +80,27 @@ class AppLevelClass : Application() {
         } else {
             formatter12h.format(zonedTimeLocal)
         }
+    }
+
+    fun getTimeInterval(startTime: String, endTime: String): String {
+        val isSystem24Hour = DateFormat.is24HourFormat(this@AppLevelClass)
+
+        val formatter = if (isSystem24Hour) {
+            DateTimeFormatter.ofPattern("dd.MM.yyyy H:mm:ss")
+        } else {
+            DateTimeFormatter.ofPattern("dd.MM.yyyy h:mm:ss a")
+        }
+
+        val startDateTime = LocalDateTime.parse(startTime, formatter)
+        val endDateTime = LocalDateTime.parse(endTime, formatter)
+
+        val duration = Duration.between(startDateTime, endDateTime)
+
+        val hours = duration.toHours()
+        val minutes = duration.toMinutesPart()
+        val seconds = duration.toSecondsPart()
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     suspend fun coroutineGeocode(latitude: Double, longitude: Double): String {

@@ -239,4 +239,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dividerBottom" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/routesRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerBottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/object_routes" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

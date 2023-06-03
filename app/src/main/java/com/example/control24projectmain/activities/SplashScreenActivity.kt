@@ -9,13 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.*
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.example.control24projectmain.HttpRequestHelper
 import com.example.control24projectmain.InternetConnectionCheck
 import com.example.control24projectmain.R
 import com.example.control24projectmain.UserManager
+import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -153,8 +156,6 @@ class SplashScreenActivity : AppCompatActivity() {
         }
     }
 
-    class BadRequestException(message: String) : Exception(message)
-
     // Function for login and catch errors
     private fun performLogin(loginCredentials: Pair<String, String>, onSuccess: () -> Unit, onError: () -> Unit) {
         val (login, password) = loginCredentials
@@ -163,11 +164,29 @@ class SplashScreenActivity : AppCompatActivity() {
             try {
                 HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
                 onSuccess()
-            } catch (e: BadRequestException) {
-                // Handle the 400 error
+            } catch (e: HttpRequestHelper.BadRequestException) {
+                StyleableToast.makeText(
+                    this@SplashScreenActivity,
+                    "Bad request: ${e.message}",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
                 onError()
-            } catch (e: Exception) {
-                // Handle other errors
+            } catch (e: HttpRequestHelper.TimeoutException) {
+                StyleableToast.makeText(
+                    this@SplashScreenActivity,
+                    "Ошибка: Превышено время ожидания ответа от сервера",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
+                onError()
+            } catch (e: ConnectException) {
+                StyleableToast.makeText(
+                    this@SplashScreenActivity,
+                    "Ошибка подключения",
+                    Toast.LENGTH_LONG,
+                    R.style.CustomStyleableToast
+                ).show()
                 onError()
             }
         }

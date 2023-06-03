@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="16dp"
+    android:elevation="@dimen/button_elevation"
+    android:background="@drawable/card_objects_route_ripple_color"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/routeCounterTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="12sp"
+        android:textColor="?attr/textOnItemsColor"
+        android:text="@string/counter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/routePeriodTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="12sp"
+        android:textColor="?attr/textObjectsInfoColor"
+        android:text="@string/time_template"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="?attr/textObjectsInfoColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/routeCounterTV"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/routeStartTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="12sp"
+        android:textColor="?attr/textOnItemsColor"
+        android:text="@string/route_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/routeStartLocationCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/routeStartTV">
+
+        <FrameLayout
+            android:id="@+id/routeStartLocationFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_route_start_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/routeStartLocationIV"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@string/car_image"
+                app:srcCompat="@drawable/icon_location"
+                app:tint="@color/material_theme_sys_light_on_primary" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/routeStartLocationTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="?attr/textObjectsInfoColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/routeStartLocationFL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/routeStartLocationFL"
+            app:layout_constraintTop_toTopOf="@+id/routeStartLocationFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/averageSpeedCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/overallTimeCL"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/routeStartLocationCL">
+
+        <TextView
+            android:id="@+id/averageSpeedTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/average_speed"
+            android:textColor="?attr/textOnItemsColor"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/dashboardIconFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_dashboard_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/averageSpeedTV">
+
+            <ImageView
+                android:id="@+id/dashboardIconIV"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@string/dashboard_image"
+                app:srcCompat="@drawable/icon_dashboard"
+                app:tint="?attr/dashboardIconColor" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/averageSpeedTemplateTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/speed_template"
+            android:textColor="?attr/textObjectsInfoColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/dashboardIconFL"
+            app:layout_constraintStart_toEndOf="@+id/dashboardIconFL"
+            app:layout_constraintTop_toTopOf="@+id/dashboardIconFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/overallTimeCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/averageSpeedCL"
+        app:layout_constraintTop_toBottomOf="@id/routeStartLocationCL">
+
+        <TextView
+            android:id="@+id/overallTimeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/overall_time"
+            android:textColor="?attr/textOnItemsColor"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/timeIconFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_time_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/overallTimeTV">
+
+            <ImageView
+                android:id="@+id/timeIconIV"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@string/dashboard_image"
+                app:srcCompat="@drawable/icon_clock"
+                app:tint="?attr/timeIconColor" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/overallTimeTemplateTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/time_template"
+            android:textColor="?attr/textObjectsInfoColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/timeIconFL"
+            app:layout_constraintStart_toEndOf="@+id/timeIconFL"
+            app:layout_constraintTop_toTopOf="@+id/timeIconFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/routeEndTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="12sp"
+        android:textColor="?attr/textOnItemsColor"
+        android:text="@string/route_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overallTimeCL" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/routeEndLocationCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/routeEndTV">
+
+        <FrameLayout
+            android:id="@+id/routeEndLocationFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_route_end_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/routeEndLocationIV"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@string/car_image"
+                app:srcCompat="@drawable/icon_location"
+                app:tint="@color/material_theme_sys_light_on_primary" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/routeEndLocationTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="?attr/textObjectsInfoColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/routeEndLocationFL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/routeEndLocationFL"
+            app:layout_constraintTop_toTopOf="@+id/routeEndLocationFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

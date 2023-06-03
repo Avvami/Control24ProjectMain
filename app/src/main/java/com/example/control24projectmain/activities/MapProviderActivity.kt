@@ -3,7 +3,6 @@ package com.example.control24projectmain.activities
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.control24projectmain.HYBRID
