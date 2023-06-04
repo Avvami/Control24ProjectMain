@@ -74,6 +74,8 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
+import kotlin.math.log2
 
 class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
@@ -280,7 +282,9 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     isPeriodCheckedRB = periodInfoRB
 
                     dateChangeCL.isClickable = true
+                    dateChangeCL.background = ContextCompat.getDrawable(this, R.drawable.btn_calendars_ripple_color)
                     dateCL.isClickable = false
+                    dateCL.background = null
                     dateTopTV.text = resources.getString(R.string.pick_range)
                     if (startCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
                         dateBottomTV.text = resources.getString(R.string.range_template, formattedDate(startCalendar), formattedDate(endCalendar))
@@ -289,6 +293,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     }
                     leftArrowCL.visibility = View.GONE
                     rightArrowCL.visibility = View.GONE
+
+                    routesRV.adapter = null
 
                     mapObjectsColl.clear()
                     if (startCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
@@ -303,12 +309,16 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     dayInfoRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
                     isPeriodCheckedRB = dayInfoRB
 
+                    dateChangeCL.background = null
                     dateChangeCL.isClickable = false
                     dateCL.isClickable = true
+                    dateCL.background = ContextCompat.getDrawable(this, R.drawable.btn_calendars_ripple_color)
                     dateTopTV.text = formattedDate(calendar)
                     dateBottomTV.text = formattedDayOfWeek(calendar)
                     leftArrowCL.visibility = View.VISIBLE
                     rightArrowCL.visibility = View.VISIBLE
+
+                    routesRV.adapter = null
 
                     mapObjectsColl.clear()
                     val (calendar1, calendar2) = getCalendars(calendar)
@@ -318,6 +328,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         }
 
         leftArrowCL.setOnClickListener {
+            routesRV.adapter = null
+
             calendar.add(Calendar.DATE, -1)
             dateTopTV.text = formattedDate(calendar)
             dateBottomTV.text = formattedDayOfWeek(calendar)
@@ -332,6 +344,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 calendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
                 calendar.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)) {
                 return@setOnClickListener
+            } else {
+                routesRV.adapter = null
             }
             calendar.add(Calendar.DATE, 1)
             dateTopTV.text = formattedDate(calendar)
@@ -470,7 +484,6 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 val httpResponseSecond = HttpRequestHelper.makeHttpRequest(
                     "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate"
                 )
-                Log.i("HDFJSDHFK", "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate")
                 routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
             } catch (e: HttpRequestHelper.BadRequestException) {
                 StyleableToast.makeText(
@@ -540,7 +553,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         var currentPoints = mutableListOf<com.example.control24projectmain.Point>()
 
         for (point in data.points) {
-            if (currentPoints.isEmpty() || (/*point.lat != currentPoints.last().lat || point.lon != currentPoints.last().lon*/point.speed != 0)) {
+            if (currentPoints.isEmpty() || (point.speed != 0)) {
                 currentPoints.add(point)
             } else {
                 routesList.add(Data(currentPoints.toList()))
@@ -559,7 +572,8 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val drivingOptions = DrivingOptions().apply {
             avoidPoorConditions = false
             avoidUnpaved = false
-            avoidTolls =false
+            avoidTolls = false
+            routesCount = 1
         }
         val vehicleOptions = VehicleOptions()
         val requestPoints = ArrayList<RequestPoint>()
@@ -593,16 +607,32 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             (firstPoint.lon + lastPoint.lon) / 2
         )
 
+        val screenWidth = yandexMVRoute.width
+        val screenHeight = yandexMVRoute.height
+
+        val padding = 250
+
+        val latDiff = abs(firstPoint.lat - lastPoint.lat)
+        val lonDiff = abs(firstPoint.lon - lastPoint.lon)
+
+        val zoomLevel = calculateZoomLevel(screenWidth - (2 * padding), screenHeight - (2 * padding), latDiff, lonDiff)
+
         yandexMVRoute.map.move(
-            CameraPosition(routeCenter, 12.0f, 0.0f, 0.0f),
+            CameraPosition(routeCenter, zoomLevel, 0.0f, 0.0f),
             Animation(Animation.Type.SMOOTH, 1f),
             null
         )
     }
 
+    private fun calculateZoomLevel(screenWidth: Int, screenHeight: Int, latDiff: Double, lonDiff: Double): Float {
+        val zoomScale = minOf(screenWidth.toDouble() / lonDiff, screenHeight.toDouble() / latDiff)
+        val zoomLevel = (log2(zoomScale) - 1).toFloat()
+        return maxOf(0f, zoomLevel)
+    }
+
     override fun onDrivingRoutes(routes: MutableList<DrivingRoute>) {
-        for (route in routes) {
-            ///mapObjectsColl.addPolyline(route.geometry)
+        if (routes.isNotEmpty()) {
+            val route = routes[0]
             val polylineMapObject = mapObjectsColl.addPolyline(route.geometry)
             polylineMapObject.setStrokeColor(MaterialColors.getColor(this@RouteActivity, R.attr.polylineColor, Color.BLUE))
         }

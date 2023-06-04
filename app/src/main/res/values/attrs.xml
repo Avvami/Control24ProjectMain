@@ -103,4 +103,7 @@
     <attr name="cardObjectRouteUnselectedColor" format="color"/>
 
     <attr name="polylineColor" format="color"/>
+
+
+    <attr name="buttonCalendarRippleColor" format="color"/>
 </resources>

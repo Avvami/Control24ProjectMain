@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +40,8 @@ class ObjectRoutesAdapter(
         val averageSpeedTV: TextView = itemView.findViewById(R.id.averageSpeedTemplateTV)
         val overallTimeTV: TextView = itemView.findViewById(R.id.overallTimeTemplateTV)
         val mileageTemplateTV: TextView = itemView.findViewById(R.id.mileageTemplateTV)
+        val routeStartLocationPB: ProgressBar = itemView.findViewById(R.id.routeStartLocationPB)
+        val routeEndLocationPB: ProgressBar = itemView.findViewById(R.id.routeEndLocationPB)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectsListViewHolder {
@@ -71,6 +74,8 @@ class ObjectRoutesAdapter(
         holder.mileageTemplateTV.text = context.resources.getString(R.string.mileage_template, mileage)
 
         lifecycleScope.launch {
+            holder.routeStartLocationPB.visibility = View.VISIBLE
+            holder.routeEndLocationPB.visibility = View.VISIBLE
             try {
                 val startLocation = app.coroutineGeocode(currentItem.points.first().lat, currentItem.points.first().lon)
                 val endLocation = app.coroutineGeocode(currentItem.points.last().lat, currentItem.points.last().lon)
@@ -83,6 +88,8 @@ class ObjectRoutesAdapter(
                 holder.routeEndLocationTV.text = "Ошибка геокодирования"
                 Log.i("GEOCODER ERROR", "Failed to get address", e)
             }
+            holder.routeStartLocationPB.visibility = View.INVISIBLE
+            holder.routeEndLocationPB.visibility = View.INVISIBLE
         }
 
         holder.itemView.setOnClickListener {

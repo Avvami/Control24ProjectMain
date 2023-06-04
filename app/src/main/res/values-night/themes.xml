@@ -137,6 +137,8 @@
 
         <item name="polylineColor">@color/material_theme_sys_dark_primary</item>
 
+        <item name="buttonCalendarRippleColor">@color/material_theme_ref_secondary_secondary30</item>
+
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
