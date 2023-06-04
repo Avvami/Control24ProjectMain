@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.control24projectmain.CombinedResponse
 import com.example.control24projectmain.MapsConfig
 import com.example.control24projectmain.R
+import com.example.control24projectmain.SCHEME
 import com.example.control24projectmain.SharedViewModel
 import com.example.control24projectmain.UserManager
 import com.example.control24projectmain.databinding.FragmentMapBinding
@@ -162,15 +163,19 @@ class MapFragment : Fragment() {
         window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.black_10p)
 
         // Set the system UI visibility to the dark
-        if (!isDarkModeEnabled(requireContext())) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                window.insetsController?.setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        if (UserManager.getMapType(requireContext()) != SCHEME && UserManager.getSelectedMap(requireContext()) == osmMap) {
+            // Do nothing
+        } else {
+            if (!isDarkModeEnabled(requireContext())) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                }
             }
         }
     }

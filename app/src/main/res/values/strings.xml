@@ -145,6 +145,8 @@
     <string name="route_start">Начало:</string>
     <string name="average_speed">Средняя скорость:</string>
     <string name="overall_time">Время в пути:</string>
+    <string name="mileage">Расстояние:</string>
+    <string name="mileage_template">%sкм</string>
     <string name="route_end">Конец:</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>

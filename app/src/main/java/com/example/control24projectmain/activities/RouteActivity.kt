@@ -1,7 +1,11 @@
 package com.example.control24projectmain.activities
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PointF
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -55,6 +59,7 @@ import com.yandex.mapkit.directions.driving.DrivingSession
 import com.yandex.mapkit.directions.driving.VehicleOptions
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.Error
@@ -466,9 +471,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate"
                 )
                 Log.i("HDFJSDHFK", "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate")
-                //Log.i("HDFJSDHFK", httpResponseSecond)
                 routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
-                //Log.i("HDFJSDHFK", routePoints.toString())
             } catch (e: HttpRequestHelper.BadRequestException) {
                 StyleableToast.makeText(
                     this@RouteActivity,
@@ -499,11 +502,10 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 ).show()
             } finally {
                 if (routePoints != null && routePoints!!.points.size > 1) {
-                    submitRequest()
+                    submitRequest(routePoints!!)
                     progressBar.visibility = View.GONE
 
                     val routes = fillRoutes(routePoints!!)
-                    //Log.i("HDFJSDHFK", fillRoutes(routePoints!!).toString())
 
                     // Filter the data to get only Data objects with more than 1 Point
                     val filteredData = routes.route.filter { data ->
@@ -515,6 +517,18 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     routesRV.setHasFixedSize(true)
 
                     val adapter = ObjectRoutesAdapter(this@RouteActivity, filteredData, lifecycleScope)
+                    adapter.setOnItemClickListener(object : ObjectRoutesAdapter.OnItemClickListener {
+                        override fun onItemClick(position: Int, item: List<Data>, isFocused: Boolean) {
+                            if (isFocused) {
+                                val currentItem = item[position]
+                                submitRequest(currentItem)
+                            } else {
+                                submitRequest(routePoints!!)
+                            }
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                        }
+                    })
+
                     routesRV.adapter = adapter
                 }
             }
@@ -526,7 +540,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         var currentPoints = mutableListOf<com.example.control24projectmain.Point>()
 
         for (point in data.points) {
-            if (currentPoints.isEmpty() || (point.lat != currentPoints.last().lat || point.lon != currentPoints.last().lon)) {
+            if (currentPoints.isEmpty() || (/*point.lat != currentPoints.last().lat || point.lon != currentPoints.last().lon*/point.speed != 0)) {
                 currentPoints.add(point)
             } else {
                 routesList.add(Data(currentPoints.toList()))
@@ -541,29 +555,37 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         return Routes(routesList)
     }
 
-    private fun submitRequest() {
-        val drivingOptions = DrivingOptions()
+    private fun submitRequest(routePoints: Data) {
+        val drivingOptions = DrivingOptions().apply {
+            avoidPoorConditions = false
+            avoidUnpaved = false
+            avoidTolls =false
+        }
         val vehicleOptions = VehicleOptions()
         val requestPoints = ArrayList<RequestPoint>()
         mapObjectsColl.clear()
 
-        for (point in routePoints?.points!!) {
+        for (point in routePoints.points) {
             val requestPoint = RequestPoint(Point(point.lat, point.lon), RequestPointType.WAYPOINT, null)
             requestPoints.add(requestPoint)
         }
 
         drivingSession = drivingRouter.requestRoutes(requestPoints, drivingOptions, vehicleOptions, this)
 
-        val firstPoint = routePoints?.points!!.first()
+        val firstPoint = routePoints.points.first()
         firstPoint.let {
             val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
-            placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))
+            val drawable = ContextCompat.getDrawable(this, R.drawable.icon_route_start)
+            val bitmap = createBitmapFromDrawable(drawable!!)
+            placemark.setIcon(ImageProvider.fromBitmap(bitmap), IconStyle().setAnchor(PointF(.5f, .8f)))
         }
 
-        val lastPoint = routePoints?.points!!.last()
+        val lastPoint = routePoints.points.last()
         lastPoint.let {
             val placemark = mapObjectsColl.addPlacemark(Point(it.lat, it.lon))
-            placemark.setIcon(ImageProvider.fromResource(this, R.drawable.icon))
+            val drawable = ContextCompat.getDrawable(this, R.drawable.icon_route_end)
+            val bitmap = createBitmapFromDrawable(drawable!!)
+            placemark.setIcon(ImageProvider.fromBitmap(bitmap), IconStyle().setAnchor(PointF(.5f, .8f)))
         }
 
         val routeCenter = Point(
@@ -580,7 +602,9 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
 
     override fun onDrivingRoutes(routes: MutableList<DrivingRoute>) {
         for (route in routes) {
-            mapObjectsColl.addPolyline(route.geometry)
+            ///mapObjectsColl.addPolyline(route.geometry)
+            val polylineMapObject = mapObjectsColl.addPolyline(route.geometry)
+            polylineMapObject.setStrokeColor(MaterialColors.getColor(this@RouteActivity, R.attr.polylineColor, Color.BLUE))
         }
     }
 
@@ -684,5 +708,24 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             val (calendar1, calendar2) = getCalendarsRange(selectedStartCalendar, selectedEndCalendar)
             requestToDatabase(carId, formattedDateToDatabase(calendar1), formattedDateToDatabase(calendar2), progressBar)
         }
+    }
+
+    private fun createBitmapFromDrawable(drawable: Drawable): Bitmap {
+        // Get the intrinsic dimensions of the drawable
+        val width = drawable.intrinsicWidth
+        val height = drawable.intrinsicHeight
+
+        // Create a bitmap with the intrinsic dimensions and ARGB_8888 configuration
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        // Set the bounds of the drawable to match the bitmap dimensions
+        drawable.setBounds(0, 0, width, height)
+
+        // Draw the drawable onto the canvas
+        drawable.draw(canvas)
+
+        // Return the generated bitmap
+        return bitmap
     }
 }

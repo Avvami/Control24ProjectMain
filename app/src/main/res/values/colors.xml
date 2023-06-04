@@ -138,6 +138,7 @@
     <color name="material_theme_ref_primary_primary50">#5770D4</color>
     <color name="material_theme_ref_primary_primary60">#718AF0</color>
     <color name="material_theme_ref_primary_primary70">#92A6FF</color>
+    <color name="material_theme_ref_primary_primary75">#A0B1FF</color>
     <color name="material_theme_ref_primary_primary80">#B7C4FF</color>
     <color name="material_theme_ref_primary_primary90">#DDE1FF</color>
     <color name="material_theme_ref_primary_primary95">#EFEFFF</color>

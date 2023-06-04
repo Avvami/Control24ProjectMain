@@ -5,7 +5,7 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="16dp"
     android:elevation="@dimen/button_elevation"
-    android:background="@drawable/card_objects_route_ripple_color"
+    android:background="@drawable/card_objects_route_unselected_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -217,6 +217,63 @@
             app:layout_constraintTop_toTopOf="@+id/timeIconFL" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mileageCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/overallTimeCL"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/averageSpeedCL">
+
+        <TextView
+            android:id="@+id/mileageTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/mileage"
+            android:textColor="?attr/textOnItemsColor"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/mileageFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_mileage_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mileageTV">
+
+            <ImageView
+                android:id="@+id/mileageIconIV"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@string/dashboard_image"
+                app:srcCompat="@drawable/icon_direction_board"
+                app:tint="@color/material_theme_sys_light_on_error_container" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/mileageTemplateTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/mileage_template"
+            android:textColor="?attr/textObjectsInfoColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/mileageFL"
+            app:layout_constraintStart_toEndOf="@+id/mileageFL"
+            app:layout_constraintTop_toTopOf="@+id/mileageFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/routeEndTV"
         android:layout_width="wrap_content"
@@ -228,7 +285,7 @@
         android:textColor="?attr/textOnItemsColor"
         android:text="@string/route_end"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/overallTimeCL" />
+        app:layout_constraintTop_toBottomOf="@id/mileageCL" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/routeEndLocationCL"

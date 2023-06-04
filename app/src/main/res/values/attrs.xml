@@ -98,4 +98,9 @@
     <attr name="textSecondaryColor" format="color"/>
 
     <attr name="dividerColor" format="color"/>
+
+    <attr name="cardObjectRouteSelectedColor" format="color"/>
+    <attr name="cardObjectRouteUnselectedColor" format="color"/>
+
+    <attr name="polylineColor" format="color"/>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.control24projectmain
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.util.Log
@@ -21,9 +20,11 @@ class ObjectRoutesAdapter(
     ) : RecyclerView.Adapter<ObjectRoutesAdapter.ObjectsListViewHolder>() {
 
     private var listener: OnItemClickListener? = null
+    private var selectedItemPosition = -1
+    private var previousSelectedItem: View? = null
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int, size: Int)
+        fun onItemClick(position: Int, item: List<Data>, isFocused: Boolean)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -37,7 +38,7 @@ class ObjectRoutesAdapter(
         val routeEndLocationTV: TextView = itemView.findViewById(R.id.routeEndLocationTV)
         val averageSpeedTV: TextView = itemView.findViewById(R.id.averageSpeedTemplateTV)
         val overallTimeTV: TextView = itemView.findViewById(R.id.overallTimeTemplateTV)
-        val routeStartTV: TextView = itemView.findViewById(R.id.routeStartTV)
+        val mileageTemplateTV: TextView = itemView.findViewById(R.id.mileageTemplateTV)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectsListViewHolder {
@@ -60,27 +61,14 @@ class ObjectRoutesAdapter(
             endTime
         )
 
-        Log.i("HDFJSDHFK", context.resources.getString(
-            R.string.range_template,
-            startTime,
-            endTime
-        ))
-
         var averageSpeed = 0
         for (point in currentItem.points) {
             averageSpeed += point.speed
         }
         holder.averageSpeedTV.text = context.resources.getString(R.string.speed_template, (averageSpeed / currentItem.points.size))
-
         holder.overallTimeTV.text = app.getTimeInterval(startTime, endTime)
-
-        /*if (position < currentItem.points.size - 1) {
-            val totalDistance = calculateTotalDistance(currentItem.points.subList(0, position + 2))
-            holder.routeStartTV.text = "Total distance: $totalDistance km"
-        } else {
-            val totalDistance = calculateTotalDistance(currentItem.points)
-            holder.routeStartTV.text = "Final total distance: $totalDistance km"
-        }*/
+        val mileage = String.format("%.2f", calculateMileage(currentItem.points))
+        holder.mileageTemplateTV.text = context.resources.getString(R.string.mileage_template, mileage)
 
         lifecycleScope.launch {
             try {
@@ -98,7 +86,28 @@ class ObjectRoutesAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            listener?.onItemClick(position, item.size)
+            selectedItemPosition = if (selectedItemPosition == position) {
+                -1
+            } else {
+                position
+            }
+            val isFocused = selectedItemPosition == position
+
+            // Update the background of the previously selected item
+            if (previousSelectedItem != null) {
+                previousSelectedItem?.setBackgroundResource(R.drawable.card_objects_route_unselected_color)
+            }
+
+            if (isFocused) {
+                holder.itemView.setBackgroundResource(R.drawable.card_objects_route_selected_color)
+            } else {
+                holder.itemView.setBackgroundResource(R.drawable.card_objects_route_unselected_color)
+            }
+
+            // Store the reference to the current item view as the previously selected item view
+            previousSelectedItem = holder.itemView
+
+            listener?.onItemClick(selectedItemPosition, item, isFocused)
         }
     }
 
@@ -106,19 +115,23 @@ class ObjectRoutesAdapter(
         return item.size
     }
 
-    private fun calculateTotalDistance(points: List<Point>): Float {
+    private fun calculateMileage(points: List<Point>): Float {
         var totalDistance = 0f
-        for (i in 1 until points.size) {
-            val p1 = points[i - 1]
-            val p2 = points[i]
-            totalDistance += getDistance(p1.lat, p1.lon, p2.lat, p2.lon)
-        }
-        return totalDistance
-    }
 
-    private fun getDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
-        val results = FloatArray(1)
-        Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-        return results[0] // distance in meters
+        for (i in 0 until points.size - 1) {
+            val startLocation = Location("start").apply {
+                latitude = points[i].lat
+                longitude = points[i].lon
+            }
+
+            val endLocation = Location("end").apply {
+                latitude = points[i + 1].lat
+                longitude = points[i + 1].lon
+            }
+
+            totalDistance += startLocation.distanceTo(endLocation) / 1000  // Convert to km
+        }
+
+        return totalDistance
     }
 }
