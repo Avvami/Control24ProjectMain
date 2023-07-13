@@ -141,6 +141,7 @@
     <string name="pick_range">Выберите диапазон</string>
     <string name="range">....</string>
     <string name="range_template">%s - %s</string>
+    <string name="no_period_data">Нет данных за данный период</string>
     <string name="counter">0</string>
     <string name="route_start">Начало:</string>
     <string name="average_speed">Средняя скорость:</string>
@@ -149,7 +150,7 @@
     <string name="mileage_template">%sкм</string>
     <string name="route_end">Конец:</string>
 
-    <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
+    <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

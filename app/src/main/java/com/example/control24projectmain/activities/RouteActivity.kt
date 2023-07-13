@@ -94,6 +94,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
     private lateinit var startCalendar: Calendar
     private lateinit var endCalendar: Calendar
     private lateinit var routesRV: RecyclerView
+    private lateinit var noDataTV: TextView
     private var routePoints: Data? = null
 
     @SuppressLint("ClickableViewAccessibility")
@@ -128,6 +129,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val dateCL = findViewById<ConstraintLayout>(R.id.dateCL)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar3)
         routesRV = findViewById(R.id.routesRV)
+        noDataTV = findViewById(R.id.noDataTV)
 
         if (UserManager.getZoomControlsState(this)) {
             binding.zoomCL.visibility = View.VISIBLE
@@ -295,6 +297,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     rightArrowCL.visibility = View.GONE
 
                     routesRV.adapter = null
+                    noDataTV.visibility = View.GONE
 
                     mapObjectsColl.clear()
                     if (startCalendar.get(Calendar.DATE) != Calendar.getInstance().get(Calendar.DATE)) {
@@ -319,6 +322,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     rightArrowCL.visibility = View.VISIBLE
 
                     routesRV.adapter = null
+                    noDataTV.visibility = View.GONE
 
                     mapObjectsColl.clear()
                     val (calendar1, calendar2) = getCalendars(calendar)
@@ -471,6 +475,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
     }
 
     private fun requestToDatabase(carId: Int, startDate: String, endDate: String, progressBar: ProgressBar) {
+        noDataTV.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             try {
@@ -484,6 +489,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 val httpResponseSecond = HttpRequestHelper.makeHttpRequest(
                     "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate"
                 )
+                Log.i("HDFJSDHFK", "http://91.193.225.170:8012/route2&${firstResponseData.key}&$carId&$startDate&$endDate")
                 routePoints = gson.fromJson(httpResponseSecond, Data::class.java)
             } catch (e: HttpRequestHelper.BadRequestException) {
                 StyleableToast.makeText(
@@ -517,6 +523,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                 if (routePoints != null && routePoints!!.points.size > 1) {
                     submitRequest(routePoints!!)
                     progressBar.visibility = View.GONE
+                    noDataTV.visibility = View.GONE
 
                     val routes = fillRoutes(routePoints!!)
 
@@ -543,6 +550,10 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
                     })
 
                     routesRV.adapter = adapter
+                } else {
+                    routesRV.adapter = null
+                    progressBar.visibility = View.GONE
+                    noDataTV.visibility = View.VISIBLE
                 }
             }
         }
@@ -583,6 +594,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             val requestPoint = RequestPoint(Point(point.lat, point.lon), RequestPointType.WAYPOINT, null)
             requestPoints.add(requestPoint)
         }
+        Log.i("HDFJSDHFK", requestPoints.toString())
 
         drivingSession = drivingRouter.requestRoutes(requestPoints, drivingOptions, vehicleOptions, this)
 
@@ -607,7 +619,7 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
             (firstPoint.lon + lastPoint.lon) / 2
         )
 
-        val screenWidth = yandexMVRoute.width
+        /*val screenWidth = yandexMVRoute.width
         val screenHeight = yandexMVRoute.height
 
         val padding = 250
@@ -615,20 +627,20 @@ class RouteActivity: AppCompatActivity(), DrivingSession.DrivingRouteListener {
         val latDiff = abs(firstPoint.lat - lastPoint.lat)
         val lonDiff = abs(firstPoint.lon - lastPoint.lon)
 
-        val zoomLevel = calculateZoomLevel(screenWidth - (2 * padding), screenHeight - (2 * padding), latDiff, lonDiff)
+        val zoomLevel = calculateZoomLevel(screenWidth - (2 * padding), screenHeight - (2 * padding), latDiff, lonDiff)*/
 
         yandexMVRoute.map.move(
-            CameraPosition(routeCenter, zoomLevel, 0.0f, 0.0f),
+            CameraPosition(routeCenter, 12f, 0.0f, 0.0f),
             Animation(Animation.Type.SMOOTH, 1f),
             null
         )
     }
 
-    private fun calculateZoomLevel(screenWidth: Int, screenHeight: Int, latDiff: Double, lonDiff: Double): Float {
+    /*private fun calculateZoomLevel(screenWidth: Int, screenHeight: Int, latDiff: Double, lonDiff: Double): Float {
         val zoomScale = minOf(screenWidth.toDouble() / lonDiff, screenHeight.toDouble() / latDiff)
         val zoomLevel = (log2(zoomScale) - 1).toFloat()
         return maxOf(0f, zoomLevel)
-    }
+    }*/
 
     override fun onDrivingRoutes(routes: MutableList<DrivingRoute>) {
         if (routes.isNotEmpty()) {

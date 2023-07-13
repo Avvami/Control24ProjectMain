@@ -243,6 +243,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dividerBottom" />
 
+    <TextView
+        android:id="@+id/noDataTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/no_period_data"
+        android:fontFamily="@font/roboto"
+        android:textColor="?attr/textOnItemsColor"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerBottom" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/routesRV"
         android:layout_width="match_parent"
