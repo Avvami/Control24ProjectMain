@@ -65,13 +65,10 @@ class LoginActivity : AppCompatActivity() {
                     val login: String = binding.loginET.text.toString().trim {it <= ' '}
                     val password: String = binding.passwordET.text.toString().trim {it <= ' '}
 
-                    val progressBar = binding.progressBar
-                    progressBar.isIndeterminate = true
-
                     // Check if user has an internet connection or not
                     if (InternetConnectionCheck.isInternetConnected(this@LoginActivity)) {
                         // If connected to the network then do login
-                        performLogin(progressBar, login, password)
+                        performLogin(login, password)
                     } else {
                         // Show dialog window if not connected to the network
                         val dialogBinding = layoutInflater.inflate(R.layout.alert_dialog_view, null)
@@ -87,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
                             if (InternetConnectionCheck.isInternetConnected(this@LoginActivity)) {
                                 // Dismiss the dialog and perform login
                                 dialog.dismiss()
-                                performLogin(progressBar, login, password)
+                                performLogin(login, password)
                             } else {
                                 // If no internet connection then show dialog again
                                 dialog.dismiss()
@@ -140,13 +137,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Make an HTTP request to the Database using coroutines
-    private fun performLogin (progressBar: ProgressBar, login: String, password: String) {
+    private fun performLogin (login: String, password: String) {
         coroutineScope.launch {
-            progressBar.visibility = View.VISIBLE
-            binding.loginTV.visibility = View.INVISIBLE
-            progressBar.isIndeterminate = false
-            progressBar.progress = 0
-
             try {
                 // Save login cred to the UserManager object
                 HttpRequestHelper.makeHttpRequest("http://91.193.225.170:8012/login2&$login&$password")
@@ -193,12 +185,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT,
                     R.style.CustomStyleableToast
                 ).show()
-            } finally {
-                // Hide the progressBar
-                progressBar.visibility = View.INVISIBLE
-                binding.loginTV.visibility = View.VISIBLE
-                progressBar.progress = 0
-            }
+            } finally { }
         }
     }
 }

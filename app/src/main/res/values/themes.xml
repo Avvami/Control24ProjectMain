@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Control24ProjectMain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Control24ProjectMain" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
@@ -22,15 +22,14 @@
         <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
         <item name="android:colorBackground">@color/md_theme_light_background</item>
         <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
+        <item name="colorOutline">@color/md_theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorSurface">@color/md_theme_light_surface</item>
         <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
         <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_light_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
-
 </style>
     
     <style name="AppTheme" parent="Theme.Control24ProjectMain">
@@ -58,7 +57,6 @@
         <item name="toastBackgroundColor">@color/material_theme_sys_light_primary</item>
         <item name="toastTextColor">@color/material_theme_sys_light_background</item>
 
-        <item name="textOnBackgroundColor">@color/material_theme_sys_light_background</item>
         <item name="textOnItemsColor">@color/material_theme_sys_light_on_background</item>
         <item name="textObjectsInfoColor">@color/material_theme_sys_light_on_surface_variant</item>
 
@@ -69,7 +67,6 @@
         <item name="gradientCenterColor">@color/material_theme_ref_primary_primary50</item>
         <item name="gradientEndColor">@color/material_theme_ref_primary_primary40</item>
 
-        <item name="bottomNavigationBarColor">@color/material_theme_sys_light_primary_container</item>
         <item name="bottomNavigationItemColor">@color/material_theme_sys_light_outline</item>
         <item name="bottomNavigationItemActiveColor">@color/material_theme_sys_light_primary</item>
         <item name="bottomNavigationItemRippleColor">@color/material_theme_ref_primary_primary80</item>
@@ -84,14 +81,9 @@
         <item name="timeIconColor">@color/material_theme_sys_light_surface_variant</item>
         <item name="callButtonRippleColor">@color/material_theme_ref_primary_primary80</item>
 
-        <item name="objectsListItemsColor">@color/material_theme_sys_light_primary_container</item>
-        <item name="objectsListItemsRippleColor">@color/material_theme_ref_primary_primary80</item>
-
         <item name="switchesRippleColor">@color/material_theme_ref_primary_primary70</item>
 
         <item name="backgroundTextTemplateColor">@color/material_theme_sys_light_on_background50p</item>
-
-        <item name="textLinkColor">@color/material_theme_sys_light_primary_container</item>
 
         <item name="placemarkIconBorderColor">@color/material_theme_sys_light_primary</item>
         <item name="placemarkIconBackgroundColor">@color/material_theme_sys_light_background</item>
@@ -101,13 +93,13 @@
 
         <item name="recyclerProgressBarColor">@color/material_theme_sys_light_primary_container</item>
 
-        <item name="trafficBackgroundColor">@color/material_theme_ref_neutral_neutral99_75p</item>
+        <item name="trafficBackgroundColor">@color/material_theme_ref_neutral_neutral99_85p</item>
         <item name="trafficOutlineColor">@color/material_theme_sys_light_outline_variant</item>
         <item name="trafficTextColor">@color/material_theme_sys_light_primary</item>
 
         <item name="collapseBarColor">@color/material_theme_sys_light_primary</item>
 
-        <item name="dialogBackgroundColor">@color/material_theme_surfaces_light_surface3</item>
+        <item name="dialogBackgroundColor">@color/md_theme_light_surface3</item>
 
         <item name="darkEditTextOutlineColor">@color/material_theme_ref_neutral_variant_neutral_variant20</item>
         <item name="darkEditTextOutlineFocusedColor">@color/material_theme_ref_neutral_neutral10</item>
@@ -123,7 +115,7 @@
         <item name="radioButtonTextCheckedColor">@color/material_theme_sys_light_background</item>
         <item name="radioButtonTextUncheckedColor">@color/material_theme_sys_light_on_background</item>
 
-        <item name="backButtonColor">@color/material_theme_ref_neutral_neutral99_75p</item>
+        <item name="backButtonColor">@color/material_theme_ref_neutral_neutral99_85p</item>
 
         <item name="periodInfoButtonColor">@color/material_theme_sys_light_primary</item>
         <item name="periodInfoButtonRippleColor">@color/material_theme_ref_primary_primary50</item>
@@ -137,11 +129,21 @@
 
         <item name="polylineColor">@color/material_theme_sys_light_primary</item>
 
+        <item name="appBackground">@color/md_theme_light_surface</item>
+        <item name="textOnBackgroundColor">@color/md_theme_light_onSurface</item>
+        <!--<item name="bottomNavigationBarColor">@color/md_theme_light_surface1</item>-->
+        <item name="cardItemsColorPrimary">@color/md_theme_light_onSurface</item>
+        <item name="cardItemsColorSecondary">@color/md_theme_light_onSurfaceVariant</item>
+        <item name="cardObjectsListColor">@color/md_theme_light_surface1</item>
+        <item name="cardObjectsListRippleColor">@color/md_theme_light_surface5</item>
+        <item name="settingsDividerColor">@color/md_theme_light_surface1</item>
+        <item name="textLinkColor">@color/md_theme_light_primary</item>
+
         <item name="buttonCalendarRippleColor">@color/material_theme_ref_primary_primary80</item>
 
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:colorEdgeEffect">?attr/overScrollColor</item>
         <item name="android:scrollbarThumbVertical">?attr/scrollVerticalThumbColor</item>
@@ -187,12 +189,6 @@
     <style name="ShapeAppearanceOverlay.Custom.TextInputLayout.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/shape_extra_small</item>
-    </style>
-
-    <style name="MaterialButtonLoginSolidStyle" parent="@style/Widget.MaterialComponents.Button">
-        <item name="backgroundTint">?attr/loginButtonColor</item>
-        <item name="android:background">@drawable/btn_login_ripple_solid_color</item>
-        <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
     </style>
 
     <style name="MaterialButtonInfoSolidStyle" parent="@style/Widget.MaterialComponents.Button">

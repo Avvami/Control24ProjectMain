@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Control24ProjectMain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Control24ProjectMain" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
@@ -22,15 +22,14 @@
         <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
         <item name="android:colorBackground">@color/md_theme_dark_background</item>
         <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorSurface">@color/md_theme_dark_surface</item>
         <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
         <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_dark_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
-
     </style>
 
     <style name="AppTheme" parent="Theme.Control24ProjectMain">
@@ -55,24 +54,22 @@
         <item name="switchThumbColorInactive">@color/material_theme_ref_neutral_variant_neutral_variant70</item>
         <item name="switchTrackColorInactive">@color/material_theme_ref_neutral_variant_neutral_variant50</item>
 
-        <item name="toastBackgroundColor">@color/material_theme_surfaces_dark_surface1</item>
+        <item name="toastBackgroundColor">@color/md_theme_dark_surface1</item>
         <item name="toastTextColor">@color/material_theme_sys_dark_on_background</item>
         <item name="textObjectsInfoColor">@color/material_theme_sys_dark_on_surface_variant</item>
 
-        <item name="textOnBackgroundColor">@color/material_theme_sys_dark_on_background</item>
         <item name="textOnItemsColor">@color/material_theme_sys_dark_on_background</item>
 
         <item name="overScrollColor">@color/material_theme_ref_primary_primary40</item>
-        <item name="scrollVerticalThumbColor">@color/material_theme_surfaces_dark_surface1</item>
+        <item name="scrollVerticalThumbColor">@color/md_theme_dark_surface1</item>
 
-        <item name="gradientStartColor">@color/material_theme_surfaces_dark_surface5</item>
-        <item name="gradientCenterColor">@color/material_theme_surfaces_dark_surface2</item>
+        <item name="gradientStartColor">@color/md_theme_dark_surface5</item>
+        <item name="gradientCenterColor">@color/md_theme_dark_surface2</item>
         <item name="gradientEndColor">@color/material_theme_sys_dark_background</item>
 
-        <item name="bottomNavigationBarColor">@color/material_theme_surfaces_dark_surface5</item>
         <item name="bottomNavigationItemColor">@color/material_theme_sys_dark_outline</item>
         <item name="bottomNavigationItemActiveColor">@color/material_theme_sys_dark_primary</item>
-        <item name="bottomNavigationItemRippleColor">@color/material_theme_surfaces_dark_surface1</item>
+        <item name="bottomNavigationItemRippleColor">@color/md_theme_dark_surface1</item>
 
         <item name="carIconBackgroundColor">@color/material_theme_sys_dark_primary</item>
         <item name="carIconColor">@color/material_theme_sys_dark_background</item>
@@ -84,14 +81,9 @@
         <item name="timeIconColor">@color/material_theme_sys_dark_surface_variant</item>
         <item name="callButtonRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant50</item>
 
-        <item name="objectsListItemsColor">@color/material_theme_surfaces_dark_surface5</item>
-        <item name="objectsListItemsRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant30</item>
-
         <item name="switchesRippleColor">@color/material_theme_ref_neutral_variant_neutral_variant70</item>
 
         <item name="backgroundTextTemplateColor">@color/material_theme_sys_dark_on_background50p</item>
-
-        <item name="textLinkColor">@color/material_theme_sys_dark_primary</item>
 
         <item name="placemarkIconBorderColor">@color/material_theme_sys_dark_primary</item>
         <item name="placemarkIconBackgroundColor">@color/material_theme_sys_dark_background</item>
@@ -101,13 +93,13 @@
 
         <item name="recyclerProgressBarColor">@color/material_theme_sys_dark_on_background</item>
 
-        <item name="trafficBackgroundColor">@color/material_theme_ref_neutral_neutral10_75p</item>
+        <item name="trafficBackgroundColor">@color/material_theme_ref_neutral_neutral10_85p</item>
         <item name="trafficOutlineColor">@color/material_theme_sys_dark_outline_variant</item>
         <item name="trafficTextColor">@color/material_theme_sys_dark_primary</item>
 
         <item name="collapseBarColor">@color/material_theme_sys_dark_primary</item>
 
-        <item name="dialogBackgroundColor">@color/material_theme_surfaces_dark_surface3</item>
+        <item name="dialogBackgroundColor">@color/md_theme_dark_surface3</item>
 
         <item name="darkEditTextOutlineColor">@color/material_theme_ref_neutral_variant_neutral_variant80</item>
         <item name="darkEditTextOutlineFocusedColor">@color/material_theme_ref_neutral_neutral90</item>
@@ -123,7 +115,7 @@
         <item name="radioButtonTextCheckedColor">@color/material_theme_sys_dark_background</item>
         <item name="radioButtonTextUncheckedColor">@color/material_theme_sys_dark_on_background</item>
 
-        <item name="backButtonColor">@color/material_theme_ref_neutral_neutral10_75p</item>
+        <item name="backButtonColor">@color/material_theme_ref_neutral_neutral10_85p</item>
 
         <item name="periodInfoButtonColor">@color/material_theme_sys_dark_primary</item>
         <item name="periodInfoButtonRippleColor">@color/material_theme_ref_primary_primary70</item>
@@ -136,6 +128,16 @@
         <item name="cardObjectRouteUnselectedColor">@color/material_theme_ref_secondary_secondary30</item>
 
         <item name="polylineColor">@color/material_theme_sys_dark_primary</item>
+
+        <item name="appBackground">@color/md_theme_dark_surface</item>
+        <item name="textOnBackgroundColor">@color/md_theme_dark_onSurface</item>
+        <!--<item name="bottomNavigationBarColor">@color/md_theme_dark_surface1</item>-->
+        <item name="cardItemsColorPrimary">@color/md_theme_dark_onSurface</item>
+        <item name="cardItemsColorSecondary">@color/md_theme_dark_onSurfaceVariant</item>
+        <item name="cardObjectsListColor">@color/md_theme_dark_surface1</item>
+        <item name="cardObjectsListRippleColor">@color/md_theme_dark_surface5</item>
+        <item name="settingsDividerColor">@color/md_theme_dark_surface1</item>
+        <item name="textLinkColor">@color/md_theme_dark_primary</item>
 
         <item name="buttonCalendarRippleColor">@color/material_theme_ref_secondary_secondary30</item>
 

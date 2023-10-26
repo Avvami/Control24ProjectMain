@@ -11,4 +11,8 @@
     <dimen name="constraint_buttons_height">52dp</dimen>
     <dimen name="margin_vertical_16dp">16dp</dimen>
     <dimen name="margin_vertical_12dp">12dp</dimen>
+    <dimen name="shape_M3_medium">12dp</dimen>
+    <dimen name="shape_M3_large">16dp</dimen>
+    <dimen name="shape_M3_extraLarge">16dp</dimen>
+    <dimen name="shape_M3_full">1000dp</dimen>
 </resources>

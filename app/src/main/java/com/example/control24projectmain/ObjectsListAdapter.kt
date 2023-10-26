@@ -20,6 +20,7 @@ import com.example.control24projectmain.activities.MainActivity
 import com.example.control24projectmain.activities.RouteActivity
 import com.example.control24projectmain.databinding.EditDialogViewBinding
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +58,6 @@ class ObjectsListAdapter(
     class ObjectsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar4)
         val carNameTV: TextView = itemView.findViewById(R.id.carNameTemplateTV)
-        val carSpeedIV: ImageView = itemView.findViewById(R.id.dashboardIconIV)
         val carSpeedTV: TextView = itemView.findViewById(R.id.speedTemplateTV)
         val carLocationTV: TextView = itemView.findViewById(R.id.locationTemplateTV)
         val carLastTimeUpdateTV: TextView = itemView.findViewById(R.id.timeTemplateTV)
@@ -65,7 +65,7 @@ class ObjectsListAdapter(
         val carTypeTV: TextView = itemView.findViewById(R.id.typeTemplateTV)
         val carCategoryTV: TextView = itemView.findViewById(R.id.categoryTemplateTV)
         val carNumberTV: TextView = itemView.findViewById(R.id.autoNumTemplateTV)
-        val displaySwitch: SwitchMaterial = itemView.findViewById(R.id.mapDisplayMSwitch)
+        val displaySwitch: MaterialSwitch = itemView.findViewById(R.id.mapDisplayMSwitch)
         val downArrow: CheckBox = itemView.findViewById(R.id.downArrow)
         val expandableCL: ConstraintLayout = itemView.findViewById(R.id.expandableCL)
         val driverTV: TextView = itemView.findViewById(R.id.driverTemplateTV)
@@ -89,11 +89,11 @@ class ObjectsListAdapter(
         holder.carNameTV.text = currentItem.name
 
         // Change icon if speed = 0
-        if (currentItem.speed == 0) {
+        /*if (currentItem.speed == 0) {
             holder.carSpeedIV.setImageResource(R.drawable.icon_parking)
         } else {
             holder.carSpeedIV.setImageResource(R.drawable.icon_dashboard)
-        }
+        }*/
         val speed = context.resources.getString(R.string.speed_template, currentItem.speed)
         holder.carSpeedTV.text = speed
 

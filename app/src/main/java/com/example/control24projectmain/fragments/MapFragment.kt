@@ -63,8 +63,8 @@ class MapFragment : Fragment() {
             windowInsets
         }
 
-        val topMargin = binding.trafficIV.marginTop
-        ViewCompat.setOnApplyWindowInsetsListener(binding.trafficIV) { view, windowInsets ->
+        val topMargin = binding.bgLogoLL.marginTop
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bgLogoLL) { view, windowInsets ->
             val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
 
             val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams

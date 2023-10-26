@@ -4,100 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="16dp"
-    android:elevation="@dimen/button_elevation"
+    android:paddingVertical="8dp"
+    android:elevation="1dp"
     android:background="@drawable/card_objects_list_ripple_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/carIconBackgroundFL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/bg_car_icon"
+    <ImageView
+        android:id="@+id/carIconIV"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/car_image"
         app:layout_constraintBottom_toBottomOf="@+id/mapDisplayMSwitch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mapDisplayMSwitch">
+        app:layout_constraintTop_toTopOf="@+id/mapDisplayMSwitch"
+        app:srcCompat="@drawable/icon_car"
+        app:tint="?attr/cardItemsColorPrimary" />
 
-        <ImageView
-            android:id="@+id/carIconIV"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginVertical="4dp"
-            android:contentDescription="@string/car_image"
-            app:srcCompat="@drawable/icon_truck"
-            app:tint="?attr/carIconColor" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/carNameTemplateTV"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:fontFamily="@font/roboto_medium"
-        android:textSize="14sp"
-        android:textColor="?attr/textOnItemsColor"
-        android:text="@string/car_name_template"
-        app:layout_constraintBottom_toBottomOf="@+id/carIconBackgroundFL"
-        app:layout_constraintStart_toEndOf="@+id/carIconBackgroundFL"
-        app:layout_constraintTop_toTopOf="@+id/carIconBackgroundFL" />
+        app:layout_constraintStart_toEndOf="@id/carIconIV"
+        app:layout_constraintTop_toTopOf="@id/carIconIV"
+        app:layout_constraintBottom_toBottomOf="@id/carIconIV">
 
-    <FrameLayout
-        android:id="@+id/dashboardIconBackgroundFL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/bg_dashboard_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/carNameTemplateTV"
-        app:layout_constraintStart_toEndOf="@+id/carNameTemplateTV"
-        app:layout_constraintTop_toTopOf="@+id/carNameTemplateTV">
+        <TextView
+            android:id="@+id/carNameTemplateTV"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/cardItemsColorPrimary"
+            android:text="@string/car_name_template"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/dashboardIconIV"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginVertical="4dp"
-            android:contentDescription="@string/dashboard_image"
-            app:srcCompat="@drawable/icon_dashboard"
-            app:tint="?attr/dashboardIconColor" />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/speedTemplateTV"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/speed_template"
+            android:textColor="?attr/cardItemsColorSecondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/carNameTemplateTV"/>
 
-    <TextView
-        android:id="@+id/speedTemplateTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/speed_template"
-        android:textColor="?attr/textOnItemsColor"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/dashboardIconBackgroundFL"
-        app:layout_constraintEnd_toStartOf="@+id/mapDisplayMSwitch"
-        app:layout_constraintStart_toEndOf="@+id/dashboardIconBackgroundFL"
-        app:layout_constraintTop_toTopOf="@+id/dashboardIconBackgroundFL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/mapDisplayMSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/switches_ripple_effect"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/downArrow"
         app:layout_constraintEnd_toStartOf="@+id/downArrow"
-        app:layout_constraintTop_toTopOf="@+id/downArrow"
-        app:thumbTint="@color/switch_thumb_state_color"
-        app:trackTint="@color/switch_track_state_color"/>
+        app:layout_constraintTop_toTopOf="@+id/downArrow"/>
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <CheckBox
         android:id="@+id/downArrow"
-        android:button="@drawable/arrow_state"
-        android:buttonTint="?attr/textOnItemsColor"
+        android:button="@drawable/arrow_drop_state"
+        android:buttonTint="?attr/cardItemsColorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/switches_ripple_effect"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/expandableCL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -115,47 +86,36 @@
             android:id="@+id/locationCL"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <FrameLayout
-                android:id="@+id/locationIconBackgroundFL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_location_icon"
+            <ImageView
+                android:id="@+id/locationIconIV"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/location_image"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/locationIconIV"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginVertical="4dp"
-                    android:contentDescription="@string/location_image"
-                    app:srcCompat="@drawable/icon_location"
-                    app:tint="?attr/locationIconColor" />
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_location"
+                app:tint="?attr/cardItemsColorPrimary" />
 
             <TextView
                 android:id="@+id/locationTemplateTV"
+                style="@style/TextAppearance.Material3.BodyMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/location_template"
-                android:textColor="?attr/textOnItemsColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorPrimary"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/locationIconBackgroundFL"
+                app:layout_constraintBottom_toBottomOf="@+id/locationIconIV"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/locationIconBackgroundFL"
-                app:layout_constraintTop_toTopOf="@+id/locationIconBackgroundFL" />
+                app:layout_constraintStart_toEndOf="@+id/locationIconIV"
+                app:layout_constraintTop_toTopOf="@+id/locationIconIV" />
 
             <ProgressBar
                 android:id="@+id/progressBar4"
@@ -169,73 +129,60 @@
                 app:layout_constraintTop_toTopOf="@+id/locationTemplateTV" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <FrameLayout
-            android:id="@+id/timeIconBackgroundFL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+        <ImageView
+            android:id="@+id/timeIconIV"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_time_icon"
+            android:contentDescription="@string/dashboard_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationCL">
-
-            <ImageView
-                android:id="@+id/timeIconIV"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginVertical="4dp"
-                android:contentDescription="@string/dashboard_image"
-                app:srcCompat="@drawable/icon_clock"
-                app:tint="?attr/timeIconColor" />
-        </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/locationCL"
+            app:srcCompat="@drawable/icon_clock"
+            app:tint="?attr/cardItemsColorPrimary" />
 
         <TextView
             android:id="@+id/timeTemplateTV"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="@font/roboto_medium"
+            android:layout_marginEnd="16dp"
             android:text="@string/time_template"
-            android:textColor="?attr/textOnItemsColor"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/timeIconBackgroundFL"
+            android:textColor="?attr/cardItemsColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/timeIconIV"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/timeIconBackgroundFL"
-            app:layout_constraintTop_toTopOf="@+id/timeIconBackgroundFL" />
+            app:layout_constraintStart_toEndOf="@+id/timeIconIV"
+            app:layout_constraintTop_toTopOf="@+id/timeIconIV" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ownerCL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeIconBackgroundFL">
+            app:layout_constraintTop_toBottomOf="@+id/timeIconIV">
 
             <TextView
                 android:id="@+id/ownerTV"
+                style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/owner"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/ownerTemplateTV"
+                style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="@font/roboto_light"
                 android:text="@string/owner_template"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="12sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="@+id/ownerTV"
                 app:layout_constraintStart_toStartOf="@+id/ownerTV"
                 app:layout_constraintTop_toBottomOf="@+id/ownerTV" />
@@ -251,25 +198,23 @@
 
             <TextView
                 android:id="@+id/typeTV"
+                style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/type"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/typeTemplateTV"
+                style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="@font/roboto_light"
                 android:text="@string/type_template"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="12sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/typeTV" />
@@ -286,25 +231,23 @@
 
             <TextView
                 android:id="@+id/categoryTV"
+                style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/category"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/categoryTemplateTV"
+                style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="@font/roboto_light"
                 android:text="@string/category_template"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="12sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/categoryTV" />
@@ -320,25 +263,23 @@
 
             <TextView
                 android:id="@+id/autoNumTV"
+                style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/auto_num"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/autoNumTemplateTV"
+                style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="@font/roboto_light"
                 android:text="@string/auto_num_template"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="12sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/autoNumTV" />
@@ -358,8 +299,8 @@
 
             <ImageView
                 android:id="@+id/accountIconIV1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:contentDescription="@string/account_image"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -369,59 +310,66 @@
 
             <TextView
                 android:id="@+id/driverTV"
+                style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/driver"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="14sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintStart_toEndOf="@+id/accountIconIV1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/driverTemplateTV"
+                style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:fontFamily="@font/roboto_light"
                 android:text="@string/driver_template"
-                android:textColor="?attr/textObjectsInfoColor"
-                android:textSize="12sp"
+                android:textColor="?attr/cardItemsColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/accountIconIV1"
                 app:layout_constraintTop_toBottomOf="@+id/driverTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/makeCallButton"
-            style="@style/MaterialButtonOutlinedStyle"
+            style="?attr/materialIconButtonFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:icon="@drawable/icon_call"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:text="@string/make_call"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/categoryCL" />
+            app:layout_constraintTop_toBottomOf="@+id/categoryCL"
+            android:contentDescription="@string/make_call" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/routeMButton"
-            style="@style/MaterialButtonInfoSolidStyle"
+        <Button
+            android:id="@+id/dayRouteMButton"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginBottom="12dp"
-            android:paddingVertical="12dp"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/day_info_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/makeCallButton"
+            tools:ignore="VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/routeMButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="16dp"
             android:text="@string/period_info_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/makeCallButton"
+            app:layout_constraintTop_toBottomOf="@+id/dayRouteMButton"
             tools:ignore="VisualLintButtonSize" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,13 +35,14 @@
 
     <ImageView
         android:id="@+id/staticImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         app:layout_constraintStart_toStartOf="@+id/rotateImage"
         app:layout_constraintEnd_toEndOf="@+id/rotateImage"
         app:layout_constraintTop_toTopOf="@+id/rotateImage"
         app:layout_constraintBottom_toBottomOf="@+id/rotateImage"
-        android:src="@drawable/icon_placemark_truck"
-        android:contentDescription="@string/car_image" />
+        android:src="@drawable/icon_car"
+        android:contentDescription="@string/car_image"
+        app:tint="?attr/placemarkIconColor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

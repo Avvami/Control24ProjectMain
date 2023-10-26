@@ -69,7 +69,7 @@ class SettingsFragment : Fragment() {
         binding.usernameTemplateTV.text = username
 
         // Click on log out button, delete login cred and go to login activity
-        binding.logoutCLButton.setOnClickListener {
+        binding.logoutMButton.setOnClickListener {
             // Clear saved login session and start login screen
             UserManager.clearLoginCredentials(requireContext())
             UserManager.clearExpandedListItem(requireContext())

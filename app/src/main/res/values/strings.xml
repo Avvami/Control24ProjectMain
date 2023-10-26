@@ -18,11 +18,12 @@
     <string name="time_image">Time icon</string>
     <string name="down_arrow_image">Down arrow icon</string>
     <string name="upper_arrow_image">Upper arrow icon</string>
-    <string name="car_name_template">Нет данных</string>
+    <string name="car_name_template">Наименование авто</string>
     <string name="display_on_map">Отобразить на карте</string>
-    <string name="location_template">Нет данных</string>
+    <string name="location_template">Местоположение</string>
     <string name="speed_template">%dкм/ч</string>
-    <string name="time_template">Нет данных</string>
+    <string name="speed">Скорость км/ч</string>
+    <string name="time_template">Дата</string>
     <string name="owner">Владелец</string>
     <string name="owner_template">Нет данных</string>
     <string name="type">Модель</string>
@@ -77,7 +78,7 @@
     <string name="logout">Выйти</string>
     <string name="account_image">Account icon</string>
     <string name="logout_image">Logout icon</string>
-    <string name="general_settings">Основные настройки</string>
+    <string name="general_settings">Общие настройки</string>
     <string name="dark_theme">Настроить ночную тему</string>
     <string name="theme_image">Moon icon</string>
     <string name="theme_state">Состояние</string>
@@ -101,7 +102,7 @@
     <string name="dialog_continue">Продолжить</string>
 
     <!--App Theme Activity-->
-    <string name="theme">Настроить ночную тему</string>
+    <string name="theme">Ночная тема</string>
     <string name="disabled">Выключена</string>
     <string name="enabled">Включена</string>
     <string name="scheduled">По расписанию: %s</string>
@@ -133,6 +134,7 @@
 
     <!--Route Activity-->
     <string name="back_button">Назад</string>
+    <string name="day_info_button">Информация за сутки</string>
     <string name="period_info_button">Информация за период</string>
     <string name="period">За период</string>
     <string name="days">Суточно</string>
@@ -150,7 +152,7 @@
     <string name="mileage_template">%sкм</string>
     <string name="route_end">Конец:</string>
 
-    <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic21pdHRtaXN0ZXIiLCJhIjoiY2xoeWI1bzF3MDlpcjNlczdkenM4Zmk4NyJ9.hrWebSeiZxwWYLGoSPteRg</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -3,6 +3,7 @@ package com.example.control24projectmain.activities
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.control24projectmain.HYBRID
@@ -39,46 +40,43 @@ class MapProviderActivity : AppCompatActivity() {
             }
         }
 
-        val yandexMapsProvider = binding.yandexMapsMRadioButton
-        val osmMapsProvider = binding.osmMapsMRadioButton
+        val yandexMapsProvider = binding.yandexMapsMToggle
+        val osmMapsProvider = binding.osmMapsMToggle
 
         var checkedMapProviderRB = when (UserManager.getSelectedMap(this)) {
             yandexMap -> yandexMapsProvider
             osmMap -> osmMapsProvider
             else -> yandexMapsProvider
         }
-        checkedMapProviderRB.isChecked = true
-        checkedMapProviderRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-        checkedMapProviderRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
+        binding.mapProviderTG.check(checkedMapProviderRB.id)
+        checkedMapProviderRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
 
-        binding.mapProviderRG.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                yandexMapsProvider.id -> {
-                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                    yandexMapsProvider.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    yandexMapsProvider.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-                    checkedMapProviderRB = yandexMapsProvider
-                    UserManager.saveSelectedMap(this, yandexMap)
-                    binding.mapTypeCL.visibility = View.GONE
-                    binding.trafficControlsMCheckBox.visibility = View.VISIBLE
-                }
-                osmMapsProvider.id -> {
-                    checkedMapProviderRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapProviderRB.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                    osmMapsProvider.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    osmMapsProvider.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-                    checkedMapProviderRB = osmMapsProvider
-                    UserManager.saveSelectedMap(this, osmMap)
-                    binding.mapTypeCL.visibility = View.VISIBLE
-                    binding.trafficControlsMCheckBox.visibility = View.GONE
+        binding.mapProviderTG.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    yandexMapsProvider.id -> {
+                        checkedMapProviderRB.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        checkedMapProviderRB = yandexMapsProvider
+                        checkedMapProviderRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
+                        UserManager.saveSelectedMap(this, yandexMap)
+                        binding.mapTypeCL.visibility = View.GONE
+                        binding.trafficControlsMCheckBox.visibility = View.VISIBLE
+                    }
+                    osmMapsProvider.id -> {
+                        checkedMapProviderRB.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        checkedMapProviderRB = osmMapsProvider
+                        checkedMapProviderRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
+                        UserManager.saveSelectedMap(this, osmMap)
+                        binding.mapTypeCL.visibility = View.VISIBLE
+                        binding.trafficControlsMCheckBox.visibility = View.GONE
+                    }
                 }
             }
         }
 
-        val schemeRB = binding.schemeMRadioButton
-        val satelliteRB = binding.satelliteMRadioButton
-        val hybridRD = binding.hybridMRadioButton
+        val schemeRB = binding.schemeMButton
+        val satelliteRB = binding.satelliteMButton
+        val hybridRD = binding.hybridMButton
 
         var checkedMapTypeRB = when (UserManager.getMapType(this)) {
             SCHEME -> schemeRB
@@ -86,36 +84,30 @@ class MapProviderActivity : AppCompatActivity() {
             HYBRID -> hybridRD
             else -> schemeRB
         }
+        binding.layersTG.check(checkedMapTypeRB.id)
+        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
 
-        checkedMapTypeRB.isChecked = true
-        checkedMapTypeRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-        checkedMapTypeRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-
-        binding.layersRG.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                schemeRB.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                    schemeRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    schemeRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-                    checkedMapTypeRB = schemeRB
-                    UserManager.saveMapType(this, SCHEME)
-                }
-                satelliteRB.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                    satelliteRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    satelliteRB.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-                    checkedMapTypeRB = satelliteRB
-                    UserManager.saveMapType(this, SATELLITE)
-                }
-                hybridRD.id -> {
-                    checkedMapTypeRB.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextUncheckedColor, Color.BLACK))
-                    checkedMapTypeRB.typeface = ResourcesCompat.getFont(this, R.font.roboto)
-                    hybridRD.setTextColor(MaterialColors.getColor(this, R.attr.radioButtonTextCheckedColor, Color.BLACK))
-                    hybridRD.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-                    checkedMapTypeRB = hybridRD
-                    UserManager.saveMapType(this, HYBRID)
+        binding.layersTG.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    schemeRB.id -> {
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        checkedMapTypeRB = schemeRB
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
+                        UserManager.saveMapType(this, SCHEME)
+                    }
+                    satelliteRB.id -> {
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        checkedMapTypeRB = satelliteRB
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
+                        UserManager.saveMapType(this, SATELLITE)
+                    }
+                    hybridRD.id -> {
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        checkedMapTypeRB = hybridRD
+                        checkedMapTypeRB.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_check, 0, 0, 0)
+                        UserManager.saveMapType(this, HYBRID)
+                    }
                 }
             }
         }

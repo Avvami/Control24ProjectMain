@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/bg_gradient"
+    android:background="?attr/appBackground"
     tools:context=".activities.AboutAppActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,14 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/companyLogoIVHidden"
+        app:layout_constraintBottom_toBottomOf="@+id/bgLogoLL"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/companyLogoIVHidden">
+        app:layout_constraintTop_toTopOf="@+id/bgLogoLL">
 
         <ImageView
             android:id="@+id/leftArrow"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/left_arrow_image"
             android:foreground="@drawable/oval_ripple_effect"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -31,26 +31,35 @@
 
         <TextView
             android:id="@+id/aboutAppBackTV"
-            style="@style/TextTitleLargeStyle"
+            style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@string/about_app_title"
+            android:textColor="?attr/textOnBackgroundColor"
             app:layout_constraintBaseline_toBaselineOf="@+id/leftArrow"
             app:layout_constraintStart_toEndOf="@+id/leftArrow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/companyLogoIVHidden"
+    <LinearLayout
+        android:id="@+id/bgLogoLL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/company_logo_image"
-        android:src="@drawable/company_logo_small"
-        android:visibility="invisible"
+        android:background="@drawable/bg_view_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/companyLogoIV"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginVertical="6dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/company_logo_image"
+            android:src="@drawable/company_logo_small" />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -60,7 +69,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companyLogoIVHidden">
+        app:layout_constraintTop_toBottomOf="@+id/bgLogoLL">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -68,13 +77,12 @@
 
             <TextView
                 android:id="@+id/appVersionTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/app_version"
-                android:fontFamily="@font/roboto"
-                android:textSize="16sp"
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -82,13 +90,12 @@
 
             <TextView
                 android:id="@+id/appPurposeTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/app_purpose"
-                android:fontFamily="@font/roboto"
-                android:textSize="16sp"
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -97,13 +104,12 @@
 
             <TextView
                 android:id="@+id/yandexConditionsTV"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/yandex_conditions"
-                android:fontFamily="@font/roboto_medium"
-                android:textSize="16sp"
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -111,27 +117,24 @@
 
             <TextView
                 android:id="@+id/yandexConditionsLinkTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/roboto"
+                android:layout_height="wrap_content"
                 android:text="@string/yandex_conditions_link"
                 android:textColor="?attr/textLinkColor"
-                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/yandexConditionsTV"
-                tools:ignore="TextContrastCheck" />
+                app:layout_constraintTop_toBottomOf="@+id/yandexConditionsTV" />
 
             <TextView
                 android:id="@+id/devInfoTV"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/developer_info"
-                android:fontFamily="@font/roboto_medium"
-                android:textSize="16sp"
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -139,13 +142,12 @@
 
             <TextView
                 android:id="@+id/devEmailTV"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/dev_email_text"
-                android:fontFamily="@font/roboto_medium"
-                android:textSize="16sp"
                 android:textColor="?attr/textOnBackgroundColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -153,89 +155,68 @@
 
             <TextView
                 android:id="@+id/devEmailLinkTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/roboto"
                 android:text="@string/dev_email_link"
                 android:textColor="?attr/textLinkColor"
-                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/devEmailTV"
-                tools:ignore="TextContrastCheck" />
+                app:layout_constraintTop_toBottomOf="@+id/devEmailTV" />
 
             <TextView
                 android:id="@+id/devOfficeTV"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/dev_office_text"
                 android:textColor="?attr/textOnBackgroundColor"
-                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/devEmailLinkTV" />
 
             <TextView
                 android:id="@+id/devOfficeLinkTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/roboto"
                 android:text="@string/dev_office_link"
                 android:textColor="?attr/textLinkColor"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/devOfficeTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/devOfficeTV"
-                app:layout_constraintTop_toTopOf="@+id/devOfficeTV"
-                tools:ignore="TextContrastCheck" />
+                app:layout_constraintTop_toTopOf="@+id/devOfficeTV" />
 
             <TextView
                 android:id="@+id/devWebsiteTV"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="16dp"
-                android:fontFamily="@font/roboto_medium"
                 android:text="@string/dev_website_text"
                 android:textColor="?attr/textOnBackgroundColor"
-                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/devOfficeLinkTV" />
+                app:layout_constraintTop_toBottomOf="@+id/devOfficeLinkTV"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/devWebsiteLinkTV"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/roboto"
                 android:text="@string/dev_website_link"
                 android:textColor="?attr/textLinkColor"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/devWebsiteTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/devWebsiteTV"
-                app:layout_constraintTop_toTopOf="@+id/devWebsiteTV"
-                tools:ignore="TextContrastCheck" />
-
-            <ImageView
-                android:id="@+id/companyLogoIV"
-                android:layout_width="wrap_content"
-                android:layout_height="85dp"
-                android:contentDescription="@string/company_logo_image"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/devWebsiteLinkTV"
-                app:srcCompat="@drawable/company_logo_large" />
+                app:layout_constraintTop_toTopOf="@+id/devWebsiteTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

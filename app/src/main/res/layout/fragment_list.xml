@@ -9,26 +9,35 @@
 
     <TextView
         android:id="@+id/objectsListTV"
-        style="@style/TextTitleLargeStyle"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/objects_list"
-        app:layout_constraintBottom_toBottomOf="@+id/companyLogoIV"
+        android:textColor="?attr/textOnBackgroundColor"
+        app:layout_constraintBottom_toBottomOf="@+id/bgLogoLL"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/companyLogoIV"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintTop_toTopOf="@+id/bgLogoLL" />
 
-    <ImageView
-        android:id="@+id/companyLogoIV"
+    <LinearLayout
+        android:id="@+id/bgLogoLL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/company_logo_image"
-        android:src="@drawable/company_logo_small"
+        android:background="@drawable/bg_view_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/companyLogoIV"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginVertical="6dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/company_logo_image"
+            android:src="@drawable/company_logo_small" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -48,11 +57,10 @@
         android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:paddingTop="8dp"
-        android:paddingBottom="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companyLogoIV"
+        app:layout_constraintTop_toBottomOf="@+id/bgLogoLL"
         tools:itemCount="4"
         tools:listitem="@layout/objects_list_brief" />
 
