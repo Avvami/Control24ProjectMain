@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Control 24</string>
-    <string name="company_logo">Control 24 Logo</string>
+    <string name="app_name">Контроль 24</string>
+    <string name="company_logo">Логотип Контроль 24</string>
 
     <!--Auth Screen-->
-    <string name="company_description">GLONASS/GPS transport monitoring and dispatch systems</string>
-    <string name="login_hint">Login</string>
-    <string name="login_hint_error">Login*</string>
-    <string name="password_hint">Password</string>
-    <string name="password_hint_error">Password*</string>
-    <string name="login">Login</string>
-    <string name="help">Help</string>
-    <string name="input_error">Cannot be empty</string>
+    <string name="company_description">Cистемы мониторинга и диспетчеризации транспорта ГЛОНАСС/GPS</string>
+    <string name="login_hint">Логин</string>
+    <string name="login_hint_error">Логин*</string>
+    <string name="password_hint">Пароль</string>
+    <string name="password_hint_error">Пароль*</string>
+    <string name="login">Войти</string>
+    <string name="help">Помощь</string>
+    <string name="input_error">Не может быть пустым</string>
 
 
     <string name="reports_menu">Отчеты</string>
@@ -158,4 +158,5 @@
     <string name="route_end">Конец:</string>
 
     <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
+
 </resources>

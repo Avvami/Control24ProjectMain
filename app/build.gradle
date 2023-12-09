@@ -23,6 +23,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -66,5 +67,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
 }
