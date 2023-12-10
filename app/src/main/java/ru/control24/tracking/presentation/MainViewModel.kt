@@ -9,11 +9,15 @@ import kotlinx.coroutines.launch
 import ru.control24.tracking.domain.auth.AuthInfo
 import ru.control24.tracking.domain.repository.AuthRepository
 import ru.control24.tracking.domain.util.Resource
+import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.AuthState
 
 class MainViewModel(
     private val authRepository: AuthRepository
 ): ViewModel() {
+
+    var startDestination by mutableStateOf(RootNavGraph.AUTH)
+        private set
 
     var authState by mutableStateOf(AuthState())
         private set
@@ -35,6 +39,7 @@ class MainViewModel(
                     }
                     is Resource.Success -> {
                         authInfo = result.data
+                        startDestination = RootNavGraph.HOME
                     }
                 }
             }

@@ -44,7 +44,8 @@ import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 @Composable
 fun AuthScreen(
     uiEvent: (UIEvent) -> Unit,
-    authState: AuthState
+    authState: AuthState,
+    navigateToHelpScreen: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
 
@@ -56,7 +57,7 @@ fun AuthScreen(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navigateToHelpScreen() }) {
                         Icon(painter = painterResource(id = R.drawable.icon_help_fill0), contentDescription = stringResource(id = R.string.help))
                     }
                 }
