@@ -157,6 +157,11 @@
 
     <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
 
+    <!--HomeScreen-->
+    <string name="objects">List</string>
+    <string name="map">Map</string>
+    <string name="settings">Settings</string>
+
     <!--Descriptions-->
     <string name="back">Back</string>
     <string name="company_logo">Control 24 Logo</string>

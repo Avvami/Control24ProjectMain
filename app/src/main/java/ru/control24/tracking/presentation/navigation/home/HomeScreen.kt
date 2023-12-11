@@ -1,15 +1,22 @@
 package ru.control24.tracking.presentation.navigation.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import ru.control24.tracking.presentation.ui.components.BottomNavigationBar
+import ru.control24.tracking.presentation.ui.components.bottomBarVisibility
 
 @Composable
-fun HomeScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "HomeScreen")
+fun HomeScreen(navController: NavHostController = rememberNavController()) {
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                state = bottomBarVisibility(navController)
+            )
+        }
+    ) { paddingValues ->
+        HomeGraph(navController = navController, paddingValues = paddingValues)
     }
 }

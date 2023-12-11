@@ -157,6 +157,11 @@
 
     <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
 
+    <!--HomeScreen-->
+    <string name="objects">Список</string>
+    <string name="map">Карта</string>
+    <string name="settings">Настройки</string>
+
     <!--Descriptions-->
     <string name="back">Назад</string>
     <string name="company_logo">Логотип Контроль 24</string>
