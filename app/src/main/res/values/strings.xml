@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Control 24</string>
-    <string name="company_logo">Control 24 Logo</string>
 
     <!--Auth Screen-->
     <string name="company_description">GLONASS/GPS transport monitoring and dispatch systems</string>
@@ -139,7 +138,6 @@
     <string name="map_layers_image">Layers icon</string>
 
     <!--Route Activity-->
-    <string name="back_button">Назад</string>
     <string name="period_info_button">Информация за период</string>
     <string name="period">За период</string>
     <string name="days">Суточно</string>
@@ -158,4 +156,8 @@
     <string name="route_end">Конец:</string>
 
     <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
+
+    <!--Descriptions-->
+    <string name="back">Back</string>
+    <string name="company_logo">Control 24 Logo</string>
 </resources>

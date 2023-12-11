@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Контроль 24</string>
-    <string name="company_logo">Логотип Контроль 24</string>
 
     <!--Auth Screen-->
     <string name="company_description">Cистемы мониторинга и диспетчеризации транспорта ГЛОНАСС/GPS</string>
@@ -139,7 +138,6 @@
     <string name="map_layers_image">Layers icon</string>
 
     <!--Route Activity-->
-    <string name="back_button">Назад</string>
     <string name="period_info_button">Информация за период</string>
     <string name="period">За период</string>
     <string name="days">Суточно</string>
@@ -159,4 +157,7 @@
 
     <string name="mapbox_access_token">YOUR PUBLIC TOKEN</string>
 
+    <!--Descriptions-->
+    <string name="back">Назад</string>
+    <string name="company_logo">Логотип Контроль 24</string>
 </resources>

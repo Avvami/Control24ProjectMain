@@ -26,7 +26,9 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
         composable(route = AuthScreen.Help.route) {
-            HelpScreen()
+            HelpScreen(
+                popBackStack = { navController.popBackStack() }
+            )
         }
     }
 }
