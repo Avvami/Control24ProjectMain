@@ -4,15 +4,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import ru.control24.tracking.presentation.MainViewModel
 import ru.control24.tracking.presentation.UIEvent
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
-import ru.control24.tracking.presentation.states.AuthState
 import ru.control24.tracking.presentation.ui.screens.help.HelpScreen
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavController,
     uiEvent: (UIEvent) -> Unit,
-    authState: AuthState
+    viewModel: MainViewModel
 ) {
     navigation(
         route = RootNavGraph.AUTH,
@@ -21,7 +21,7 @@ fun NavGraphBuilder.authNavGraph(
         composable(route = AuthScreen.Auth.route) {
             ru.control24.tracking.presentation.ui.screens.auth.AuthScreen(
                 uiEvent = uiEvent,
-                authState = authState,
+                viewModel = viewModel,
                 navigateToHelpScreen = { navController.navigate(AuthScreen.Help.route) }
             )
         }

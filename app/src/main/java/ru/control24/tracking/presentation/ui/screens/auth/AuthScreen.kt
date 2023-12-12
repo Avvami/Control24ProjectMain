@@ -35,8 +35,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
+import ru.control24.tracking.presentation.MainViewModel
 import ru.control24.tracking.presentation.UIEvent
-import ru.control24.tracking.presentation.states.AuthState
+import ru.control24.tracking.presentation.ui.components.CustomAlertDialog
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 
@@ -44,10 +45,22 @@ import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 @Composable
 fun AuthScreen(
     uiEvent: (UIEvent) -> Unit,
-    authState: AuthState,
+    viewModel: MainViewModel,
     navigateToHelpScreen: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
+
+    if (viewModel.authState.showAuthDialog) {
+        CustomAlertDialog(
+            error = viewModel.authState.authError!!,
+            onDismiss = {
+                viewModel.uiEvent(UIEvent.CloseAuthDialog)
+            },
+            onConfirm = {
+                viewModel.uiEvent(UIEvent.CloseAuthDialog)
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -92,7 +105,9 @@ fun AuthScreen(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.width(488.dp).padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
@@ -105,7 +120,9 @@ fun AuthScreen(
                     stringResource(id = R.string.login_hint)) },
                 isError = authViewModel.loginInputError,
                 singleLine = true,
-                modifier = Modifier.width(488.dp).padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
@@ -127,7 +144,9 @@ fun AuthScreen(
                     }
                 },
                 singleLine = true,
-                modifier = Modifier.width(488.dp).padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
@@ -136,9 +155,11 @@ fun AuthScreen(
                     if (authViewModel.loginInputError || authViewModel.passwordInputError) return@Button
                     uiEvent(UIEvent.AuthUser(authViewModel.loginFieldState, authViewModel.passwordFieldState))
                 },
-                modifier = Modifier.width(488.dp).padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp)
             ) {
-                AnimatedContent(targetState = authState.authInProcess, label = "Auth progress animation") {
+                AnimatedContent(targetState = viewModel.authState.authInProcess, label = "Auth progress animation") {
                     if (!it) {
                         Text(text = stringResource(id = R.string.login))
                     } else {

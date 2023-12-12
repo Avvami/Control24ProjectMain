@@ -165,4 +165,10 @@
     <!--Descriptions-->
     <string name="back">Назад</string>
     <string name="company_logo">Логотип Контроль 24</string>
+
+    <!--Dialogs-->
+    <string name="error_title">Упс!</string>
+    <string name="error_confirm">Ок</string>
+    <string name="error_text">Произошла ошибка:</string>
+
 </resources>

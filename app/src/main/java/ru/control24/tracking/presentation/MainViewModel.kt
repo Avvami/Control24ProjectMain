@@ -31,11 +31,13 @@ class MainViewModel(
 
             var authInfo: AuthInfo? = null
             var authError: String? = null
+            var showAuthDialog = false
 
             authRepository.auth(login, password).let { result ->
                 when (result) {
                     is Resource.Error -> {
                         authError = result.message
+                        showAuthDialog = true
                     }
                     is Resource.Success -> {
                         authInfo = result.data
@@ -47,7 +49,8 @@ class MainViewModel(
             authState = authState.copy(
                 authInfo = authInfo,
                 authInProcess = false,
-                authError = authError
+                authError = authError,
+                showAuthDialog = showAuthDialog
             )
         }
     }
@@ -56,6 +59,11 @@ class MainViewModel(
         when (event) {
             is UIEvent.AuthUser -> {
                 authorizeUser(event.login, event.password)
+            }
+            UIEvent.CloseAuthDialog -> {
+                authState = authState.copy(
+                    showAuthDialog = false
+                )
             }
         }
     }
