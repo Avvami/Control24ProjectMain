@@ -44,8 +44,18 @@ fun CustomAlertDialog(
                 Text(text = stringResource(id = R.string.error_title), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
             }
             FlowRow(verticalArrangement = Arrangement.spacedBy(8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = stringResource(id = R.string.error_text), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = error, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = stringResource(id = R.string.error_text),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Text(
+                    text = error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
             TextButton(
                 onClick = { onConfirm() },

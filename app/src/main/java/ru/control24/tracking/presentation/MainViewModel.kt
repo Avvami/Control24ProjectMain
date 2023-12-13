@@ -31,13 +31,11 @@ class MainViewModel(
 
             var authInfo: AuthInfo? = null
             var authError: String? = null
-            var showAuthDialog = false
 
             authRepository.auth(login, password).let { result ->
                 when (result) {
                     is Resource.Error -> {
                         authError = result.message
-                        showAuthDialog = true
                     }
                     is Resource.Success -> {
                         authInfo = result.data
@@ -50,7 +48,7 @@ class MainViewModel(
                 authInfo = authInfo,
                 authInProcess = false,
                 authError = authError,
-                showAuthDialog = showAuthDialog
+                showAuthDialog = !authError.isNullOrEmpty()
             )
         }
     }

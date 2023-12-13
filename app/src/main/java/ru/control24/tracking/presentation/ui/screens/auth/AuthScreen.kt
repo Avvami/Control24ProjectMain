@@ -51,15 +51,17 @@ fun AuthScreen(
     val authViewModel: AuthViewModel = viewModel()
 
     if (viewModel.authState.showAuthDialog) {
-        CustomAlertDialog(
-            error = viewModel.authState.authError!!,
-            onDismiss = {
-                viewModel.uiEvent(UIEvent.CloseAuthDialog)
-            },
-            onConfirm = {
-                viewModel.uiEvent(UIEvent.CloseAuthDialog)
-            }
-        )
+        viewModel.authState.authError?.let { error ->
+            CustomAlertDialog(
+                error = error,
+                onDismiss = {
+                    viewModel.uiEvent(UIEvent.CloseAuthDialog)
+                },
+                onConfirm = {
+                    viewModel.uiEvent(UIEvent.CloseAuthDialog)
+                }
+            )
+        }
     }
 
     Scaffold(
