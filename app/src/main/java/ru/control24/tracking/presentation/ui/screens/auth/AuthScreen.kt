@@ -35,8 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.MainViewModel
 import ru.control24.tracking.presentation.UIEvent
+import ru.control24.tracking.presentation.states.AuthState
 import ru.control24.tracking.presentation.ui.components.CustomAlertDialog
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
@@ -45,20 +45,20 @@ import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 @Composable
 fun AuthScreen(
     uiEvent: (UIEvent) -> Unit,
-    viewModel: MainViewModel,
+    authState: () -> AuthState,
     navigateToHelpScreen: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
 
-    if (viewModel.authState.showAuthDialog) {
-        viewModel.authState.authError?.let { error ->
+    if (authState().showAuthDialog) {
+        authState().authError?.let { error ->
             CustomAlertDialog(
                 error = error,
                 onDismiss = {
-                    viewModel.uiEvent(UIEvent.CloseAuthDialog)
+                    uiEvent(UIEvent.CloseAuthDialog)
                 },
                 onConfirm = {
-                    viewModel.uiEvent(UIEvent.CloseAuthDialog)
+                    uiEvent(UIEvent.CloseAuthDialog)
                 }
             )
         }
@@ -161,7 +161,7 @@ fun AuthScreen(
                     .width(488.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                AnimatedContent(targetState = viewModel.authState.authInProcess, label = "Auth progress animation") {
+                AnimatedContent(targetState = authState().authInProcess, label = "Auth progress animation") {
                     if (!it) {
                         Text(text = stringResource(id = R.string.login))
                     } else {

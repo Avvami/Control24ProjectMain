@@ -22,7 +22,7 @@ fun RootNavigationGraph(
         authNavGraph(
             navController = navHostController,
             uiEvent = viewModel::uiEvent,
-            viewModel = viewModel
+            authState = viewModel::authState
         )
         composable(route = RootNavGraph.HOME) {
             HomeScreen()

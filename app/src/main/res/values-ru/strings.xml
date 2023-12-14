@@ -171,4 +171,27 @@
     <string name="error_confirm">Ок</string>
     <string name="error_text">Произошла ошибка:</string>
 
+    <!--Car categories-->
+    <string name="house">Дом</string>
+    <string name="car">Машина</string>
+    <string name="cargo">Грузовой</string>
+    <string name="special">Особый</string>
+    <string name="vip">VIP</string>
+    <string name="passenger">Легковой</string>
+    <string name="mixer">Миксер</string>
+    <string name="front_loader">Фронтальный погрузчик</string>
+    <string name="van">Фургон</string>
+    <string name="truck_crane">Автокран</string>
+    <string name="ekg">ЭКГ</string>
+    <string name="belaz">БелАЗ</string>
+    <string name="excavator">Экскаватор</string>
+    <string name="loader">Погрузчик</string>
+    <string name="tractor">Трактор</string>
+    <string name="tractor_excavator">Трактор-экскаватор</string>
+    <string name="fuel_tanker">Бензовоз</string>
+    <string name="tractor2">Трактор 2</string>
+    <string name="tractor_excavator2">Трактор-экскаватор 2</string>
+    <string name="bus">Автобус</string>
+    <string name="bulldozer">Бульдозер</string>
+
 </resources>

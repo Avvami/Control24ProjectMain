@@ -171,4 +171,27 @@
     <string name="error_confirm" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="error_text">Error occurred:</string>
 
+    <!--Car categories-->
+    <string name="house">House</string>
+    <string name="car">Car</string>
+    <string name="cargo">Cargo</string>
+    <string name="special">Special</string>
+    <string name="vip">VIP</string>
+    <string name="passenger">Passenger</string>
+    <string name="mixer">Mixer</string>
+    <string name="front_loader">Front end loader</string>
+    <string name="van">Van</string>
+    <string name="truck_crane">Truck crane</string>
+    <string name="ekg">EKG</string>
+    <string name="belaz">BelAZ</string>
+    <string name="excavator">Excavator</string>
+    <string name="loader">Loader</string>
+    <string name="tractor">Tractor</string>
+    <string name="tractor_excavator">Tractor excavator</string>
+    <string name="fuel_tanker">Fuel tanker</string>
+    <string name="tractor2">Tractor 2</string>
+    <string name="tractor_excavator2">Tractor excavator 2</string>
+    <string name="bus">Bus</string>
+    <string name="bulldozer">Bulldozer</string>
+
 </resources>

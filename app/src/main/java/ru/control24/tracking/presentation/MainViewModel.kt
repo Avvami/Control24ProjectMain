@@ -8,12 +8,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.control24.tracking.domain.auth.AuthInfo
 import ru.control24.tracking.domain.repository.AuthRepository
+import ru.control24.tracking.domain.repository.ObjectsDetailsRepository
 import ru.control24.tracking.domain.util.Resource
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.AuthState
 
 class MainViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val objectsDetailsRepository: ObjectsDetailsRepository
 ): ViewModel() {
 
     var startDestination by mutableStateOf(RootNavGraph.AUTH)
@@ -39,6 +41,8 @@ class MainViewModel(
                     }
                     is Resource.Success -> {
                         authInfo = result.data
+                        println(result.data)
+                        getObjectsDetails(result.data!!.key)
                         startDestination = RootNavGraph.HOME
                     }
                 }
@@ -50,6 +54,21 @@ class MainViewModel(
                 authError = authError,
                 showAuthDialog = !authError.isNullOrEmpty()
             )
+        }
+    }
+
+    private fun getObjectsDetails(key: String) {
+        viewModelScope.launch {
+            objectsDetailsRepository.getObjectsDetails(key = key).let { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        println(result.message)
+                    }
+                    is Resource.Success -> {
+                        println(result.data)
+                    }
+                }
+            }
         }
     }
 

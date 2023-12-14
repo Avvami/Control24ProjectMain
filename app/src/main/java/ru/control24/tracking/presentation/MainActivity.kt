@@ -23,7 +23,10 @@ class MainActivity : ComponentActivity() {
             Control24Theme {
                 val viewModel = viewModel<MainViewModel>(
                     factory = viewModelFactory {
-                        MainViewModel(Control24Application.appModule.authRepository)
+                        MainViewModel(
+                            authRepository = Control24Application.appModule.authRepository,
+                            objectsDetailsRepository = Control24Application.appModule.objectsDetailsRepository
+                        )
                     }
                 )
                 Surface(
