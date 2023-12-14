@@ -24,11 +24,13 @@ class MainActivity : ComponentActivity() {
                 val viewModel = viewModel<MainViewModel>(
                     factory = viewModelFactory {
                         MainViewModel(
+                            dataStoreRepository = Control24Application.appModule.dataStoreRepository,
                             authRepository = Control24Application.appModule.authRepository,
                             objectsDetailsRepository = Control24Application.appModule.objectsDetailsRepository
                         )
                     }
                 )
+                viewModel.uiEvent(UIEvent.CheckUserExist)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
