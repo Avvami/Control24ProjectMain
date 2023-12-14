@@ -21,29 +21,28 @@ class DataStoreRepository(private val context: Context) {
     }
 
     val readUserPreference: Flow<User> = context.dataStore.data
-        .catch {exception ->
+        .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw exception
             }
-        }.map {
+        }.map { preferences ->
             User(
-                login = it[LOGIN] ?: "",
-                password = it[PASSWORD] ?: ""
+                login = preferences[LOGIN],
+                password = preferences[PASSWORD]
             )
         }
 
     suspend fun saveUser(login: String, password: String) {
-        println(login + password)
-        context.dataStore.edit {
-            it[LOGIN] = login
-            it[PASSWORD] = password
+        context.dataStore.edit { preferences ->
+            preferences[LOGIN] = login
+            preferences[PASSWORD] = password
         }
     }
 }
 
 data class User(
-    val login: String,
-    val password: String
+    val login: String? = null,
+    val password: String? = null
 )
