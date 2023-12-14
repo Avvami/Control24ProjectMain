@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             Control24Theme {
                 viewModel.uiEvent(UIEvent.CheckUserExist)
-                println("Check in the main activity")
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

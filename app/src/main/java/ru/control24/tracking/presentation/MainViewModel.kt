@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import ru.control24.tracking.domain.auth.AuthInfo
 import ru.control24.tracking.domain.datastore.DataStoreRepository
 import ru.control24.tracking.domain.datastore.User
+import ru.control24.tracking.domain.objects.ObjectsInfoDetailed
 import ru.control24.tracking.domain.repository.AuthRepository
 import ru.control24.tracking.domain.repository.ObjectsDetailsRepository
 import ru.control24.tracking.domain.util.Resource
@@ -72,14 +73,19 @@ class MainViewModel(
     private fun getObjectsDetails(key: String) {
         viewModelScope.launch {
             objectsDetailsRepository.getObjectsDetails(key = key).let { result ->
+                var objectDetails: ObjectsInfoDetailed? = null
                 when (result) {
                     is Resource.Error -> {
                         println(result.message)
                     }
                     is Resource.Success -> {
-                        println(result.data)
+                        objectDetails = result.data
                     }
                 }
+                // TODO: Maybe redo it with objectsDetails own state
+                authState = authState.copy(
+                    objectsDetails = objectDetails
+                )
             }
         }
     }

@@ -25,7 +25,9 @@ fun RootNavigationGraph(
             authState = viewModel::authState
         )
         composable(route = RootNavGraph.HOME) {
-            HomeScreen()
+            HomeScreen(
+                authState = viewModel::authState
+            )
         }
     }
 }
