@@ -33,17 +33,13 @@
     <string name="car_name_template">Нет данных</string>
     <string name="display_on_map">Отобразить на карте</string>
     <string name="location_template">Нет данных</string>
-    <string name="speed_template">%dкм/ч</string>
     <string name="time_template">Нет данных</string>
-    <string name="owner">Владелец</string>
     <string name="owner_template">Нет данных</string>
-    <string name="type">Модель</string>
     <string name="type_template">Нет данных</string>
     <string name="category">Тип ТС</string>
     <string name="category_template">Нет данных</string>
     <string name="auto_num">Гос номер</string>
     <string name="auto_num_template">Нет данных</string>
-    <string name="driver">Водитель</string>
     <string name="driver_template">Указать</string>
     <string name="make_call">Позвонить</string>
 
@@ -202,6 +198,15 @@
     <!--Objects Screen-->
     <string name="tracking_objects_title">Tracking objects</string>
     <string name="empty_tracking_objects">No objects</string>
+    <string name="speed">%dкм/ч</string>
+    <string name="no_information">No information</string>
+    <string name="owner">Owner</string>
+    <string name="car_model">Car model</string>
+    <string name="type">Type</string>
+    <string name="licence_plate">Licence plate</string>
+    <string name="driver">Driver</string>
+    <string name="info_per_day">Info per day</string>
+    <string name="info_per_period">Info per period</string>
 
 
 

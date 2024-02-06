@@ -1,5 +1,10 @@
 package ru.control24.tracking.presentation.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,15 +28,27 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
+import ru.control24.tracking.domain.objects.Object
+import ru.control24.tracking.domain.objects_details.ObjectDetails
+import ru.control24.tracking.presentation.ui.screens.objects.ObjectsUiEvent
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ObjectCardCompact() {
+fun ObjectCardCompact(
+    objectInfo: Object,
+    objectInfoDetails: ObjectDetails?,
+    isExpanded: () -> SnapshotStateMap<Int, Boolean>,
+    objectsUiEvent: (ObjectsUiEvent) -> Unit
+) {
     ElevatedCard(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
         shape = MaterialTheme.shapes.large,
@@ -47,7 +64,7 @@ fun ObjectCardCompact() {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        painter = painterResource(id = R.drawable.icon_directions_car_fill0),
+                        painter = painterResource(id = objectInfo.category.iconRes),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(30.dp)
@@ -55,12 +72,13 @@ fun ObjectCardCompact() {
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
-                            text = "NAME",
+                            text = objectInfo.name,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "43km/h",
+                            text = if (objectInfoDetails?.speed != null) stringResource(id = R.string.speed, objectInfoDetails.speed) else
+                                stringResource(id = R.string.no_information),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -72,105 +90,133 @@ fun ObjectCardCompact() {
                         onCheckedChange = {}
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_arrow_drop_down_fill0),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(30.dp)
-                        )
+                    AnimatedContent(
+                        targetState = !(isExpanded()[objectInfo.id] ?: false),
+                        transitionSpec = {
+                            if (targetState) {
+                                scaleIn() togetherWith scaleOut()
+                            } else {
+                                scaleIn() togetherWith scaleOut()
+                            }
+                        },
+                        label = "Button change animation"
+                    ) { targetState ->
+                        if (targetState) {
+                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.id, true)) }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_arrow_drop_down_fill0),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.id, false)) }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_arrow_drop_up_fill0),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.icon_location_on_fill0),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Location goes bimbambiabambibaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.icon_schedule_fill0),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "20.2..4.789 9:30:24 PM",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Column(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Owner", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(text = "Almighty", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                FlowRow(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "Car model", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(text = "Junkster", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "Type", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(text = "BelAZ", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "Plate", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(text = "lkj234h5", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+        AnimatedVisibility(visible = isExpanded()[objectInfo.id] == true) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon_person_fill0),
+                            painter = painterResource(id = R.drawable.icon_location_on_fill0),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(22.dp)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Column {
-                            Text(text = "Driver", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(text = "Manly man of men", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (objectInfoDetails != null) "${objectInfoDetails.lat} + ${objectInfoDetails.long}" else stringResource(id = R.string.no_information),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_schedule_fill0),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = (objectInfoDetails?.time?.let {
+                                SimpleDateFormat("dd.MM.yyyy HH:mm:ss a", Locale.getDefault()).format(it)
+                            } ?: stringResource(id = R.string.no_information)).toString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Column(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = stringResource(id = R.string.owner), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(text = objectInfo.client, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = stringResource(id = R.string.car_model), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(text = objectInfo.carModel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = stringResource(id = R.string.type), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(text = stringResource(id = objectInfo.category.definitionRes), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = stringResource(id = R.string.licence_plate), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(text = objectInfo.licencePlate, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
-                    FilledIconButton(onClick = { /*TODO*/ }) {
-                        Icon(painter = painterResource(id = R.drawable.icon_call_fill0), contentDescription = null)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_person_fill0),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Column {
+                                Text(text = stringResource(id = R.string.driver), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(text = "Manly man of men", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                        FilledIconButton(onClick = { /*TODO*/ }) {
+                            Icon(painter = painterResource(id = R.drawable.icon_call_fill0), contentDescription = null)
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Info per day")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Info per period")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                        Text(text = stringResource(id = R.string.info_per_day))
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                        Text(text = stringResource(id = R.string.info_per_period))
+                    }
                 }
             }
         }

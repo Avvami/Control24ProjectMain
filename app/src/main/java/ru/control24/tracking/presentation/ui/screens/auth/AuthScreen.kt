@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +39,7 @@ import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     uiEvent: (UiEvent) -> Unit,

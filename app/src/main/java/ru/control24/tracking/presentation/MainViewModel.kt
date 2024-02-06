@@ -78,7 +78,8 @@ class MainViewModel(
                     }
                 }
                 objectsState = objectsState.copy(
-                    objectsDetails = objectDetails
+                    objectsDetails = objectDetails,
+                    isLoading = false,
                 )
             }
         }
