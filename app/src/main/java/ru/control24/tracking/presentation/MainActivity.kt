@@ -8,18 +8,23 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import ru.control24.tracking.Control24Application
+import ru.control24.tracking.R
 import ru.control24.tracking.presentation.navigation.root.RootNavigationGraph
+import ru.control24.tracking.presentation.ui.components.CustomDialog
 import ru.control24.tracking.presentation.ui.theme.Control24Theme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by viewModels {
         viewModelFactory {
             MainViewModel(
-                authRepository = Control24Application.appModule.authRepository,
+                objectsRepository = Control24Application.appModule.objectsRepository,
                 objectsDetailsRepository = Control24Application.appModule.objectsDetailsRepository
             )
         }
@@ -29,7 +34,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 //        installSplashScreen().setKeepOnScreenCondition {
-//            viewModel.isLoading
+//            mainViewModel.isLoading
 //        }
         setContent {
             Control24Theme {
@@ -39,10 +44,23 @@ class MainActivity : ComponentActivity() {
                 ) {
                     RootNavigationGraph(
                         navHostController = rememberNavController(),
-                        startDestination = viewModel.startDestination,
-                        viewModel = viewModel
+                        startDestination = mainViewModel.startDestination,
+                        mainViewModel = mainViewModel
                     )
                 }
+                CustomDialog(
+                    iconRes = mainViewModel.messageDialogState.iconRes,
+                    titleRes = mainViewModel.messageDialogState.titleRes,
+                    messageRes = mainViewModel.messageDialogState.messageRes,
+                    messageString = mainViewModel.messageDialogState.messageString,
+                    onDismissRequest = { mainViewModel.uiEvent(UiEvent.CloseMessageDialog) },
+                    confirmButton = {
+                        TextButton(onClick = { mainViewModel.uiEvent(UiEvent.CloseMessageDialog) }) {
+                            Text(text = stringResource(id = R.string.ok))
+                        }
+                    },
+                    showDialog = mainViewModel.messageDialogState.isShown
+                )
             }
         }
     }

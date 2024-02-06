@@ -13,16 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.states.AuthState
+import ru.control24.tracking.presentation.states.ObjectsState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
 
 @Composable
 fun ObjectsScreen(
-    navController: NavController,
     paddingValues: PaddingValues,
-    authState: () -> AuthState
+    objectsState: () -> ObjectsState
 ) {
 
     Scaffold(
@@ -32,7 +30,7 @@ fun ObjectsScreen(
             )
         }
     ) { innerPadding ->
-        if (authState().authInfo != null) {
+        if (objectsState().objectsInfo != null) {
             Text(
                 text = stringResource(id = R.string.empty_tracking_objects),
                 style = MaterialTheme.typography.bodyLarge,

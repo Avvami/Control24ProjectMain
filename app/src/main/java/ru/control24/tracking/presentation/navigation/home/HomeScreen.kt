@@ -4,14 +4,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.control24.tracking.presentation.states.AuthState
+import ru.control24.tracking.presentation.states.ObjectsState
 import ru.control24.tracking.presentation.ui.components.BottomNavigationBar
 import ru.control24.tracking.presentation.ui.components.bottomBarVisibility
 
 @Composable
 fun HomeScreen(
     navController: NavHostController = rememberNavController(),
-    authState: () -> AuthState
+    objectsState: () -> ObjectsState
 ) {
     Scaffold(
         bottomBar = {
@@ -24,7 +24,7 @@ fun HomeScreen(
         HomeGraph(
             navController = navController,
             paddingValues = paddingValues,
-            authState = authState
+            objectsState = objectsState
         )
     }
 }

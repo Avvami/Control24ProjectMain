@@ -2,6 +2,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Control 24</string>
 
+    <!--Errors-->
+    <string name="unknown_error">An unknown error occurred</string>
+    <string name="http_400">Error code: 400. Invalid username or password</string>
+    <string name="api_call_error">Couldn\'t reach the server. Check your internet connection</string>
+
     <!--Auth Screen-->
     <string name="company_description">GLONASS/GPS transport monitoring and dispatch systems</string>
     <string name="login_hint">Login</string>
@@ -197,5 +202,9 @@
     <!--Objects Screen-->
     <string name="tracking_objects_title">Tracking objects</string>
     <string name="empty_tracking_objects">No objects</string>
+
+
+
+    <string name="ok">OK</string>
 
 </resources>

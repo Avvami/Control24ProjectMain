@@ -1,4 +1,4 @@
-package ru.control24.tracking.domain.objects
+package ru.control24.tracking.domain.objects_details
 
 import java.util.Date
 

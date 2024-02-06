@@ -1,4 +1,4 @@
-package ru.control24.tracking.data.remote.auth
+package ru.control24.tracking.data.remote.objects
 
 import com.squareup.moshi.Json
 

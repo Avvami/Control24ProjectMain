@@ -32,35 +32,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.UIEvent
-import ru.control24.tracking.presentation.states.AuthState
-import ru.control24.tracking.presentation.ui.components.CustomAlertDialog
+import ru.control24.tracking.presentation.UiEvent
+import ru.control24.tracking.presentation.states.ObjectsState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 
 @Composable
 fun AuthScreen(
-    uiEvent: (UIEvent) -> Unit,
-    authState: () -> AuthState,
+    uiEvent: (UiEvent) -> Unit,
+    objectsState: () -> ObjectsState,
     navigateToHelpScreen: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
-
-    if (authState().showAuthDialog) {
-        authState().authError?.let { error ->
-            CustomAlertDialog(
-                error = error,
-                onDismiss = {
-                    uiEvent(UIEvent.CloseAuthDialog)
-                },
-                onConfirm = {
-                    uiEvent(UIEvent.CloseAuthDialog)
-                }
-            )
-        }
-    }
-
     Scaffold(
         topBar = {
             CustomTopAppBar(
@@ -145,17 +129,17 @@ fun AuthScreen(
                 onClick = {
                     authViewModel.authUIEvent(AuthUIEvent.ValidateInput(authViewModel.loginFieldState, authViewModel.passwordFieldState))
                     if (authViewModel.loginInputError || authViewModel.passwordInputError) return@Button
-                    uiEvent(UIEvent.AuthUser(authViewModel.loginFieldState, authViewModel.passwordFieldState))
+                    uiEvent(UiEvent.AuthUser(authViewModel.loginFieldState, authViewModel.passwordFieldState))
                 },
                 modifier = Modifier
                     .width(488.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                AnimatedContent(targetState = authState().authInProcess, label = "Auth progress animation") {
-                    if (!it) {
-                        Text(text = stringResource(id = R.string.login))
-                    } else {
+                AnimatedContent(targetState = objectsState().isLoading, label = "Auth progress animation") { targetState ->
+                    if (targetState) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    } else {
+                        Text(text = stringResource(id = R.string.login))
                     }
                 }
             }

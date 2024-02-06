@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">Контроль 24</string>
 
+    <!--Errors-->
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="http_400">Код ошибки: 400. Неверное имя пользователя или пароль</string>
+    <string name="api_call_error">Не удалось подключиться к серверу. Проверьте ваше интернет-соединение</string>
+
     <!--Auth Screen-->
     <string name="company_description">Cистемы мониторинга и диспетчеризации транспорта ГЛОНАСС/GPS</string>
     <string name="login_hint">Логин</string>
@@ -197,5 +202,10 @@
     <!--Objects Screen-->
     <string name="tracking_objects_title">Объекты отслеживания</string>
     <string name="empty_tracking_objects">Нет объектов</string>
+
+
+
+
+    <string name="ok">Ок</string>
 
 </resources>

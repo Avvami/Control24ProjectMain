@@ -12,7 +12,7 @@ import ru.control24.tracking.presentation.navigation.home.HomeScreen
 fun RootNavigationGraph(
     navHostController: NavHostController,
     startDestination: String,
-    viewModel: MainViewModel
+    mainViewModel: MainViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -21,12 +21,12 @@ fun RootNavigationGraph(
     ) {
         authNavGraph(
             navController = navHostController,
-            uiEvent = viewModel::uiEvent,
-            authState = viewModel::authState
+            uiEvent = mainViewModel::uiEvent,
+            objectsState = mainViewModel::objectsState
         )
         composable(route = RootNavGraph.HOME) {
             HomeScreen(
-                authState = viewModel::authState
+                objectsState = mainViewModel::objectsState
             )
         }
     }
