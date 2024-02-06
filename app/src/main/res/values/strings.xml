@@ -194,4 +194,8 @@
     <string name="bus">Bus</string>
     <string name="bulldozer">Bulldozer</string>
 
+    <!--Objects Screen-->
+    <string name="tracking_objects_title">Tracking objects</string>
+    <string name="empty_tracking_objects">No objects</string>
+
 </resources>

@@ -5,12 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.control24.tracking.domain.auth.AuthInfo
-import ru.control24.tracking.domain.datastore.DataStoreRepository
-import ru.control24.tracking.domain.datastore.User
 import ru.control24.tracking.domain.objects.ObjectsInfoDetailed
 import ru.control24.tracking.domain.repository.AuthRepository
 import ru.control24.tracking.domain.repository.ObjectsDetailsRepository
@@ -19,15 +15,9 @@ import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.AuthState
 
 class MainViewModel(
-    private val dataStoreRepository: DataStoreRepository,
     private val authRepository: AuthRepository,
     private val objectsDetailsRepository: ObjectsDetailsRepository
 ): ViewModel() {
-
-    var isLoading by mutableStateOf(true)
-        private set
-
-    private var user by mutableStateOf(User())
 
     var startDestination by mutableStateOf(RootNavGraph.AUTH)
         private set
@@ -52,10 +42,7 @@ class MainViewModel(
                     }
                     is Resource.Success -> {
                         authInfo = result.data
-                        if (user.login.isNullOrEmpty() && user.password.isNullOrEmpty()) {
-                            dataStoreRepository.saveUser(login, password)
-                            startDestination = RootNavGraph.HOME
-                        }
+                        startDestination = RootNavGraph.HOME
                         getObjectsDetails(result.data!!.key)
                     }
                 }
@@ -82,29 +69,10 @@ class MainViewModel(
                         objectDetails = result.data
                     }
                 }
-                // TODO: Maybe redo it with objectsDetails own state
                 authState = authState.copy(
                     objectsDetails = objectDetails
                 )
             }
-        }
-    }
-
-    private fun checkUserExist() {
-        viewModelScope.launch {
-            val savedUser = dataStoreRepository.readUserPreference.first()
-            if (!savedUser.login.isNullOrEmpty() && !savedUser.password.isNullOrEmpty()) {
-                user = user.copy(
-                    login = savedUser.login,
-                    password = savedUser.password
-                )
-                authorizeUser(savedUser.login, savedUser.password)
-                startDestination = RootNavGraph.HOME
-            } else {
-                startDestination = RootNavGraph.AUTH
-            }
-            delay(500)
-            isLoading = false
         }
     }
 
@@ -118,7 +86,6 @@ class MainViewModel(
                     showAuthDialog = false
                 )
             }
-            UIEvent.CheckUserExist -> { checkUserExist() }
         }
     }
 }

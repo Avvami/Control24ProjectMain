@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import ru.control24.tracking.Control24Application
 import ru.control24.tracking.presentation.navigation.root.RootNavigationGraph
@@ -20,7 +19,6 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels {
         viewModelFactory {
             MainViewModel(
-                dataStoreRepository = Control24Application.appModule.dataStoreRepository,
                 authRepository = Control24Application.appModule.authRepository,
                 objectsDetailsRepository = Control24Application.appModule.objectsDetailsRepository
             )
@@ -30,12 +28,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        installSplashScreen().setKeepOnScreenCondition {
-            viewModel.isLoading
-        }
+//        installSplashScreen().setKeepOnScreenCondition {
+//            viewModel.isLoading
+//        }
         setContent {
             Control24Theme {
-                viewModel.uiEvent(UIEvent.CheckUserExist)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

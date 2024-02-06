@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.ui.components.TopAppBar
+import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
 
 @Composable
 fun HelpScreen(
@@ -17,8 +17,9 @@ fun HelpScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CustomTopAppBar(
                 title = stringResource(id = R.string.help),
+                hasNavigationIcon = true,
                 popBackStack = { popBackStack() }
             )
         }

@@ -194,4 +194,8 @@
     <string name="bus">Автобус</string>
     <string name="bulldozer">Бульдозер</string>
 
+    <!--Objects Screen-->
+    <string name="tracking_objects_title">Объекты отслеживания</string>
+    <string name="empty_tracking_objects">Нет объектов</string>
+
 </resources>

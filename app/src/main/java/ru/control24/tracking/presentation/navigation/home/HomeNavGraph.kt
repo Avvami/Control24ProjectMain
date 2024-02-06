@@ -26,6 +26,7 @@ fun HomeGraph(
         composable(route = Destinations.ObjectsScreen.route) {
             ObjectsScreen(
                 navController = navController,
+                paddingValues = paddingValues,
                 authState = authState
             )
         }

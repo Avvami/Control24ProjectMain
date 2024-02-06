@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,11 +28,14 @@ import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(
+fun CustomTopAppBar(
     title: String = "",
-    popBackStack: () -> Unit
+    hasNavigationIcon: Boolean = false,
+    hasHelpAction: Boolean = false,
+    navigateToHelpScreen: () -> Unit = {},
+    popBackStack: () -> Unit = {}
 ) {
-    androidx.compose.material3.TopAppBar(
+    TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
             titleContentColor = MaterialTheme.colorScheme.onBackground,
@@ -42,29 +46,37 @@ fun TopAppBar(
                 Text(text = title)
         },
         navigationIcon = {
-            IconButton(onClick = { popBackStack() }) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = stringResource(id = R.string.back)
-                )
+            if (hasNavigationIcon) {
+                IconButton(onClick = { popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowBack,
+                        contentDescription = stringResource(id = R.string.back)
+                    )
+                }
             }
         },
         actions = {
-            Box(
-                modifier = Modifier
-                    .offset(x = 4.dp)
-                    .clip(RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp))
-                    .background(md_theme_light_primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.company_logo),
-                    contentDescription = stringResource(id = R.string.company_logo),
-                    tint = md_theme_light_onPrimary,
+            if (hasHelpAction) {
+                IconButton(onClick = { navigateToHelpScreen() }) {
+                    Icon(painter = painterResource(id = R.drawable.icon_help_fill0), contentDescription = stringResource(id = R.string.help))
+                }
+            } else {
+                Box(
                     modifier = Modifier
-                        .padding(start = 12.dp, top = 6.dp, end = 16.dp, bottom = 6.dp)
-                        .height(28.dp)
-                )
+                        .offset(x = 4.dp)
+                        .clip(RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp))
+                        .background(md_theme_light_primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.company_logo),
+                        contentDescription = stringResource(id = R.string.company_logo),
+                        tint = md_theme_light_onPrimary,
+                        modifier = Modifier
+                            .padding(start = 12.dp, top = 6.dp, end = 16.dp, bottom = 6.dp)
+                            .height(28.dp)
+                    )
+                }
             }
         }
     )
