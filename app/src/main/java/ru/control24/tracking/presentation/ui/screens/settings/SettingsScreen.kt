@@ -7,15 +7,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import ru.control24.tracking.presentation.navigation.home.Destinations
 
 @Composable
 fun SettingsScreen(
-    navController: NavController
+    navigateToHelpScreen: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        TextButton(onClick = { navController.navigate(Destinations.HelpScreen.route) }) {
+        TextButton(onClick = navigateToHelpScreen) {
             Text(text = "Settings screen\nNavigate to help")
         }
     }

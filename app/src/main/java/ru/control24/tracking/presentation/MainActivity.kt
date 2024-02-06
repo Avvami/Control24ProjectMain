@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     RootNavigationGraph(
-                        navHostController = rememberNavController(),
+                        navController = rememberNavController(),
                         startDestination = mainViewModel.startDestination,
                         mainViewModel = mainViewModel
                     )

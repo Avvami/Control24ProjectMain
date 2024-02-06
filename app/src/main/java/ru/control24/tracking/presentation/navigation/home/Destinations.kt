@@ -36,7 +36,7 @@ sealed class Destinations(
 
     data object ThemeScreen: Destinations(route = "theme_screen")
     data object MapConfigScreen: Destinations(route = "map_config_screen")
-    data object ObjectsItemAppearenceScreen: Destinations(route = "objects_item_appearance_screen")
+    data object ObjectsItemAppearanceScreen: Destinations(route = "objects_item_appearance_screen")
     data object AboutAppScreen: Destinations(route = "about_app_screen")
     data object HelpScreen: Destinations(route = "help_screen")
 }
