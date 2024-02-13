@@ -9,7 +9,7 @@ data class ObjectsDetailsDto(
 data class ObjectDetailsDto(
     val id: Int,
     @field:Json(name = "gmt")
-    val time: String,
+    val gmtTime: String,
     val lat: Double,
     @field:Json(name = "lon")
     val long: Double,

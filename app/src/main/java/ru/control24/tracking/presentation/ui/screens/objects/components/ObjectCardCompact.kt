@@ -1,4 +1,4 @@
-package ru.control24.tracking.presentation.ui.components
+package ru.control24.tracking.presentation.ui.screens.objects.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -38,8 +38,6 @@ import ru.control24.tracking.R
 import ru.control24.tracking.domain.objects.Object
 import ru.control24.tracking.domain.objects_details.ObjectDetails
 import ru.control24.tracking.presentation.ui.screens.objects.ObjectsUiEvent
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -152,9 +150,7 @@ fun ObjectCardCompact(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = (objectInfoDetails?.time?.let {
-                                SimpleDateFormat("dd.MM.yyyy HH:mm:ss a", Locale.getDefault()).format(it)
-                            } ?: stringResource(id = R.string.no_information)).toString(),
+                            text = (objectInfoDetails?.time ?: stringResource(id = R.string.no_information)).toString(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )

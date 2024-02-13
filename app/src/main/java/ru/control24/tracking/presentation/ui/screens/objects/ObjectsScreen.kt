@@ -24,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
 import ru.control24.tracking.presentation.states.ObjectsState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
-import ru.control24.tracking.presentation.ui.components.ObjectCardCompact
+import ru.control24.tracking.presentation.ui.screens.objects.components.ObjectCardCompact
 import ru.control24.tracking.presentation.ui.components.ThinLinearProgressIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)

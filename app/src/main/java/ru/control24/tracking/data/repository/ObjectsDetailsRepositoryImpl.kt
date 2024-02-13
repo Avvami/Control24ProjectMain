@@ -18,7 +18,7 @@ class ObjectsDetailsRepositoryImpl(
     override suspend fun getObjectsDetails(key: String): Resource<ObjectsInfoDetailed> {
         return try {
             Resource.Success(
-                data = api.getObjectsDetails(key = key).toObjectsInfoDetailed()
+                data = api.getObjectsDetails(key = key).toObjectsInfoDetailed(context)
             )
         } catch (e: HttpException) {
             e.printStackTrace()
