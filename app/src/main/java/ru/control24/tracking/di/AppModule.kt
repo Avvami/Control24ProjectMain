@@ -4,19 +4,18 @@ import android.content.Context
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import ru.control24.tracking.data.remote.geocoding.GeocodingApi
 import ru.control24.tracking.data.remote.objects.ObjectsApi
 import ru.control24.tracking.data.remote.object_details.ObjectsDetailsApi
 import ru.control24.tracking.data.repository.ObjectsRepositoryImpl
-import ru.control24.tracking.data.repository.ObjectsDetailsRepositoryImpl
 import ru.control24.tracking.domain.repository.ObjectsRepository
-import ru.control24.tracking.domain.repository.ObjectsDetailsRepository
 import ru.control24.tracking.domain.util.C
 
 interface AppModule {
     val objectsApi: ObjectsApi
     val objectsRepository: ObjectsRepository
     val objectDetailsApi: ObjectsDetailsApi
-    val objectsDetailsRepository: ObjectsDetailsRepository
+    val geocodingApi: GeocodingApi
 }
 
 class AppModuleImpl(private val appContext: Context): AppModule {
@@ -29,7 +28,12 @@ class AppModuleImpl(private val appContext: Context): AppModule {
             .create()
     }
     override val objectsRepository: ObjectsRepository by lazy {
-        ObjectsRepositoryImpl(objectsApi, appContext)
+        ObjectsRepositoryImpl(
+            objectsApi = objectsApi,
+            objectsDetailsApi = objectDetailsApi,
+            geocodingApi = geocodingApi,
+            context = appContext
+        )
     }
 
     override val objectDetailsApi: ObjectsDetailsApi by lazy {
@@ -39,7 +43,12 @@ class AppModuleImpl(private val appContext: Context): AppModule {
             .build()
             .create()
     }
-    override val objectsDetailsRepository: ObjectsDetailsRepository by lazy {
-        ObjectsDetailsRepositoryImpl(objectDetailsApi, appContext)
+
+    override val geocodingApi: GeocodingApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(C.GEOCODE_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
     }
 }

@@ -11,8 +11,7 @@ data class ObjectDetailsDto(
     @field:Json(name = "gmt")
     val gmtTime: String,
     val lat: Double,
-    @field:Json(name = "lon")
-    val long: Double,
+    val lon: Double,
     val speed: Int,
     val heading: Int,
     val gps: Int

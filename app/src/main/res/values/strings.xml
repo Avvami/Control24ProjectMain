@@ -207,6 +207,7 @@
     <string name="driver">Driver</string>
     <string name="info_per_day">Info per day</string>
     <string name="info_per_period">Info per period</string>
+    <string name="geocoding_error">Geocoding error</string>
 
 
 

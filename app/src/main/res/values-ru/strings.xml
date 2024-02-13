@@ -207,6 +207,7 @@
     <string name="driver">Водитель</string>
     <string name="info_per_day">Информация за сутки</string>
     <string name="info_per_period">Информация за период</string>
+    <string name="geocoding_error">Ошибка геокодирования</string>
 
 
 

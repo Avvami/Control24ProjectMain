@@ -8,17 +8,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.control24.tracking.R
 import ru.control24.tracking.domain.objects.ObjectsInfo
-import ru.control24.tracking.domain.objects_details.ObjectsInfoDetailed
 import ru.control24.tracking.domain.repository.ObjectsRepository
-import ru.control24.tracking.domain.repository.ObjectsDetailsRepository
 import ru.control24.tracking.domain.util.Resource
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.MessageDialogState
 import ru.control24.tracking.presentation.states.ObjectsState
 
 class MainViewModel(
-    private val objectsRepository: ObjectsRepository,
-    private val objectsDetailsRepository: ObjectsDetailsRepository
+    private val objectsRepository: ObjectsRepository
 ): ViewModel() {
 
     var startDestination by mutableStateOf(RootNavGraph.AUTH)
@@ -52,7 +49,6 @@ class MainViewModel(
                     is Resource.Success -> {
                         objectsInfo = result.data
                         startDestination = RootNavGraph.HOME
-                        getObjectsDetails(result.data!!.key)
                     }
                 }
             }
@@ -62,26 +58,6 @@ class MainViewModel(
                 isLoading = false,
                 error = error
             )
-        }
-    }
-
-    private fun getObjectsDetails(key: String) {
-        viewModelScope.launch {
-            objectsDetailsRepository.getObjectsDetails(key = key).let { result ->
-                var objectDetails: ObjectsInfoDetailed? = null
-                when (result) {
-                    is Resource.Error -> {
-                        println(result.message)
-                    }
-                    is Resource.Success -> {
-                        objectDetails = result.data
-                    }
-                }
-                objectsState = objectsState.copy(
-                    objectsDetails = objectDetails,
-                    isLoading = false,
-                )
-            }
         }
     }
 

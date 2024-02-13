@@ -8,8 +8,9 @@ data class ObjectDetails(
     val id: Int,
     val time: String,
     val lat: Double,
-    val long: Double,
+    val lon: Double,
     val speed: Int,
     val heading: Int,
-    val gps: Int
+    val gps: Int,
+    val address: String? = null
 )

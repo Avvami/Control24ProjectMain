@@ -46,4 +46,5 @@ object C {
     const val PASSWORD = "PASSWORD"
     
     const val BASE_URL = "http://91.193.225.170:8012/"
+    const val GEOCODE_BASE_URL = "https://nominatim.openstreetmap.org/"
 }

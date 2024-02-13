@@ -36,14 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
 import ru.control24.tracking.domain.objects.Object
-import ru.control24.tracking.domain.objects_details.ObjectDetails
 import ru.control24.tracking.presentation.ui.screens.objects.ObjectsUiEvent
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ObjectCardCompact(
     objectInfo: Object,
-    objectInfoDetails: ObjectDetails?,
     isExpanded: () -> SnapshotStateMap<Int, Boolean>,
     objectsUiEvent: (ObjectsUiEvent) -> Unit
 ) {
@@ -75,7 +73,7 @@ fun ObjectCardCompact(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if (objectInfoDetails?.speed != null) stringResource(id = R.string.speed, objectInfoDetails.speed) else
+                            text = if (objectInfo.details?.speed != null) stringResource(id = R.string.speed, objectInfo.details.speed) else
                                 stringResource(id = R.string.no_information),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -136,7 +134,7 @@ fun ObjectCardCompact(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = if (objectInfoDetails != null) "${objectInfoDetails.lat} + ${objectInfoDetails.long}" else stringResource(id = R.string.no_information),
+                            text = objectInfo.details?.address ?: stringResource(id = R.string.no_information),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -150,7 +148,7 @@ fun ObjectCardCompact(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = (objectInfoDetails?.time ?: stringResource(id = R.string.no_information)).toString(),
+                            text = (objectInfo.details?.time ?: stringResource(id = R.string.no_information)).toString(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )

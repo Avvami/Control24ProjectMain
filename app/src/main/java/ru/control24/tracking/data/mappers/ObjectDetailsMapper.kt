@@ -34,7 +34,7 @@ fun ObjectDetailsDto.toObjectDetails(context: Context): ObjectDetails {
         id = id,
         time = formattedTime,
         lat = lat,
-        long = long,
+        lon = lon,
         speed = speed,
         heading = heading,
         gps = gps

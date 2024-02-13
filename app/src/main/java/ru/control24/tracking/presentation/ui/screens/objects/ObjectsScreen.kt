@@ -87,10 +87,8 @@ fun ObjectsScreen(
                             key = { objectsInfo.trackingObjects[it].id }
                         ) { index ->
                             val objectInfo = objectsInfo.trackingObjects[index]
-                            val objectDetails = objectsState().objectsDetails?.objects?.associateBy { it.id }?.get(objectInfo.id)
                             ObjectCardCompact(
                                 objectInfo = objectInfo,
-                                objectInfoDetails = objectDetails,
                                 isExpanded = objectsViewModel::isCardExpanded,
                                 objectsUiEvent = objectsViewModel::objectsUiEvent
                             )

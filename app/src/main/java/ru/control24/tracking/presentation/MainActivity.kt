@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels {
         viewModelFactory {
             MainViewModel(
-                objectsRepository = Control24Application.appModule.objectsRepository,
-                objectsDetailsRepository = Control24Application.appModule.objectsDetailsRepository
+                objectsRepository = Control24Application.appModule.objectsRepository
             )
         }
     }
