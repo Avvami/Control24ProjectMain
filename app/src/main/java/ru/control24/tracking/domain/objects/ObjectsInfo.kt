@@ -1,6 +1,5 @@
 package ru.control24.tracking.domain.objects
 
-import ru.control24.tracking.domain.objects_details.ObjectDetails
 import ru.control24.tracking.domain.util.CarCategory
 
 data class ObjectsInfo(

@@ -7,3 +7,14 @@ data class ObjectsDto(
     @field:Json(name = "objects")
     val trackingObjects: List<ObjectDto>
 )
+
+data class ObjectDto(
+    val id: Int,
+    val name: String,
+    val category: Int,
+    val client: String,
+    @field:Json(name = "avto_no")
+    val licencePlate: String,
+    @field:Json(name = "avto_model")
+    val carModel: String
+)

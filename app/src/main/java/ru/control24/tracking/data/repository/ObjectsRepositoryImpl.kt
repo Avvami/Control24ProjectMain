@@ -7,7 +7,6 @@ import ru.control24.tracking.data.mappers.toGeocodingInfo
 import ru.control24.tracking.data.mappers.toObjectsInfo
 import ru.control24.tracking.data.mappers.toObjectsInfoDetailed
 import ru.control24.tracking.data.remote.geocoding.GeocodingApi
-import ru.control24.tracking.data.remote.object_details.ObjectsDetailsApi
 import ru.control24.tracking.data.remote.objects.ObjectsApi
 import ru.control24.tracking.domain.objects.ObjectsInfo
 import ru.control24.tracking.domain.repository.ObjectsRepository
@@ -17,7 +16,6 @@ import java.io.IOException
 
 class ObjectsRepositoryImpl(
     private val objectsApi: ObjectsApi,
-    private val objectsDetailsApi: ObjectsDetailsApi,
     private val geocodingApi: GeocodingApi,
     private val context: Context
 ): ObjectsRepository {
@@ -28,7 +26,7 @@ class ObjectsRepositoryImpl(
                 password = password
             ).toObjectsInfo()
 
-            val objectsDetails = objectsDetailsApi.getObjectsDetails(key = objectsInfo.key)
+            val objectsDetails = objectsApi.getObjectsDetails(key = objectsInfo.key)
                 .toObjectsInfoDetailed(context).objects.map { detail ->
                     var address = ""
                     try {

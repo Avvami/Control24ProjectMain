@@ -1,4 +1,4 @@
-package ru.control24.tracking.domain.objects_details
+package ru.control24.tracking.domain.objects
 
 data class ObjectsInfoDetailed(
     val objects: List<ObjectDetails>

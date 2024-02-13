@@ -6,7 +6,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import ru.control24.tracking.data.remote.geocoding.GeocodingApi
 import ru.control24.tracking.data.remote.objects.ObjectsApi
-import ru.control24.tracking.data.remote.object_details.ObjectsDetailsApi
 import ru.control24.tracking.data.repository.ObjectsRepositoryImpl
 import ru.control24.tracking.domain.repository.ObjectsRepository
 import ru.control24.tracking.domain.util.C
@@ -14,7 +13,6 @@ import ru.control24.tracking.domain.util.C
 interface AppModule {
     val objectsApi: ObjectsApi
     val objectsRepository: ObjectsRepository
-    val objectDetailsApi: ObjectsDetailsApi
     val geocodingApi: GeocodingApi
 }
 
@@ -30,18 +28,9 @@ class AppModuleImpl(private val appContext: Context): AppModule {
     override val objectsRepository: ObjectsRepository by lazy {
         ObjectsRepositoryImpl(
             objectsApi = objectsApi,
-            objectsDetailsApi = objectDetailsApi,
             geocodingApi = geocodingApi,
             context = appContext
         )
-    }
-
-    override val objectDetailsApi: ObjectsDetailsApi by lazy {
-        Retrofit.Builder()
-            .baseUrl(C.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create()
     }
 
     override val geocodingApi: GeocodingApi by lazy {

@@ -9,4 +9,9 @@ interface ObjectsApi {
         @Path("login") login: String,
         @Path("password") password: String
     ): ObjectsDto
+
+    @GET("update2&{key}")
+    suspend fun getObjectsDetails(
+        @Path("key") key: String
+    ): ObjectsDetailsDto
 }
