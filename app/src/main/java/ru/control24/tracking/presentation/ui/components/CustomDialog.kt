@@ -15,11 +15,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -43,8 +44,10 @@ fun CustomDialog(
     @StringRes messageRes: Int? = null,
     messageString: String? = null,
     onDismissRequest: () -> Unit,
-    dismissButton:  @Composable (() -> Unit)? = null,
-    confirmButton: @Composable () -> Unit,
+    @StringRes dismissTextRes: Int? = null,
+    onDismiss: (() -> Unit)? = null,
+    @StringRes confirmTextRes: Int,
+    onConfirm: () -> Unit,
     showDialog: Boolean = false
 ) {
     var showAnimatedDialog by remember { mutableStateOf(false) }
@@ -54,7 +57,7 @@ fun CustomDialog(
     }
 
     if (showAnimatedDialog) {
-        AlertDialog(onDismissRequest = onDismissRequest) {
+        BasicAlertDialog(onDismissRequest = onDismissRequest) {
             var animateIn by remember { mutableStateOf(false) }
             LaunchedEffect(Unit) { animateIn = true }
 
@@ -117,10 +120,15 @@ fun CustomDialog(
                             .fillMaxWidth()
                             .padding(end = 8.dp, bottom = 8.dp)
                     ) {
-                        if (dismissButton != null) {
-                            dismissButton()
+                        println(onDismiss)
+                        onDismiss?.let { dismiss ->
+                            TextButton(onClick = { dismiss() }) {
+                                Text(text = stringResource(id = dismissTextRes!!))
+                            }
                         }
-                        confirmButton()
+                        TextButton(onClick = { onConfirm() }) {
+                            Text(text = stringResource(id = confirmTextRes))
+                        }
                     }
                 }
                 DisposableEffect(Unit) {

@@ -94,10 +94,15 @@ class MainViewModel(
                     iconRes = event.iconRes,
                     titleRes = event.titleRes,
                     messageRes = event.messageRes,
-                    messageString = event.messageString
+                    messageString = event.messageString,
+                    dismissTextRes = event.dismissTextRes,
+                    onDismissRequest = { uiEvent(UiEvent.CloseMessageDialog) },
+                    onDismiss = event.onDismiss,
+                    confirmTextRes = event.confirmTextRes,
+                    onConfirm = event.onConfirm ?: { uiEvent(UiEvent.CloseMessageDialog) }
                 )
             }
-            UiEvent.CloseMessageDialog -> { messageDialogState = MessageDialogState() }
+            UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
         }
     }
 }

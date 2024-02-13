@@ -1,6 +1,8 @@
 package ru.control24.tracking.presentation.ui.screens.auth
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,8 +96,23 @@ fun AuthScreen(
                     authViewModel.authUIEvent(AuthUIEvent.SetLogin(it))
                     authViewModel.authUIEvent(AuthUIEvent.ValidateInput(login = it))
                 },
-                label = { Text(text = if (authViewModel.loginInputError) stringResource(id = R.string.login_hint_error) else
-                    stringResource(id = R.string.login_hint)) },
+                label = {
+                    AnimatedContent(
+                        targetState = authViewModel.loginInputError,
+                        label = "Login text field error label animation",
+                        transitionSpec = {
+                            slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Up) togetherWith
+                                    slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Up)
+                        }
+                    ) {loginInputError ->
+                        Text(
+                            text = when (loginInputError) {
+                                true -> { stringResource(id = R.string.login_hint_error) }
+                                false -> { stringResource(id = R.string.login_hint) }
+                            }
+                        )
+                    }
+                },
                 isError = authViewModel.loginInputError,
                 singleLine = true,
                 modifier = Modifier
@@ -109,8 +126,23 @@ fun AuthScreen(
                     authViewModel.authUIEvent(AuthUIEvent.SetPassword(it))
                     authViewModel.authUIEvent(AuthUIEvent.ValidateInput(password = it))
                 },
-                label = { Text(text = if (authViewModel.passwordInputError) stringResource(id = R.string.password_hint_error) else
-                    stringResource(id = R.string.password_hint)) },
+                label = {
+                    AnimatedContent(
+                        targetState = authViewModel.passwordInputError,
+                        label = "Password text field error label animation",
+                        transitionSpec = {
+                            slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Up) togetherWith
+                                    slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Up)
+                        }
+                    ) {passwordInputError ->
+                        Text(
+                            text = when (passwordInputError) {
+                                true -> { stringResource(id = R.string.password_hint_error) }
+                                false -> { stringResource(id = R.string.password_hint) }
+                            }
+                        )
+                    }
+                },
                 isError = authViewModel.passwordInputError,
                 visualTransformation = if (authViewModel.passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                 trailingIcon = {
