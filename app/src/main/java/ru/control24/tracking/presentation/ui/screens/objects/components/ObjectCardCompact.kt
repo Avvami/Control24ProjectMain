@@ -130,7 +130,8 @@ fun ObjectCardCompact(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_location_on_fill0),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(22.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -144,7 +145,8 @@ fun ObjectCardCompact(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_schedule_fill0),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(22.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -196,11 +198,11 @@ fun ObjectCardCompact(
                             Spacer(modifier = Modifier.width(4.dp))
                             Column {
                                 Text(text = stringResource(id = R.string.driver), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text(text = "Manly man of men", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(text = stringResource(id = R.string.unspecified), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                         FilledIconButton(onClick = { /*TODO*/ }) {
-                            Icon(painter = painterResource(id = R.drawable.icon_call_fill0), contentDescription = null)
+                            Icon(painter = painterResource(id = R.drawable.icon_call_fill1), contentDescription = null)
                         }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
