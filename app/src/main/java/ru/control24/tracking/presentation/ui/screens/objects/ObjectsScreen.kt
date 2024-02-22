@@ -22,16 +22,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.states.ObjectsState
+import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
-import ru.control24.tracking.presentation.ui.screens.objects.components.ObjectCardCompact
 import ru.control24.tracking.presentation.ui.components.ThinLinearProgressIndicator
+import ru.control24.tracking.presentation.ui.screens.objects.components.ObjectCardCompact
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObjectsScreen(
     paddingValues: PaddingValues,
-    objectsState: () -> ObjectsState
+    activeUserState: ActiveUserState
 ) {
     val objectsViewModel: ObjectsViewModel = viewModel()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -50,10 +50,10 @@ fun ObjectsScreen(
                 .padding(bottom = paddingValues.calculateBottomPadding())
                 .padding(top = innerPadding.calculateTopPadding())
         ) {
-            AnimatedVisibility(visible = objectsState().isLoading) {
+            AnimatedVisibility(visible = activeUserState.isLoading) {
                 ThinLinearProgressIndicator()
             }
-            objectsState().error?.let { error ->
+            activeUserState.error?.let { error ->
                 Text(
                     text = error,
                     style = MaterialTheme.typography.bodyLarge,
@@ -64,8 +64,8 @@ fun ObjectsScreen(
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
             }
-            objectsState().objectsInfo?.let { objectsInfo ->
-                if (objectsInfo.trackingObjects.isEmpty()) {
+            activeUserState.objectsList?.let { objectsList ->
+                if (objectsList.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.empty_tracking_objects),
                         style = MaterialTheme.typography.bodyLarge,
@@ -83,10 +83,10 @@ fun ObjectsScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(
-                            count = objectsInfo.trackingObjects.size,
-                            key = { objectsInfo.trackingObjects[it].id }
+                            count = objectsList.size,
+                            key = { objectsList[it].objectId }
                         ) { index ->
-                            val objectInfo = objectsInfo.trackingObjects[index]
+                            val objectInfo = objectsList[index]
                             ObjectCardCompact(
                                 objectInfo = objectInfo,
                                 isExpanded = objectsViewModel::isCardExpanded,

@@ -35,13 +35,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
-import ru.control24.tracking.domain.objects.Object
+import ru.control24.tracking.domain.objects.ObjectsInfo
 import ru.control24.tracking.presentation.ui.screens.objects.ObjectsUiEvent
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ObjectCardCompact(
-    objectInfo: Object,
+    objectInfo: ObjectsInfo,
     isExpanded: () -> SnapshotStateMap<Int, Boolean>,
     objectsUiEvent: (ObjectsUiEvent) -> Unit
 ) {
@@ -61,7 +61,7 @@ fun ObjectCardCompact(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         painter = painterResource(id = objectInfo.category.iconRes),
-                        contentDescription = null,
+                        contentDescription = stringResource(id = R.string.type),
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(30.dp)
                     )
@@ -73,7 +73,7 @@ fun ObjectCardCompact(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if (objectInfo.details?.speed != null) stringResource(id = R.string.speed, objectInfo.details.speed) else
+                            text = if (objectInfo.speed != null) stringResource(id = R.string.speed, objectInfo.speed) else
                                 stringResource(id = R.string.no_information),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -87,7 +87,7 @@ fun ObjectCardCompact(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     AnimatedContent(
-                        targetState = !(isExpanded()[objectInfo.id] ?: false),
+                        targetState = !(isExpanded()[objectInfo.objectId] ?: false),
                         transitionSpec = {
                             if (targetState) {
                                 scaleIn() togetherWith scaleOut()
@@ -98,7 +98,7 @@ fun ObjectCardCompact(
                         label = "Button change animation"
                     ) { targetState ->
                         if (targetState) {
-                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.id, true)) }) {
+                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.objectId, true)) }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.icon_arrow_drop_down_fill0),
                                     contentDescription = null,
@@ -107,7 +107,7 @@ fun ObjectCardCompact(
                                 )
                             }
                         } else {
-                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.id, false)) }) {
+                            IconButton(onClick = { objectsUiEvent(ObjectsUiEvent.SetCardExpanded(objectInfo.objectId, false)) }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.icon_arrow_drop_up_fill0),
                                     contentDescription = null,
@@ -120,7 +120,7 @@ fun ObjectCardCompact(
                 }
             }
         }
-        AnimatedVisibility(visible = isExpanded()[objectInfo.id] == true) {
+        AnimatedVisibility(visible = isExpanded()[objectInfo.objectId] == true) {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -135,7 +135,7 @@ fun ObjectCardCompact(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = objectInfo.details?.address ?: stringResource(id = R.string.no_information),
+                            text = objectInfo.address ?: stringResource(id = R.string.no_information),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -150,7 +150,7 @@ fun ObjectCardCompact(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = (objectInfo.details?.time ?: stringResource(id = R.string.no_information)).toString(),
+                            text = (objectInfo.time ?: stringResource(id = R.string.no_information)).toString(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )

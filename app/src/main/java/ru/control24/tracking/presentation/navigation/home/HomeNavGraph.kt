@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
-import ru.control24.tracking.presentation.states.ObjectsState
+import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.ui.screens.map.MapScreen
 import ru.control24.tracking.presentation.ui.screens.objects.ObjectsScreen
 import ru.control24.tracking.presentation.ui.screens.settings.SettingsScreen
@@ -22,7 +22,7 @@ fun HomeNavigationGraph(
     navController: NavHostController,
     rootNavController: NavController,
     paddingValues: PaddingValues,
-    objectsState: () -> ObjectsState
+    activeUserState: ActiveUserState
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +36,7 @@ fun HomeNavigationGraph(
         ) {
             ObjectsScreen(
                 paddingValues = paddingValues,
-                objectsState = objectsState
+                activeUserState = activeUserState
             )
         }
         composable(

@@ -18,4 +18,5 @@ sealed interface UiEvent {
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
     data object CloseMessageDialog: UiEvent
+    data class SetStartDestination(val destination: String): UiEvent
 }

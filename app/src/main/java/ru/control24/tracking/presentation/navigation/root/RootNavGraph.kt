@@ -4,36 +4,46 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.control24.tracking.presentation.MainViewModel
-import ru.control24.tracking.presentation.navigation.auth.authNavGraph
 import ru.control24.tracking.presentation.navigation.home.HomeScreen
+import ru.control24.tracking.presentation.ui.screens.auth.AuthScreen
 import ru.control24.tracking.presentation.ui.screens.help.HelpScreen
 
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
-    startDestination: String,
     mainViewModel: MainViewModel
 ) {
     NavHost(
         navController = navController,
         route = RootNavGraph.ROOT,
-        startDestination = startDestination
+        startDestination = mainViewModel.startDestination
     ) {
-        authNavGraph(
-            rootNavController = navController,
-            uiEvent = mainViewModel::uiEvent,
-            objectsState = mainViewModel::objectsState
-        )
+        composable(
+            route = RootNavGraph.AUTH,
+            enterTransition = { fadeIn() + scaleIn(initialScale = .9f) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
+        ) {
+            AuthScreen(
+                uiEvent = mainViewModel::uiEvent,
+                activeUserState = mainViewModel.activeUserState.collectAsState().value,
+                navigateToHelpScreen = { navController.navigate(RootNavGraph.HELP) }
+            )
+        }
         composable(route = RootNavGraph.HOME) {
             HomeScreen(
                 rootNavController = navController,
-                objectsState = mainViewModel::objectsState
+                activeUserState = mainViewModel.activeUserState.collectAsState().value
             )
         }
         composable(
@@ -60,9 +70,9 @@ fun RootNavigationGraph(
 
 object RootNavGraph {
     const val ROOT = "root_graph"
-    const val AUTH = "auth_graph"
     const val HOME = "home_graph"
 
+    const val AUTH = "auth_screen"
     const val HELP = "help_screen"
 }
 

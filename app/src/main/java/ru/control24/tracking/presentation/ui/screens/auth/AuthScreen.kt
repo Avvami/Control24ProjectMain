@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
 import ru.control24.tracking.presentation.UiEvent
-import ru.control24.tracking.presentation.states.ObjectsState
+import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
 import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
@@ -45,7 +45,7 @@ import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
 @Composable
 fun AuthScreen(
     uiEvent: (UiEvent) -> Unit,
-    objectsState: () -> ObjectsState,
+    activeUserState: ActiveUserState,
     navigateToHelpScreen: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
@@ -169,7 +169,7 @@ fun AuthScreen(
                     .width(488.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                AnimatedContent(targetState = objectsState().isLoading, label = "Auth progress animation") { targetState ->
+                AnimatedContent(targetState = activeUserState.isLoading, label = "Auth progress animation") { targetState ->
                     if (targetState) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                     } else {

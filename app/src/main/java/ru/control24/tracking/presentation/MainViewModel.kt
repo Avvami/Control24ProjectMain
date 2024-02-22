@@ -5,17 +5,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.control24.tracking.R
-import ru.control24.tracking.domain.objects.ObjectsInfo
+import ru.control24.tracking.data.mappers.toObjectsInfo
+import ru.control24.tracking.domain.user.UserInfo
 import ru.control24.tracking.domain.repository.ObjectsRepository
+import ru.control24.tracking.domain.repository.UsersLocalRepository
 import ru.control24.tracking.domain.util.Resource
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
+import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.states.MessageDialogState
-import ru.control24.tracking.presentation.states.ObjectsState
 
 class MainViewModel(
-    private val objectsRepository: ObjectsRepository
+    private val objectsRepository: ObjectsRepository,
+    private val usersLocalRepository: UsersLocalRepository
 ): ViewModel() {
 
     var startDestination by mutableStateOf(RootNavGraph.AUTH)
@@ -24,17 +35,46 @@ class MainViewModel(
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
-    var objectsState by mutableStateOf(ObjectsState())
+    var userCheckResult by mutableStateOf<Boolean?>(null)
         private set
+
+    private val _activeUserState = MutableStateFlow(ActiveUserState())
+    val activeUserState = _activeUserState.asStateFlow()
+
+    init {
+        @OptIn(ExperimentalCoroutinesApi::class)
+        viewModelScope.launch {
+            usersLocalRepository.getActiveUser()
+                .flatMapLatest { userEntity ->
+                    usersLocalRepository.loadCurrentUserObjects(userEntity.username).map { objectsList ->
+                        ActiveUserState(
+                            userInfo = UserInfo(username = userEntity.username, password = userEntity.password),
+                            objectsList = objectsList.map { it.toObjectsInfo() }
+                        )
+                    }
+                }.catch {e ->
+                    e.printStackTrace()
+                    if (userCheckResult == null) userCheckResult = false
+                }.collect { activeUserState ->
+                    _activeUserState.value = activeUserState
+                    if (userCheckResult == null) {
+                        startDestination = RootNavGraph.HOME
+                        delay(100L)
+                        userCheckResult = true
+                    }
+                }
+        }
+    }
 
     private fun getObjects(login: String, password: String) {
         viewModelScope.launch {
-            objectsState = objectsState.copy(
-                isLoading = true,
-                error = null
-            )
+            _activeUserState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
-            var objectsInfo: ObjectsInfo? = null
+            var key: String? = null
             var error: String? = null
 
             objectsRepository.getObjects(login, password).let { result ->
@@ -43,21 +83,23 @@ class MainViewModel(
                         error = result.message
                         uiEvent(UiEvent.ShowMessageDialog(
                             iconRes = R.drawable.icon_running_with_errors_fill0,
-                            messageRes = R.string.http_400
+                            messageString = error
                         ))
                     }
                     is Resource.Success -> {
-                        objectsInfo = result.data
+                        key = result.data
                         startDestination = RootNavGraph.HOME
                     }
                 }
             }
 
-            objectsState = objectsState.copy(
-                objectsInfo = objectsInfo,
-                isLoading = false,
-                error = error
-            )
+            _activeUserState.update {
+                it.copy(
+                    key = key,
+                    isLoading = false,
+                    error = error
+                )
+            }
         }
     }
 
@@ -79,6 +121,7 @@ class MainViewModel(
                 )
             }
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
+            is UiEvent.SetStartDestination -> { startDestination = event.destination }
         }
     }
 }

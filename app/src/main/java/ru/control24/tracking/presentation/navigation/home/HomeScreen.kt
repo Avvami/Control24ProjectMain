@@ -4,14 +4,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import ru.control24.tracking.presentation.states.ObjectsState
+import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.ui.components.BottomNavigationBar
 import ru.control24.tracking.presentation.ui.components.bottomBarVisibility
 
 @Composable
 fun HomeScreen(
     rootNavController: NavController,
-    objectsState: () -> ObjectsState
+    activeUserState: ActiveUserState
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -23,7 +23,7 @@ fun HomeScreen(
             navController = navController,
             rootNavController = rootNavController,
             paddingValues = paddingValues,
-            objectsState = objectsState
+            activeUserState = activeUserState
         )
     }
 }

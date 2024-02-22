@@ -1,6 +1,6 @@
 package ru.control24.tracking.domain.objects
 
-data class ObjectsInfoDetailed(
+data class ObjectsDetails(
     val objects: List<ObjectDetails>
 )
 

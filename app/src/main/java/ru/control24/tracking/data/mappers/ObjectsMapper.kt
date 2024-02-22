@@ -2,22 +2,24 @@ package ru.control24.tracking.data.mappers
 
 import android.content.Context
 import android.text.format.DateFormat
+import ru.control24.tracking.data.local.ObjectsInfoEntity
 import ru.control24.tracking.data.remote.objects.ObjectDetailsDto
 import ru.control24.tracking.data.remote.objects.ObjectDto
 import ru.control24.tracking.data.remote.objects.ObjectsDetailsDto
 import ru.control24.tracking.data.remote.objects.ObjectsDto
 import ru.control24.tracking.domain.objects.Object
-import ru.control24.tracking.domain.objects.ObjectsInfo
+import ru.control24.tracking.domain.objects.Objects
 import ru.control24.tracking.domain.objects.ObjectDetails
-import ru.control24.tracking.domain.objects.ObjectsInfoDetailed
+import ru.control24.tracking.domain.objects.ObjectsDetails
+import ru.control24.tracking.domain.objects.ObjectsInfo
 import ru.control24.tracking.domain.util.CarCategory
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun ObjectsDto.toObjectsInfo(): ObjectsInfo {
-    return ObjectsInfo(
+fun ObjectsDto.toObjects(): Objects {
+    return Objects(
         key = key,
         trackingObjects = trackingObjects.map {
             it.toObject()
@@ -29,15 +31,15 @@ fun ObjectDto.toObject(): Object {
     return Object(
         id = id,
         name = name,
-        category = CarCategory.fromDigit(category),
+        category = category,
         client = client,
         licencePlate = licencePlate,
         carModel = carModel
     )
 }
 
-fun ObjectsDetailsDto.toObjectsInfoDetailed(context: Context): ObjectsInfoDetailed {
-    return ObjectsInfoDetailed(
+fun ObjectsDetailsDto.toObjectsDetails(context: Context): ObjectsDetails {
+    return ObjectsDetails(
         objects = objects.map {
             it.toObjectDetails(context)
         }
@@ -63,5 +65,41 @@ fun ObjectDetailsDto.toObjectDetails(context: Context): ObjectDetails {
         speed = speed,
         heading = heading,
         gps = gps
+    )
+}
+
+fun Object.toObjectsInfoEntity(): ObjectsInfoEntity {
+    return ObjectsInfoEntity(
+        objectId = id,
+        name = name,
+        category = category,
+        client = client,
+        licencePlate = licencePlate,
+        carModel = carModel,
+        time = details?.time,
+        lat = details?.lat,
+        lon = details?.lon,
+        speed = details?.speed,
+        heading = details?.heading,
+        gps = details?.gps,
+        address = details?.address
+    )
+}
+
+fun ObjectsInfoEntity.toObjectsInfo(): ObjectsInfo {
+    return ObjectsInfo(
+        objectId = id,
+        name = name,
+        category = CarCategory.fromDigit(category),
+        client = client,
+        licencePlate = licencePlate,
+        carModel = carModel,
+        time = time,
+        lat = lat,
+        lon = lon,
+        speed = speed,
+        heading = heading,
+        gps = gps,
+        address = address
     )
 }

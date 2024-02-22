@@ -3,12 +3,15 @@ package ru.control24.tracking.data.repository
 import android.content.Context
 import retrofit2.HttpException
 import ru.control24.tracking.R
+import ru.control24.tracking.data.local.ObjectsDao
+import ru.control24.tracking.data.local.UsersDao
+import ru.control24.tracking.data.local.UsersEntity
 import ru.control24.tracking.data.mappers.toGeocodingInfo
-import ru.control24.tracking.data.mappers.toObjectsInfo
-import ru.control24.tracking.data.mappers.toObjectsInfoDetailed
+import ru.control24.tracking.data.mappers.toObjects
+import ru.control24.tracking.data.mappers.toObjectsDetails
+import ru.control24.tracking.data.mappers.toObjectsInfoEntity
 import ru.control24.tracking.data.remote.geocoding.GeocodingApi
 import ru.control24.tracking.data.remote.objects.ObjectsApi
-import ru.control24.tracking.domain.objects.ObjectsInfo
 import ru.control24.tracking.domain.repository.ObjectsRepository
 import ru.control24.tracking.domain.util.Resource
 import ru.control24.tracking.domain.util.UiText
@@ -17,17 +20,19 @@ import java.io.IOException
 class ObjectsRepositoryImpl(
     private val objectsApi: ObjectsApi,
     private val geocodingApi: GeocodingApi,
+    private val usersDao: UsersDao,
+    private val objectsDao: ObjectsDao,
     private val context: Context
 ): ObjectsRepository {
-    override suspend fun getObjects(login: String, password: String): Resource<ObjectsInfo> {
+    override suspend fun getObjects(login: String, password: String): Resource<String> {
         return try {
             val objectsInfo = objectsApi.getObjects(
                 login = login,
                 password = password
-            ).toObjectsInfo()
+            ).toObjects()
 
             val objectsDetails = objectsApi.getObjectsDetails(key = objectsInfo.key)
-                .toObjectsInfoDetailed(context).objects.map { detail ->
+                .toObjectsDetails(context).objects.map { detail ->
                     var address = ""
                     try {
                         address = geocodingApi.getAddressFromLatLon(detail.lat, detail.lon).toGeocodingInfo(context)
@@ -43,8 +48,18 @@ class ObjectsRepositoryImpl(
             }
             val objectsInfoWithDetails = objectsInfo.copy(trackingObjects = trackingObjectsWithDetails)
 
+            usersDao.insertUser(UsersEntity(
+                username = login,
+                password = password,
+                active = true
+            )).also {
+                objectsDao.insertTrackingObjects(
+                    objectsInfoWithDetails.trackingObjects.map { it.toObjectsInfoEntity().copy(username = login) }
+                )
+            }
+
             Resource.Success(
-                data = objectsInfoWithDetails
+                data = objectsInfoWithDetails.key
             )
         } catch (e: HttpException) {
             e.printStackTrace()
