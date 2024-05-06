@@ -1,4 +1,4 @@
-package ru.control24.tracking.presentation.ui.screens.auth
+package ru.control24.tracking.auth.presentation.auth
 
 sealed interface AuthUIEvent {
     data class SetLogin(val login: String): AuthUIEvent

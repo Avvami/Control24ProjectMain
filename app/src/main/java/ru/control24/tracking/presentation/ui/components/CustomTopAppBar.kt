@@ -24,8 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
-import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
+import ru.control24.tracking.presentation.ui.theme.onPrimaryLight
+import ru.control24.tracking.presentation.ui.theme.primaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,13 +67,13 @@ fun CustomTopAppBar(
                     modifier = Modifier
                         .offset(x = 4.dp)
                         .clip(RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp))
-                        .background(md_theme_light_primary),
+                        .background(primaryLight),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.company_logo),
                         contentDescription = stringResource(id = R.string.company_logo),
-                        tint = md_theme_light_onPrimary,
+                        tint = onPrimaryLight,
                         modifier = Modifier
                             .padding(start = 12.dp, top = 6.dp, end = 16.dp, bottom = 6.dp)
                             .height(28.dp)

@@ -1,4 +1,4 @@
-package ru.control24.tracking.presentation.ui.screens.auth
+package ru.control24.tracking.auth.presentation.auth
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package ru.control24.tracking.presentation.ui.screens.auth
+package ru.control24.tracking.auth.presentation.auth
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -38,8 +38,8 @@ import ru.control24.tracking.R
 import ru.control24.tracking.presentation.UiEvent
 import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
-import ru.control24.tracking.presentation.ui.theme.md_theme_light_onPrimary
-import ru.control24.tracking.presentation.ui.theme.md_theme_light_primary
+import ru.control24.tracking.presentation.ui.theme.onPrimaryLight
+import ru.control24.tracking.presentation.ui.theme.primaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,29 +68,32 @@ fun AuthScreen(
             Box(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
-                    .background(color = md_theme_light_primary)
+                    .background(color = primaryLight)
                     .padding(24.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
+                    modifier = Modifier.width(260.dp),
                     painter = painterResource(id = R.drawable.company_logo),
                     contentDescription = stringResource(id = R.string.company_logo),
-                    modifier = Modifier.width(260.dp),
-                    tint = md_theme_light_onPrimary
+                    tint = onPrimaryLight
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.company_description),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .width(488.dp)
-                    .padding(horizontal = 16.dp)
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp),
                 value = authViewModel.loginFieldState,
                 onValueChange = {
                     authViewModel.authUIEvent(AuthUIEvent.SetLogin(it))
@@ -114,13 +117,13 @@ fun AuthScreen(
                     }
                 },
                 isError = authViewModel.loginInputError,
-                singleLine = true,
-                modifier = Modifier
-                    .width(488.dp)
-                    .padding(horizontal = 16.dp)
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp),
                 value = authViewModel.passwordFieldState,
                 onValueChange = {
                     authViewModel.authUIEvent(AuthUIEvent.SetPassword(it))
@@ -153,25 +156,22 @@ fun AuthScreen(
                         Icon(painter = visibilityIcon, contentDescription = description)
                     }
                 },
-                singleLine = true,
-                modifier = Modifier
-                    .width(488.dp)
-                    .padding(horizontal = 16.dp)
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
+                modifier = Modifier
+                    .width(488.dp)
+                    .padding(horizontal = 16.dp),
                 onClick = {
                     authViewModel.authUIEvent(AuthUIEvent.ValidateInput(authViewModel.loginFieldState, authViewModel.passwordFieldState))
                     if (authViewModel.loginInputError || authViewModel.passwordInputError) return@Button
                     uiEvent(UiEvent.AuthUser(authViewModel.loginFieldState, authViewModel.passwordFieldState))
-                },
-                modifier = Modifier
-                    .width(488.dp)
-                    .padding(horizontal = 16.dp)
+                }
             ) {
                 AnimatedContent(targetState = activeUserState.isLoading, label = "Auth progress animation") { targetState ->
                     if (targetState) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                     } else {
                         Text(text = stringResource(id = R.string.login))
                     }
