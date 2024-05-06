@@ -26,4 +26,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Control24"
-include ':app'
+include(":app")
