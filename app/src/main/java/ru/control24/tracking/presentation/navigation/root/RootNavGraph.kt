@@ -16,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.control24.tracking.presentation.MainViewModel
 import ru.control24.tracking.presentation.navigation.home.HomeScreen
-import ru.control24.tracking.auth.presentation.auth.AuthScreen
+import ru.control24.tracking.auth.presentation.login.AuthScreen
 import ru.control24.tracking.presentation.ui.screens.help.HelpScreen
 
 @Composable

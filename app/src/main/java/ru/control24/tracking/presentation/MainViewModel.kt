@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,18 +16,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.control24.tracking.R
-import ru.control24.tracking.data.mappers.toObjectsInfo
-import ru.control24.tracking.domain.user.UserInfo
-import ru.control24.tracking.domain.repository.ObjectsRepository
-import ru.control24.tracking.domain.repository.UsersLocalRepository
-import ru.control24.tracking.domain.util.Resource
+import ru.control24.tracking.monitoring.data.objects.mappers.toObjectsInfo
+import ru.control24.tracking.core.domain.models.UserInfo
+import ru.control24.tracking.monitoring.domain.objects.repository.ObjectsRepository
+import ru.control24.tracking.core.domain.repository.LocalRepository
+import ru.control24.tracking.core.util.Resource
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.states.MessageDialogState
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val objectsRepository: ObjectsRepository,
-    private val usersLocalRepository: UsersLocalRepository
+    private val localRepository: LocalRepository
 ): ViewModel() {
 
     var startDestination by mutableStateOf(RootNavGraph.AUTH)
@@ -44,9 +47,9 @@ class MainViewModel(
     init {
         @OptIn(ExperimentalCoroutinesApi::class)
         viewModelScope.launch {
-            usersLocalRepository.getActiveUser()
+            localRepository.getActiveUser()
                 .flatMapLatest { userEntity ->
-                    usersLocalRepository.loadCurrentUserObjects(userEntity.username).map { objectsList ->
+                    localRepository.getCurrentUserObjects(userEntity.username).map { objectsList ->
                         ActiveUserState(
                             userInfo = UserInfo(username = userEntity.username, password = userEntity.password),
                             objectsList = objectsList.map { it.toObjectsInfo() }

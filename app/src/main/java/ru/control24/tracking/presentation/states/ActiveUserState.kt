@@ -1,7 +1,7 @@
 package ru.control24.tracking.presentation.states
 
-import ru.control24.tracking.domain.objects.ObjectsInfo
-import ru.control24.tracking.domain.user.UserInfo
+import ru.control24.tracking.monitoring.domain.objects.models.ObjectsInfo
+import ru.control24.tracking.core.domain.models.UserInfo
 
 data class ActiveUserState(
     val userInfo: UserInfo? = null,

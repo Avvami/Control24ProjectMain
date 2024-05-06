@@ -35,7 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.control24.tracking.R
-import ru.control24.tracking.domain.objects.ObjectsInfo
+import ru.control24.tracking.monitoring.domain.objects.models.ObjectsInfo
 import ru.control24.tracking.presentation.ui.screens.objects.ObjectsUiEvent
 
 @OptIn(ExperimentalLayoutApi::class)

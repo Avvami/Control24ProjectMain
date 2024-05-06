@@ -11,28 +11,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import ru.control24.tracking.Control24Application
+import dagger.hilt.android.AndroidEntryPoint
 import ru.control24.tracking.presentation.navigation.root.RootNavigationGraph
 import ru.control24.tracking.presentation.ui.components.CustomDialog
 import ru.control24.tracking.presentation.ui.theme.Control24Theme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels {
-        viewModelFactory {
-            MainViewModel(
-                objectsRepository = Control24Application.appModule.objectsRepository,
-                usersLocalRepository = Control24Application.appModule.usersLocalRepository
-            )
-        }
-    }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
         installSplashScreen().setKeepOnScreenCondition {
             mainViewModel.userCheckResult == null
         }
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         setContent {
             Control24Theme {
                 Surface(
