@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AnimatedSplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/splash_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_company_logo</item>
-        <item name="windowSplashScreenAnimationDuration">1000</item>
+    <style name="Theme.Control24.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/control24_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Control24</item>
     </style>
 </resources>

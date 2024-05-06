@@ -22,7 +22,7 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AnimatedSplash">
+            android:theme="@style/Theme.Control24.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
