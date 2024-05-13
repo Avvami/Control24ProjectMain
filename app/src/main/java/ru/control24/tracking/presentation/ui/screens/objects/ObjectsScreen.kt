@@ -65,6 +65,7 @@ fun ObjectsScreen(
                 )
             }
             activeUserState.objectsList?.let { objectsList ->
+                println(objectsList)
                 if (objectsList.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.empty_tracking_objects),

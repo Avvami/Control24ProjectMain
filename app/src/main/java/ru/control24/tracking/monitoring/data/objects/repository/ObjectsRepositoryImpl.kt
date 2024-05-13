@@ -30,7 +30,7 @@ class ObjectsRepositoryImpl @Inject constructor(
             val objectsInfo = objectsApi.getObjects(
                 login = login,
                 password = password
-            ).toObjects()
+            ).toObjects(login)
 
             val objectsDetails = objectsApi.getObjectsDetails(key = objectsInfo.key)
                 .toObjectsDetails(appContext).objects.map { detail ->
@@ -49,15 +49,15 @@ class ObjectsRepositoryImpl @Inject constructor(
             }
             val objectsInfoWithDetails = objectsInfo.copy(trackingObjects = trackingObjectsWithDetails)
 
-            usersDao.insertUser(
+            usersDao.upsertUser(
                 UsersEntity(
                 username = login,
                 password = password,
                 active = true
             )
             ).also {
-                objectsDao.insertTrackingObjects(
-                    objectsInfoWithDetails.trackingObjects.map { it.toObjectsInfoEntity().copy(username = login) }
+                objectsDao.upsertTrackingObjects(
+                    objectsInfoWithDetails.trackingObjects.map { it.toObjectsInfoEntity() }
                 )
             }
 

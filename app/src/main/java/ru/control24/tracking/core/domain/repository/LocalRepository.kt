@@ -5,11 +5,11 @@ import ru.control24.tracking.core.data.local.ObjectsInfoEntity
 import ru.control24.tracking.core.data.local.UsersEntity
 
 interface LocalRepository {
-    suspend fun insertUser(user: UsersEntity)
+    suspend fun upsertUser(user: UsersEntity)
 
     suspend fun deleteUser(user: UsersEntity)
 
-    fun getActiveUser(): Flow<UsersEntity>
+    fun getActiveUser(): Flow<UsersEntity?>
 
-    fun getCurrentUserObjects(activeUser: String): Flow<List<ObjectsInfoEntity>>
+    fun getCurrentUserObjects(username: String): Flow<List<ObjectsInfoEntity>>
 }

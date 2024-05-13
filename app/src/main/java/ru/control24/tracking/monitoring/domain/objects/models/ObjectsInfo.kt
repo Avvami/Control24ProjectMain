@@ -4,7 +4,7 @@ import ru.control24.tracking.monitoring.domain.objects.util.CarCategory
 
 data class ObjectsInfo(
     val objectId: Int,
-    val username: String? = null,
+    val username: String,
     val name: String,
     val category: CarCategory,
     val client: String,

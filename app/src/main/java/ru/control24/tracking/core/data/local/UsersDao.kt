@@ -2,25 +2,17 @@ package ru.control24.tracking.core.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UsersDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: UsersEntity)
+    @Upsert
+    suspend fun upsertUser(user: UsersEntity)
 
     @Delete
     suspend fun deleteUser(user: UsersEntity)
-
-    @Query(
-        "SELECT * FROM objectsinfoentity " +
-                "JOIN usersentity ON usersentity.username == objectsinfoentity.username " +
-                "WHERE usersentity.active = 1 AND usersentity.username = :currentUser"
-    )
-    fun getCurrentUserObjects(currentUser: String): Flow<List<ObjectsInfoEntity>>
 
     @Query("SELECT * FROM usersentity WHERE active = 1")
     fun getActiveUser(): Flow<UsersEntity>

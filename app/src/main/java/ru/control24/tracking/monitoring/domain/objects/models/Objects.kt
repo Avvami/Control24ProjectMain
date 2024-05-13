@@ -7,6 +7,7 @@ data class Objects(
 
 data class Object(
     val id: Int,
+    val username: String,
     val name: String,
     val category: Int,
     val client: String,

@@ -7,20 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.control24.tracking.R
-import ru.control24.tracking.monitoring.data.objects.mappers.toObjectsInfo
 import ru.control24.tracking.core.domain.models.UserInfo
-import ru.control24.tracking.monitoring.domain.objects.repository.ObjectsRepository
 import ru.control24.tracking.core.domain.repository.LocalRepository
 import ru.control24.tracking.core.util.Resource
+import ru.control24.tracking.monitoring.data.objects.mappers.toObjectsInfo
+import ru.control24.tracking.monitoring.domain.objects.repository.ObjectsRepository
 import ru.control24.tracking.presentation.navigation.root.RootNavGraph
 import ru.control24.tracking.presentation.states.ActiveUserState
 import ru.control24.tracking.presentation.states.MessageDialogState
@@ -38,7 +37,7 @@ class MainViewModel @Inject constructor(
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
-    var userCheckResult by mutableStateOf<Boolean?>(null)
+    var holdSplash by mutableStateOf(true)
         private set
 
     private val _activeUserState = MutableStateFlow(ActiveUserState())
@@ -49,22 +48,22 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             localRepository.getActiveUser()
                 .flatMapLatest { userEntity ->
-                    localRepository.getCurrentUserObjects(userEntity.username).map { objectsList ->
-                        ActiveUserState(
-                            userInfo = UserInfo(username = userEntity.username, password = userEntity.password),
-                            objectsList = objectsList.map { it.toObjectsInfo() }
-                        )
+                    if (userEntity != null) {
+                        localRepository.getCurrentUserObjects(userEntity.username).map { objectsList ->
+                            ActiveUserState(
+                                userInfo = UserInfo(username = userEntity.username, password = userEntity.password),
+                                objectsList = objectsList.map { it.toObjectsInfo() }
+                            )
+                        }
+                    } else {
+                        flowOf(ActiveUserState())
                     }
-                }.catch {e ->
-                    e.printStackTrace()
-                    if (userCheckResult == null) userCheckResult = false
                 }.collect { activeUserState ->
                     _activeUserState.value = activeUserState
-                    if (userCheckResult == null) {
+                    activeUserState.userInfo?.let {
                         startDestination = RootNavGraph.HOME
-                        delay(100L)
-                        userCheckResult = true
                     }
+                    holdSplash = false
                 }
         }
     }

@@ -18,18 +18,19 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun ObjectsDto.toObjects(): Objects {
+fun ObjectsDto.toObjects(username: String): Objects {
     return Objects(
         key = key,
         trackingObjects = trackingObjects.map {
-            it.toObject()
+            it.toObject(username)
         }
     )
 }
 
-fun ObjectDto.toObject(): Object {
+fun ObjectDto.toObject(username: String): Object {
     return Object(
         id = id,
+        username = username,
         name = name,
         category = category,
         client = client,
@@ -71,6 +72,7 @@ fun ObjectDetailsDto.toObjectDetails(context: Context): ObjectDetails {
 fun Object.toObjectsInfoEntity(): ObjectsInfoEntity {
     return ObjectsInfoEntity(
         objectId = id,
+        username = username,
         name = name,
         category = category,
         client = client,
@@ -88,7 +90,8 @@ fun Object.toObjectsInfoEntity(): ObjectsInfoEntity {
 
 fun ObjectsInfoEntity.toObjectsInfo(): ObjectsInfo {
     return ObjectsInfo(
-        objectId = id,
+        objectId = objectId,
+        username = username,
         name = name,
         category = CarCategory.fromDigit(category),
         client = client,

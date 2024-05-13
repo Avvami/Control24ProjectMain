@@ -1,14 +1,11 @@
 package ru.control24.tracking.core.data.local
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity
+@Entity(primaryKeys = ["objectId", "username"])
 data class ObjectsInfoEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
     val objectId: Int,
-    val username: String? = null,
+    val username: String,
     val name: String,
     val category: Int,
     val client: String,
