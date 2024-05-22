@@ -98,9 +98,6 @@ dependencies {
 
     // Splash API
     implementation("androidx.core:core-splashscreen:1.0.1")
-
-    // Maps
-    implementation("com.mapbox.maps:android:10.14.0")
 }
 
 kapt {

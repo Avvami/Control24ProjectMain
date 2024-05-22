@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -64,7 +63,6 @@ class MainViewModel @Inject constructor(
                     activeUserState.userInfo?.let {
                         startDestination = RootNavGraph.HOME
                     }
-                    delay(100)
                     holdSplash = false
                 }
         }

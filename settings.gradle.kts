@@ -1,13 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
-val localPropertiesFile = file("local.properties")
-val localProperties = Properties()
-
-if (localPropertiesFile.exists()) {
-    localProperties.load(FileInputStream(localPropertiesFile))
-}
-
 pluginManagement {
     repositories {
         google()
@@ -20,14 +10,19 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
-            // Do not change the username below. It should always be "mapbox" (not your username).
-            credentials.username = "mapbox"
-            // Use the secret token stored in gradle.properties as the password
-            credentials.password = localProperties.getProperty("MAPBOX_DOWNLOADS_TOKEN", "")
-            authentication.create<BasicAuthentication>("basic")
-        }
+//        maven {
+//            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+//            authentication {
+//                basic(BasicAuthentication)
+//            }
+//            credentials {
+//                // Do not change the username below.
+//                // This should always be `mapbox` (not your username).
+//                username = "mapbox"
+//                // Use the secret token you stored in gradle.properties as the password
+//                password = MAPBOX_DOWNLOADS_TOKEN
+//            }
+//        }
     }
 }
 rootProject.name = "Control24"
