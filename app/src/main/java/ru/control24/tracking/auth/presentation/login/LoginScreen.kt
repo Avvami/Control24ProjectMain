@@ -35,11 +35,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.control24.tracking.R
-import ru.control24.tracking.presentation.UiEvent
-import ru.control24.tracking.presentation.states.ActiveUserState
-import ru.control24.tracking.presentation.ui.components.CustomTopAppBar
-import ru.control24.tracking.presentation.ui.theme.onPrimaryLight
-import ru.control24.tracking.presentation.ui.theme.primaryLight
+import ru.control24.tracking.UiEvent
+import ru.control24.tracking.core.presentation.ActiveUserState
+import ru.control24.tracking.core.presentation.components.CustomTopAppBar
+import ru.control24.tracking.ui.theme.onPrimaryLight
+import ru.control24.tracking.ui.theme.primaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
