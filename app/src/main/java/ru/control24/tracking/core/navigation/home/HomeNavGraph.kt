@@ -7,6 +7,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,7 +24,7 @@ fun HomeNavigationGraph(
     navController: NavHostController,
     rootNavController: NavController,
     paddingValues: PaddingValues,
-    activeUserState: ActiveUserState,
+    activeUserState: State<ActiveUserState>,
     uiEvent: (UiEvent) -> Unit
 ) {
     NavHost(
@@ -57,7 +58,9 @@ fun HomeNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
             SettingsScreen(
-                navigateToHelpScreen = { rootNavController.navigate(RootNavGraph.HELP) }
+                paddingValues = paddingValues,
+                navigateToHelpScreen = { rootNavController.navigate(RootNavGraph.HELP) },
+                activeUserState = activeUserState
             )
         }
     }

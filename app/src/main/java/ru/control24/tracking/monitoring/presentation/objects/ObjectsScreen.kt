@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -31,7 +32,7 @@ import ru.control24.tracking.monitoring.presentation.objects.components.ObjectCa
 @Composable
 fun ObjectsScreen(
     paddingValues: PaddingValues,
-    activeUserState: ActiveUserState
+    activeUserState: State<ActiveUserState>
 ) {
     val objectsViewModel: ObjectsViewModel = viewModel()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -50,10 +51,10 @@ fun ObjectsScreen(
                 .padding(bottom = paddingValues.calculateBottomPadding())
                 .padding(top = innerPadding.calculateTopPadding())
         ) {
-            AnimatedVisibility(visible = activeUserState.isLoading) {
+            AnimatedVisibility(visible = activeUserState.value.isLoading) {
                 ThinLinearProgressIndicator()
             }
-            activeUserState.error?.let { error ->
+            activeUserState.value.error?.let { error ->
                 Text(
                     text = error,
                     style = MaterialTheme.typography.bodyLarge,
@@ -64,7 +65,7 @@ fun ObjectsScreen(
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
             }
-            activeUserState.objectsList?.let { objectsList ->
+            activeUserState.value.objectsList?.let { objectsList ->
                 if (objectsList.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.empty_tracking_objects),

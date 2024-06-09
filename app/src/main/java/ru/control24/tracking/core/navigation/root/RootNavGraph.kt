@@ -9,14 +9,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.control24.tracking.MainViewModel
-import ru.control24.tracking.core.navigation.home.HomeScreen
 import ru.control24.tracking.auth.presentation.login.AuthScreen
+import ru.control24.tracking.core.navigation.home.HomeScreen
 import ru.control24.tracking.settings.presentation.help.HelpScreen
 
 @Composable
@@ -36,14 +36,14 @@ fun RootNavigationGraph(
         ) {
             AuthScreen(
                 uiEvent = mainViewModel::uiEvent,
-                activeUserState = mainViewModel.activeUserState.collectAsState().value,
+                activeUserState = mainViewModel.activeUserState.collectAsStateWithLifecycle(),
                 navigateToHelpScreen = { navController.navigate(RootNavGraph.HELP) }
             )
         }
         composable(route = RootNavGraph.HOME) {
             HomeScreen(
                 rootNavController = navController,
-                activeUserState = mainViewModel.activeUserState.collectAsState().value,
+                activeUserState = mainViewModel.activeUserState.collectAsStateWithLifecycle(),
                 uiEvent = mainViewModel::uiEvent
             )
         }

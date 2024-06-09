@@ -2,6 +2,7 @@ package ru.control24.tracking.core.navigation.home
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ru.control24.tracking.UiEvent
@@ -12,7 +13,7 @@ import ru.control24.tracking.core.presentation.components.navbar.bottomBarVisibi
 @Composable
 fun HomeScreen(
     rootNavController: NavController,
-    activeUserState: ActiveUserState,
+    activeUserState: State<ActiveUserState>,
     uiEvent: (UiEvent) -> Unit
 ) {
     val navController = rememberNavController()

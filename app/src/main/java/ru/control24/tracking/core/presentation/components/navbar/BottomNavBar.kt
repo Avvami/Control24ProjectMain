@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -40,7 +41,8 @@ fun BottomNavigationBar(
         exit = slideOutVertically(targetOffsetY = { it })
     ) {
         NavigationBar(
-            modifier = modifier
+            modifier = modifier,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route

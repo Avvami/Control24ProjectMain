@@ -85,13 +85,14 @@
     <string name="logout">Выйти</string>
     <string name="account_image">Account icon</string>
     <string name="logout_image">Logout icon</string>
-    <string name="general_settings">Основные настройки</string>
+    <string name="general_settings">Общие настройки</string>
     <string name="dark_theme">Настроить ночную тему</string>
     <string name="theme_image">Moon icon</string>
     <string name="theme_state">Состояние</string>
     <string name="map_settings">Настройки карт</string>
     <string name="map_provider_image">Map location icon</string>
     <string name="map_using">Постовщик</string>
+    <string name="appearance">Внешний вид</string>
     <string name="list_view_settings">Вид списка объектов</string>
     <string name="list_view_image">List view icon</string>
     <string name="list_view">Вид</string>

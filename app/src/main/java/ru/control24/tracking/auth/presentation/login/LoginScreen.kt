@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +46,7 @@ import ru.control24.tracking.ui.theme.primaryLight
 @Composable
 fun AuthScreen(
     uiEvent: (UiEvent) -> Unit,
-    activeUserState: ActiveUserState,
+    activeUserState: State<ActiveUserState>,
     navigateToHelpScreen: () -> Unit
 ) {
     val loginViewModel: LoginViewModel = viewModel()
@@ -169,7 +170,7 @@ fun AuthScreen(
                     uiEvent(UiEvent.AuthUser(loginViewModel.loginFieldState, loginViewModel.passwordFieldState))
                 }
             ) {
-                AnimatedContent(targetState = activeUserState.isLoading, label = "Auth progress animation") { targetState ->
+                AnimatedContent(targetState = activeUserState.value.isLoading, label = "Auth progress animation") { targetState ->
                     if (targetState) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                     } else {
